@@ -13,7 +13,7 @@ const includePathOptions = {
 
 const eslintOptions = {
   fix: function() {return true},
-  exclude: ['node_modules/**', 'modules/vendor/nouislider.js']
+  exclude: ['node_modules/**', 'modules/vendor/nouislider.js', 'modules/vendor/fraction.js']
 }
 
 

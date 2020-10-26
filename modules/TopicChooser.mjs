@@ -3,6 +3,7 @@ import IntegerAddQ from 'IntegerAdd'
 import ArithmagonQ from 'ArithmagonQ'
 import TestQ from 'TestQ'
 import AddAZero from 'AddAZero'
+import EquationOfLine from 'EquationOfLine'
 
 import OptionsSet from 'OptionsSet'
 
@@ -21,6 +22,11 @@ const topicList = [
     id: 'integer-add',
     title: 'Add integers (v simple)',
     class: IntegerAddQ
+  },
+  {
+    id: 'equation-of-line',
+    title: 'Equation of a line (from two points)',
+    class: EquationOfLine
   },
   {
     id: 'arithmagon-add',
