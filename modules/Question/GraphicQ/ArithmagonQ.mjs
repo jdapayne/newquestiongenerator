@@ -462,7 +462,7 @@ class ArithmagonQView extends GraphicQView {
 
     this.reCenter() // Reposition everything properly
 
-    this.makeLabels()
+    this.makeLabels(true)
 
     // Draw into canvas
   }
@@ -541,6 +541,24 @@ class ArithmagonQView extends GraphicQView {
     ctx.closePath()
 
     // place labels
-    this.renderLabels()
+    this.renderLabels(true)
+  }
+
+  showAnswer () {
+    this.labels.forEach(l => {
+      l.text = l.texta
+      l.style = l.stylea
+    })
+    this.renderLabels(true)
+    this.answered = true
+  }
+
+  hideAnswer () {
+    this.labels.forEach(l => {
+      l.text = l.textq
+      l.style = l.styleq
+    })
+    this.renderLabels(true)
+    this.answered = false
   }
 }

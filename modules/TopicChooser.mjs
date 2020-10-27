@@ -4,6 +4,7 @@ import ArithmagonQ from 'ArithmagonQ'
 import TestQ from 'TestQ'
 import AddAZero from 'AddAZero'
 import EquationOfLine from 'EquationOfLine'
+import AnglesFormingQ from 'AnglesFormingQ'
 
 import OptionsSet from 'OptionsSet'
 
@@ -22,6 +23,11 @@ const topicList = [
     id: 'integer-add',
     title: 'Add integers (v simple)',
     class: IntegerAddQ
+  },
+  {
+    id: 'aosl',
+    title: 'Angles on a straight line',
+    class: AnglesFormingQ
   },
   {
     id: 'equation-of-line',

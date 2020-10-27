@@ -74,7 +74,7 @@ export class GraphicQView {
     this.renderLabels() // will be overwritten
   }
 
-  renderLabels () {
+  renderLabels (nudge) {
     const container = this.DOM
 
     // remove any existing labels
@@ -97,6 +97,7 @@ export class GraphicQView {
 
       // remove space if the inner label is too big
       if (innerlabel.offsetWidth / innerlabel.offsetHeight > 2) {
+        console.log(`removed space in ${l.text}`)
         const newlabeltext = l.text.replace(/\+/, '\\!+\\!').replace(/-/, '\\!-\\!')
         katex.render(newlabeltext, innerlabel)
       }
@@ -109,12 +110,18 @@ export class GraphicQView {
       label.style.left = (l.pos.x - lwidth / 2) + 'px'
       label.style.top = (l.pos.y - lheight / 2) + 'px'
 
-      // further adjustment - if it runs into the margins?
-      if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
-        label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
-      }
-      if (l.pos.x > this.canvas.width / 2 + 5 && l.pos.x - lwidth / 2 < this.canvas.width / 2) {
-        label.style.left = (this.canvas.width / 2 + 3) + 'px'
+      // I don't understand this adjustment. I think it might be needed in arithmagons, but it makes
+      // others go funny.
+
+      if (nudge) {
+        if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
+          label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
+          console.log(`nudged '${l.text}'`)
+        }
+        if (l.pos.x > this.canvas.width / 2 + 5 && l.pos.x - lwidth / 2 < this.canvas.width / 2) {
+          label.style.left = (this.canvas.width / 2 + 3) + 'px'
+          console.log(`nudged '${l.text}'`)
+        }
       }
     })
   }
