@@ -1,77 +1,30 @@
 /* global katex */
 import Question from 'Question'
-import { createElem } from 'Utilities'
 import Point from 'Point'
 
-export class GraphicQ extends Question {
+export default class GraphicQ extends Question {
   constructor (options) {
-    super() // this.answered = false
-    delete (this.DOM) // going to override getDOM using the view's DOM
+    super() // sets this.DOM and this.answered
 
     const defaults = {
       difficulty: 5,
+      label: 'a',
       width: 250,
       height: 250
     }
-    this.settings = Object.assign({}, defaults, options) // this could be overridden
+    this.settings = Object.assign({}, defaults, options)
 
-    /* These are guaranteed to be overridden, so no point initializing here
-     *
-     *  this.data = new GraphicQData(options)
-     *  this.view = new GraphicQView(this.data, options)
-     *
-     */
-  }
-
-  getDOM () { return this.view.getDOM() }
-
-  render () { this.view.render() }
-
-  showAnswer () {
-    super.showAnswer()
-    this.view.showAnswer()
-  }
-
-  hideAnswer () {
-    super.hideAnswer()
-    this.view.hideAnswer()
-  }
-}
-
-/* GraphicQData
- * Each subclass will probably have one of these. But they're completely custon
- * to the question type - so no need to subclass
- *
- *    export class GraphicQData {
- *      constructor (options) {
- *      }
- *      [other initialisation methods]
- *    }
- *
-*/
-
-export class GraphicQView {
-  constructor (data, options) {
-    this.width = options.width
-    this.height = options.height // only things I need from the options, generally?
-    this.data = data
-    // this.rotation?
-
+    // TODO Do I need rotation stored?
+    this.label = this.settings.label // Question number
     this.labels = [] // labels on diagram
 
-    // DOM elements
-    this.DOM = createElem('div', 'question-div')
-    this.canvas = createElem('canvas', 'question-canvas', this.DOM)
-    this.canvas.width = this.width
-    this.canvas.height = this.height
-  }
+    // make canvas and append to div
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = this.settings.width
+    this.canvas.height = this.settings.height
+    this.canvas.className = 'question-canvas'
 
-  getDOM () {
-    return this.DOM
-  }
-
-  render () {
-    this.renderLabels() // will be overwritten
+    this.DOM.append(this.canvas)
   }
 
   renderLabels () {
@@ -137,11 +90,25 @@ export class GraphicQView {
     this.answered = false
   }
 
-  // Point tranformations of all points
-
+  // To be overridden
   get allpoints () {
     return []
   }
+
+  // Point transformation functions
+  // Depend on this.allpoints
+  //
+  // TODO:
+  // Put these into points library instead?
+  // Or better, have the following?
+  //
+  //  GraphicQ
+  //   |
+  //   --GraphicQData
+  //   | (constructs data for the question)
+  //   |
+  //   --GraphicQView
+  //   | (has link to the data, does the drawing in a canvas
 
   scale (sf) {
     this.allpoints.forEach(function (p) {

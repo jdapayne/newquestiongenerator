@@ -1,0 +1,32 @@
+Thoughts on refactoring graphics questions:
+
+GraphicQ
+ - A simple controller - links to a GraphicQData object and GraphicQView object?
+- fairly simple 
+
+class GraphicQ {
+  constructor(options) {
+    this.data = new GraphicQData(options)
+    this.view = new GraphicQView(this.data, width, height)
+    // no reference to this.DOM
+  }
+
+  getDOM () {
+    return this.view.getDOM()
+  }
+
+  render () {
+    this.view.render()
+  }
+
+  showAnswer() {
+    this.view.showAnswer()
+  }
+
+etc.
+
+GraphicQData:
+  Pretty customised to individual question
+
+
+GraphicQView

@@ -1,5 +1,4 @@
-// import {createElem} from 'Utilities'
-import { createElem } from './Utilities.js'
+import { createElem } from 'Utilities'
 
 export default class OptionsSet {
   constructor (optionSpec, template) {

@@ -1,60 +1,24 @@
-import { GraphicQ, GraphicQView } from 'GraphicQ'
+import GraphicQ from 'GraphicQ'
 import Point from 'Point'
 import Fraction from 'fraction.js'
 import Polynomial from 'Polynomial'
 import { randElem, randBetween, randBetweenFilter, gcd } from 'Utilities'
 
 export default class ArithmagonQ extends GraphicQ {
+  /* Members:
+   *
+   * Relating to the question itself:
+   *   this.op:: Num -> Num .  The operator
+   *   this.opname :: String.  The name of the operator
+   *   this.vertices :: [{val: Num, hidden: Bool}]. The vertices
+   *   this.sides :: [{val: Num, hidden: Bool}]
+   *
+   * Relating to the graphic:
+   */
+
   constructor (options) {
-    super() // processes options into this.settings
-    Object.assign(this.settings, options) // override settings with new options passed
-    this.data = new ArithmagonQData(this.settings)
-    this.view = new ArithmagonQView(this.data, this.settings)
-  }
+    super(options)
 
-  static get commandWord () { return 'Complete the arithmagon:' }
-}
-
-ArithmagonQ.optionsSpec = [
-  {
-    title: 'Vertices',
-    id: 'n',
-    type: 'int',
-    min: 3,
-    max: 20,
-    default: 3
-  },
-  {
-    title: 'Type',
-    id: 'type',
-    type: 'select-exclusive',
-    selectOptions: [
-      { title: 'Integer (+)', id: 'integer-add' },
-      { title: 'Integer (\u00d7)', id: 'integer-multiply' },
-      { title: 'Fraction (+)', id: 'fraction-add' },
-      { title: 'Fraction (\u00d7)', id: 'fraction-multiply' },
-      { title: 'Algebra (+)', id: 'algebra-add' },
-      { title: 'Algebra (\u00d7)', id: 'algebra-multiply' }
-    ],
-    default: 'integer-add',
-    vertical: true
-  },
-  {
-    title: 'Puzzle type',
-    type: 'select-exclusive',
-    id: 'puz_diff',
-    selectOptions: [
-      { title: 'Missing edges', id: '1' },
-      { title: 'Mixed', id: '2' },
-      { title: 'Missing vertices', id: '3' }
-    ],
-    default: '1'
-  }
-]
-
-class ArithmagonQData /* extends GraphicQData */ {
-  constructor (options) {
-    // 1. Set properties from options
     const defaults = {
       n: 3, // number of vertices
       min: -20,
@@ -67,7 +31,7 @@ class ArithmagonQData /* extends GraphicQData */ {
 
     this.settings = Object.assign({}, defaults, this.settings, options)
     this.settings.num_diff = this.settings.difficulty
-    this.settings.puz_diff = parseInt(this.settings.puz_diff) //! ? This should have been done upstream...
+    this.settings.puz_diff = parseInt(this.settings.puz_diff)
 
     this.n = this.settings.n
     this.vertices = []
@@ -81,7 +45,9 @@ class ArithmagonQData /* extends GraphicQData */ {
       this.op = (x, y) => x.mul(y)
     }
 
-    // 2. Initialise based on type
+    // init sets up operation and vertices
+    // TODO split into different subclasses?
+
     switch (this.settings.type) {
       case 'integer-add':
       case 'integer-multiply':
@@ -104,10 +70,50 @@ class ArithmagonQData /* extends GraphicQData */ {
     }
 
     this.calculateEdges() // Use op functions to fill in the edges
-    this.hideLabels(this.settings.puz_diff) // set some vertices/edges as hidden depending on difficulty
+    this.hideLabels(this.settings.puz_diff)
+    this.render()
   }
 
-  /* Methods initialising vertices */
+  calculateEdges () {
+    // Calculate the edges given the vertices using this.op
+    for (let i = 0; i < this.n; i++) {
+      this.sides[i] = {
+        val: this.op(this.vertices[i].val, this.vertices[(i + 1) % this.n].val),
+        hidden: false
+      }
+    }
+  }
+
+  hideLabels (puzzleDifficulty) {
+    // Hide some labels to make a puzzle
+    // 1 - Sides hidden, vertices shown
+    // 2 - Some sides hidden, some vertices hidden
+    // 3 - All vertices hidden
+    switch (puzzleDifficulty) {
+      case 1:
+        this.sides.forEach(x => { x.hidden = true })
+        break
+      case 2: {
+        this.sides.forEach(x => { x.hidden = true })
+        const showside = randBetween(0, this.n - 1, Math.random)
+        const hidevert = Math.random() < 0.5
+          ? showside // previous vertex
+          : (showside + 1) % this.n // next vertex;
+
+        this.sides[showside].hidden = false
+        this.vertices[hidevert].hidden = true
+        break
+      }
+      case 3:
+        this.vertices.forEach(x => { x.hidden = true })
+        break
+      default:
+        throw new Error('no_difficulty')
+    }
+  }
+
+  // Vertex initialisation methods.
+  // TODO Maybe put these into constructor of different subclasses?
 
   initInteger (settings) {
     for (let i = 0; i < this.n; i++) {
@@ -390,103 +396,57 @@ class ArithmagonQData /* extends GraphicQData */ {
     }
   }
 
-  /* Method to calculate edges from vertices */
-  calculateEdges () {
-    // Calculate the edges given the vertices using this.op
-    for (let i = 0; i < this.n; i++) {
-      this.sides[i] = {
-        val: this.op(this.vertices[i].val, this.vertices[(i + 1) % this.n].val),
-        hidden: false
-      }
-    }
-  }
+  // Rendering
+  // Different from previous - don't save all the points in object
+  // TODO - split out into separate object?
 
-  /* Mark hiddend edges/vertices */
+  render () {
+    const width = this.settings.width
+    const height = this.settings.height
 
-  hideLabels (puzzleDifficulty) {
-    // Hide some labels to make a puzzle
-    // 1 - Sides hidden, vertices shown
-    // 2 - Some sides hidden, some vertices hidden
-    // 3 - All vertices hidden
-    switch (puzzleDifficulty) {
-      case 1:
-        this.sides.forEach(x => { x.hidden = true })
-        break
-      case 2: {
-        this.sides.forEach(x => { x.hidden = true })
-        const showside = randBetween(0, this.n - 1, Math.random)
-        const hidevert = Math.random() < 0.5
-          ? showside // previous vertex
-          : (showside + 1) % this.n // next vertex;
-
-        this.sides[showside].hidden = false
-        this.vertices[hidevert].hidden = true
-        break
-      }
-      case 3:
-        this.vertices.forEach(x => { x.hidden = true })
-        break
-      default:
-        throw new Error('no_difficulty')
-    }
-  }
-}
-
-class ArithmagonQView extends GraphicQView {
-  constructor (data, options) {
-    super(data, options) // sets this.width this.height, initialises this.labels, creates dom elements
-
-    const width = this.width
-    const height = this.height
-    const r = 0.35 * Math.min(width, height) // radius
-    const n = this.data.n
+    const r = 0.35 * Math.min(width, height)
+    const n = this.n
 
     // A point to label with the operation
     // All points first set up with (0,0) at center
-    this.operationPoint = new Point(0, 0)
+    const operationPoint = new Point(0, 0)
 
     // Position of vertices
-    this.vertexPoints = []
+    const vertexPoints = []
     for (let i = 0; i < n; i++) {
       const angle = i * Math.PI * 2 / n - Math.PI / 2
-      this.vertexPoints[i] = Point.fromPolar(r, angle)
+      vertexPoints[i] = Point.fromPolar(r, angle)
     }
 
     // Poisition of side labels
-    this.sidePoints = []
+    const sidePoints = []
     for (let i = 0; i < n; i++) {
-      this.sidePoints[i] = Point.mean(this.vertexPoints[i], this.vertexPoints[(i + 1) % n])
+      sidePoints[i] = Point.mean(vertexPoints[i], vertexPoints[(i + 1) % n])
     }
 
-    this.allPoints = [this.operationPoint].concat(this.vertexPoints).concat(this.sidePoints)
-
-    this.reCenter() // Reposition everything properly
-
-    this.makeLabels()
-
-    // Draw into canvas
-  }
-
-  reCenter () {
+    // Reposition everything properly
     // Find the center of the bounding box
-    const topleft = Point.min(this.allPoints)
-    const bottomright = Point.max(this.allPoints)
+    const allPoints = [operationPoint].concat(vertexPoints).concat(sidePoints)
+
+    const topleft = Point.min(allPoints)
+    const bottomright = Point.max(allPoints)
     const center = Point.mean(topleft, bottomright)
 
     // translate to put in the center
-    this.allPoints.forEach(p => {
-      p.translate(this.width / 2 - center.x, this.height / 2 - center.y)
+    allPoints.forEach(p => {
+      p.translate(width / 2 - center.x, height / 2 - center.y)
     })
-  }
 
-  makeLabels () {
+    // make labels list
+    this.labels = []
+
     // vertices
-    this.data.vertices.forEach((v, i) => {
+    this.vertices.forEach((v, i) => {
       const value = v.val.toLatex
         ? v.val.toLatex(true)
         : v.val.toString()
       this.labels.push({
-        pos: this.vertexPoints[i],
+        pos: vertexPoints[i],
         textq: v.hidden ? '' : value,
         texta: value,
         styleq: 'normal vertex',
@@ -495,12 +455,12 @@ class ArithmagonQView extends GraphicQView {
     })
 
     // sides
-    this.data.sides.forEach((v, i) => {
+    this.sides.forEach((v, i) => {
       const value = v.val.toLatex
         ? v.val.toLatex(true)
         : v.val.toString()
       this.labels.push({
-        pos: this.sidePoints[i],
+        pos: sidePoints[i],
         textq: v.hidden ? '' : value,
         texta: value,
         styleq: 'normal side',
@@ -508,32 +468,39 @@ class ArithmagonQView extends GraphicQView {
       })
     })
 
-    // operation
+    // point
     this.labels.push({
-      pos: this.operationPoint,
-      textq: this.data.opname,
-      texta: this.data.opname,
+      pos: operationPoint,
+      textq: this.opname,
+      texta: this.opname,
       styleq: 'normal',
       stylea: 'normal'
     })
 
-    // styling
+    /* Labels now done external to this module - keeping just in case
+    this.labels.push({
+      pos: new Point(15, 15),
+      textq: `${this.label}`,
+      texta: `${this.label}`,
+      styleq: 'normal',
+      stylea: 'normal'
+    })
+    */
+
     this.labels.forEach(l => {
       l.text = l.textq
       l.style = l.styleq
     })
-  }
 
-  render () {
+    // Draw into canvas
     const ctx = this.canvas.getContext('2d')
-    const n = this.data.n
 
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) // clear
 
     ctx.beginPath()
     for (let i = 0; i < n; i++) {
-      const p = this.vertexPoints[i]
-      const next = this.vertexPoints[(i + 1) % n]
+      const p = vertexPoints[i]
+      const next = vertexPoints[(i + 1) % n]
       ctx.moveTo(p.x, p.y)
       ctx.lineTo(next.x, next.y)
     }
@@ -543,4 +510,45 @@ class ArithmagonQView extends GraphicQView {
     // place labels
     this.renderLabels()
   }
+
+  static get commandWord () {
+    return 'Complete the arithmagons'
+  }
 }
+
+ArithmagonQ.optionsSpec = [
+  {
+    title: 'Vertices',
+    id: 'n',
+    type: 'int',
+    min: 3,
+    max: 20,
+    default: 3
+  },
+  {
+    title: 'Type',
+    id: 'type',
+    type: 'select-exclusive',
+    selectOptions: [
+      { title: 'Integer (+)', id: 'integer-add' },
+      { title: 'Integer (\u00d7)', id: 'integer-multiply' },
+      { title: 'Fraction (+)', id: 'fraction-add' },
+      { title: 'Fraction (\u00d7)', id: 'fraction-multiply' },
+      { title: 'Algebra (+)', id: 'algebra-add' },
+      { title: 'Algebra (\u00d7)', id: 'algebra-multiply' }
+    ],
+    default: 'integer-add',
+    vertical: true
+  },
+  {
+    title: 'Puzzle type',
+    type: 'select-exclusive',
+    id: 'puz_diff',
+    selectOptions: [
+      { title: 'Missing edges', id: '1' },
+      { title: 'Mixed', id: '2' },
+      { title: 'Missing vertices', id: '3' }
+    ],
+    default: '1'
+  }
+]
