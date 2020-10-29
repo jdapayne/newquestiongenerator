@@ -10,7 +10,7 @@ export default class AnglesFormingQ extends GraphicQ {
 
     const defaults = {
       angleSum: 180,
-      minAngle: 10,
+      minAngle: 25,
       minN: 3,
       maxN: 3
     }
