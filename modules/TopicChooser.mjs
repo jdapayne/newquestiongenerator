@@ -5,6 +5,7 @@ import TestQ from 'TestQ'
 import AddAZero from 'AddAZero'
 import EquationOfLine from 'EquationOfLine'
 import AnglesFormingQ from 'MissingAngles/AnglesFormingQ'
+import MissingAnglesQ from 'MissingAngles/MissingAnglesWrapper'
 
 import OptionsSet from 'OptionsSet'
 
@@ -28,6 +29,11 @@ const topicList = [
     id: 'aosl',
     title: 'Angles on a straight line',
     class: AnglesFormingQ
+  },
+  {
+    id: 'missing-angles',
+    title: 'Missing angles',
+    class: MissingAnglesQ
   },
   {
     id: 'equation-of-line',
