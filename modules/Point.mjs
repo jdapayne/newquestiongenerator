@@ -60,7 +60,18 @@ export default class Point {
     return new Point(sumx / n, sumy / n)
   }
 
+  static inCenter (A, B, C) {
+    // incenter of a triangle given vertex points A, B and C
+    const a = Point.distance(B, C)
+    const b = Point.distance(A, C)
+    const c = Point.distance(A, B)
 
+    const perimeter = a + b + c
+    const sumx = a * A.x + b * B.x + c * C.x
+    const sumy = a * A.y + b * B.y + c * C.y
+
+    return new Point(sumx / perimeter, sumy / perimeter)
+  }
 
   static min (points) {
     const minx = points.reduce((x, p) => Math.min(x, p.x), Infinity)

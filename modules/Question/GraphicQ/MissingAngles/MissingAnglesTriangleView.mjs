@@ -21,12 +21,16 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     )
 
     // Create labels
-    const centroid = Point.mean(this.A, this.B, this.C)
+    const inCenter = Point.inCenter(this.A, this.B, this.C)
 
     for (let i = 0; i < 3; i++) {
       const p = [this.A, this.B, this.C][i]
+
+      // nudging label toward center
+      // const nudgeDistance = this.data.angles[i]
+      // const position = p.clone().moveToward(inCenter,
       this.labels[i] = {
-        pos: Point.mean(p, p, centroid), // weighted mean - position from centroid
+        pos: Point.mean(p, p, inCenter), // weighted mean - position from inCenter
         textq: this.data.missing[i] ? 'x^\\circ' : this.data.angles[i].toString() + '^\\circ',
         styleq: 'normal'
       }
