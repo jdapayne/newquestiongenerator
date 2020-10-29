@@ -4,7 +4,7 @@ import ArithmagonQ from 'ArithmagonQ'
 import TestQ from 'TestQ'
 import AddAZero from 'AddAZero'
 import EquationOfLine from 'EquationOfLine'
-import AnglesFormingQ from 'AnglesFormingQ'
+import AnglesFormingQ from 'MissingAngles/AnglesFormingQ'
 
 import OptionsSet from 'OptionsSet'
 
