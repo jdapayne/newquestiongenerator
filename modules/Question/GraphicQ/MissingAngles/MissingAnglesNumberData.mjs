@@ -4,6 +4,9 @@
 import { randBetween } from 'Utilities'
 
 export default class MissingAnglesNumberData /* extends GraphicQData */ {
+  // this.angles :: [Int] -- list of angles
+  // this.missing :: [Bool] -- true if missing
+  // this.angleSum :: what the angles add up to
   constructor (options) {
     const defaults = {
       /* angleSum: 180 */ // must be set by caller

@@ -60,6 +60,8 @@ export default class Point {
     return new Point(sumx / n, sumy / n)
   }
 
+
+
   static min (points) {
     const minx = points.reduce((x, p) => Math.min(x, p.x), Infinity)
     const miny = points.reduce((y, p) => Math.min(y, p.y), Infinity)

@@ -3,6 +3,7 @@
  * public methods
 */
 import AnglesFormingQ from 'AnglesFormingQ'
+import MissingAnglesTriangleQ from 'MissingAnglesTriangleQ'
 import { randElem } from 'Utilities'
 
 export default class MissingAnglesQ {
@@ -28,6 +29,10 @@ export default class MissingAnglesQ {
         this.question = new AnglesFormingQ(options)
         break
       }
+      case 'triangle': {
+        this.question = new MissingAnglesTriangleQ()
+        break
+      }
       default:
         throw new Error(`Unknown type ${type} chosen from ${options.types}`)
     }
@@ -47,9 +52,10 @@ export default class MissingAnglesQ {
         type: 'select-inclusive',
         selectOptions: [
           { title: 'On a straight line', id: 'aosl' },
-          { title: 'Around a point', id: 'aaap' }
+          { title: 'Around a point', id: 'aaap' },
+          { title: 'Triangle', id: 'triangle' }
         ],
-        default: ['aosl', 'aaap'],
+        default: ['aosl', 'aaap', 'triangle'],
         vertical: true
       }
     ]
