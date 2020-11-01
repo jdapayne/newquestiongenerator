@@ -1,4 +1,4 @@
-import { GraphicQ, GraphicQView } from 'GraphicQ'
+import { GraphicQ, GraphicQView } from 'Question/GraphicQ/GraphicQ'
 import Point from 'Point'
 import Fraction from 'fraction.js'
 import Polynomial from 'Polynomial'

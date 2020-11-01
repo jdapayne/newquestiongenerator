@@ -1,17 +1,16 @@
 /* global katex */
+declare const katex : any
 import Question from 'Question'
 import { createElem } from 'Utilities'
 import Point from 'Point'
 
-export class GraphicQ extends Question {
-  constructor (options) {
-    super() // this.answered = false
-    delete (this.DOM) // going to override getDOM using the view's DOM
+export abstract class GraphicQ extends Question {
+  data: GraphicQData
+  view: GraphicQView
 
-    const defaults = {
-      difficulty: 5
-    }
-    this.settings = Object.assign({}, defaults, options) // this could be overridden
+  constructor (options) {
+    super(options) // this.answered = false
+    delete (this.DOM) // going to override getDOM using the view's DOM
 
     /* These are guaranteed to be overridden, so no point initializing here
      *
@@ -56,19 +55,28 @@ export class GraphicQ extends Question {
   }
 }
 
-/* GraphicQData
- * Each subclass will probably have one of these. But they're completely custon
- * to the question type - so no need to subclass
- *
- *    export class GraphicQData {
- *      constructor (options) {
- *      }
- *      [other initialisation methods]
- *    }
- *
-*/
+interface GraphicQData {
+  random: (options: any) => GraphicQData
+}
 
-export class GraphicQView {
+interface Label {
+  pos: Point,
+  textq: string,
+  texta: string,
+  styleq: string,
+  stylea: string,
+  text: string,
+  style: string
+}
+
+export abstract class GraphicQView {
+  DOM:    HTMLElement
+  canvas: HTMLCanvasElement
+  width:  number
+  height: number
+  data:   GraphicQData
+  labels: Label[]
+
   constructor (data, options) {
     const defaults = {
       width: 250,
@@ -95,9 +103,7 @@ export class GraphicQView {
     return this.DOM
   }
 
-  render () {
-    this.renderLabels() // will be overwritten
-  }
+  abstract render ()
 
   renderLabels (nudge) {
     const container = this.DOM
@@ -112,7 +118,7 @@ export class GraphicQView {
       const label = document.createElement('div')
       const innerlabel = document.createElement('div')
       label.classList.add('label')
-      label.classList += ' ' + l.style
+      label.classList.add(l.style)
       label.style.left = l.pos.x + 'px'
       label.style.top = l.pos.y + 'px'
 
@@ -156,8 +162,7 @@ export class GraphicQView {
       l.text = l.texta
       l.style = l.stylea
     })
-    this.renderLabels()
-    this.answered = true
+    this.renderLabels(false)
   }
 
   hideAnswer () {
@@ -165,8 +170,7 @@ export class GraphicQView {
       l.text = l.textq
       l.style = l.styleq
     })
-    this.renderLabels()
-    this.answered = false
+    this.renderLabels(false)
   }
 
   // Point tranformations of all points
