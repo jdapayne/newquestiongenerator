@@ -3,18 +3,22 @@ import {terser} from 'rollup-plugin-terser'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import {eslint} from 'rollup-plugin-eslint'
-//import graph from 'rollup-plugin-graph'
+import typescript from '@rollup/plugin-typescript'
 
 const includePathOptions = {
   include: {},
   paths: ['modules', 'modules/Question', 'modules/Question/TextQ', 'modules/Question/GraphicQ', 'modules/vendor'],
   external: [],
-  extensions: ['.js', '.mjs']
+  extensions: ['.js', '.mjs', '.ts']
 }
 
 const eslintOptions = {
   fix: function() {return true},
   exclude: ['node_modules/**', 'modules/vendor/nouislider.js', 'modules/vendor/fraction.js']
+}
+
+const typescriptOptions = {
+  target: "ES6"
 }
 
 
@@ -31,5 +35,5 @@ export default {
       format: 'iife',
       plugins: [terser()]
     }],
-  plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), eslint(eslintOptions)]
+  plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), eslint(eslintOptions), typescript(typescriptOptions)]
 };

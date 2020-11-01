@@ -30,3 +30,49 @@ GraphicQData:
 
 
 GraphicQView
+
+-----------------------
+
+Further thoughts (am I overcomplicating this though).
+Refactor to make better use of factories - constructors should be simple and deterministic. Factories can be random.
+
+QuestionFactory.createRandom(options) // Perhaps this should be in the TopicChooser
+
+Then each question subtype should have a factory?
+
+QuestionFactory.createRandom(options) {
+  switch (options.type) {
+    case 'arithmagon':
+        return ArithmagonQFactory.createRandom(options)
+etc.
+
+ArithmagonQFactory.createRandom(options) {
+  switch options.subtype {
+    case algebra-add:
+        // generate arithmaaon
+        return new ArithmagonQ(
+
+This is overcomplicated. I don't need proper factories, but 'named constructors'
+
+E.g. in ArithmagonQData
+
+constructor(n,vertices,sides,opname) {
+  this.n = n
+  this.vertices = vertices,
+  etc.
+}
+
+createInteger(options) {
+  ...
+  return new ArithmagonQData(...)
+}
+
+createFractionAdd(options) {
+...
+}
+
+...
+
+createRandom()
+
+Could be needed for sub-topics thought. E.g. angles seems to fit well.

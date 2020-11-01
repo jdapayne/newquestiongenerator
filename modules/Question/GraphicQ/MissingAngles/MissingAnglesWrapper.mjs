@@ -2,8 +2,8 @@
  * Reads options and then wraps the appropriate object, mirroring the main
  * public methods
 */
-import AnglesFormingQ from 'AnglesFormingQ'
-import MissingAnglesTriangleQ from 'MissingAnglesTriangleQ'
+import MissingAnglesAroundQ from 'MissingAngles/MissingAnglesAroundQ'
+import MissingAnglesTriangleQ from 'MissingAngles/MissingAnglesTriangleQ'
 import { randElem } from 'Utilities'
 
 export default class MissingAnglesQ {
@@ -18,15 +18,21 @@ export default class MissingAnglesQ {
     }
     const type = randElem(options.types)
 
+    this.init(type)
+  }
+
+  init (type, subtype) {
+    // Initialise given both a type and a subtype
+    // Currently ignoring subtype
     switch (type) {
       case 'aosl': {
         const options = { angleSum: 180 }
-        this.question = new AnglesFormingQ(options)
+        this.question = MissingAnglesAroundQ.random(options)
         break
       }
       case 'aaap': {
         const options = { angleSum: 360 }
-        this.question = new AnglesFormingQ(options)
+        this.question = MissingAnglesAroundQ.random(options)
         break
       }
       case 'triangle': {
@@ -34,8 +40,12 @@ export default class MissingAnglesQ {
         break
       }
       default:
-        throw new Error(`Unknown type ${type} chosen from ${options.types}`)
+        throw new Error(`Unknown type ${type}`)
     }
+  }
+
+  initDifficulty (type, difficulty) {
+    // Initialised based on a type and a difficulty
   }
 
   getDOM () { return this.question.getDOM() }

@@ -22,7 +22,7 @@ export default class AnglesFormingQ extends GraphicQ {
     //
     Object.assign(this.settings, defaults, options)
 
-    this.data = new MissingAnglesNumberData(this.settings)
+    this.data = MissingAnglesNumberData.random(this.settings)
     this.view = new MissingAnglesTriangleView(this.data, this.settings)
   }
 

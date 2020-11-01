@@ -6,8 +6,7 @@ import { randElem, randBetween, randBetweenFilter, gcd } from 'Utilities'
 
 export default class ArithmagonQ extends GraphicQ {
   constructor (options) {
-    super() // processes options into this.settings
-    Object.assign(this.settings, options) // override settings with new options passed
+    super(options) // processes options into this.settings
     this.data = new ArithmagonQData(this.settings)
     this.view = new ArithmagonQView(this.data, this.settings)
   }
@@ -53,6 +52,7 @@ ArithmagonQ.optionsSpec = [
 ]
 
 class ArithmagonQData /* extends GraphicQData */ {
+  // TODO simplify constructor. Move logic into static factory methods
   constructor (options) {
     // 1. Set properties from options
     const defaults = {

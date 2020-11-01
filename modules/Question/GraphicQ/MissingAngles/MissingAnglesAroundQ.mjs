@@ -10,26 +10,26 @@ import { GraphicQ } from 'GraphicQ'
 import MissingAnglesAroundView from 'MissingAngles/MissingAnglesAroundView'
 import MissingAnglesNumberData from 'MissingAngles/MissingAnglesNumberData'
 
-export default class AnglesFormingQ extends GraphicQ {
-  constructor (options) {
-    super() // processes options into this.settings
+export default class MissingAnglesAroundQ extends GraphicQ {
+  constructor (data, view, options) { // effectively private
+    super(options) // want to reform GraphicQ.
+    this.data = data
+    this.view = view
+  }
 
+  static random (options) {
     const defaults = {
       angleSum: 180,
       minAngle: 10,
       minN: 2,
       maxN: 4
     }
+    options = Object.assign({}, defaults, options)
 
-    // Order of importance
-    // (1) options passed to this constructor
-    // (2) defaults for this constructor
-    // (3) any options set from parent constructor
-    //
-    Object.assign(this.settings, defaults, options)
+    const data = MissingAnglesNumberData.random(options)
+    const view = new MissingAnglesAroundView(data, options) // TODO eliminate public constructors
 
-    this.data = new MissingAnglesNumberData(this.settings)
-    this.view = new MissingAnglesAroundView(this.data, this.settings)
+    return new MissingAnglesAroundQ(data, view)
   }
 
   static get commandWord () { return 'Find the missing value' }
