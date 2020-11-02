@@ -1,14 +1,186 @@
-declare const katex : any
 import Question from 'Question/Question'
+import IOptions from 'IOptions'
 import { createElem } from 'Utilities'
 import Point from 'Point'
+declare const katex : {
+  render : (string: string, element: HTMLElement) => void
+}
+
+export interface GraphicQData {
+  random: (options: IOptions) => GraphicQData
+}
+
+export interface Label {
+  pos: Point,
+  textq: string,
+  texta: string,
+  styleq: string,
+  stylea: string,
+  text: string,
+  style: string
+}
+
+export abstract class GraphicQView {
+  DOM: HTMLElement
+  canvas: HTMLCanvasElement
+  width: number
+  height: number
+  data: GraphicQData
+  labels: Label[]
+
+  constructor (
+    data : GraphicQData,
+    options : {
+      width: number,
+      height: number
+    }) {
+    const defaults = {
+      width: 250,
+      height: 250
+    }
+
+    options = Object.assign({}, defaults, options)
+
+    this.width = options.width
+    this.height = options.height // only things I need from the options, generally?
+    this.data = data
+    // this.rotation?
+
+    this.labels = [] // labels on diagram
+
+    // DOM elements
+    this.DOM = createElem('div', 'question-div')
+    this.canvas = createElem('canvas', 'question-canvas', this.DOM)
+    this.canvas.width = this.width
+    this.canvas.height = this.height
+  }
+
+  getDOM () : HTMLElement {
+    return this.DOM
+  }
+
+  abstract render () : void
+
+  renderLabels (nudge? : boolean) : void {
+    const container = this.DOM
+
+    // remove any existing labels
+    const oldLabels = container.getElementsByClassName('label')
+    while (oldLabels.length > 0) {
+      oldLabels[0].remove()
+    }
+
+    this.labels.forEach(l => {
+      const label = document.createElement('div')
+      const innerlabel = document.createElement('div')
+      label.classList.add('label')
+      label.className += ' ' + l.style // using className over classList since l.style is space-delimited list of classes
+      label.style.left = l.pos.x + 'px'
+      label.style.top = l.pos.y + 'px'
+
+      katex.render(l.text, innerlabel)
+      label.appendChild(innerlabel)
+      container.appendChild(label)
+
+      // remove space if the inner label is too big
+      if (innerlabel.offsetWidth / innerlabel.offsetHeight > 2) {
+        console.log(`removed space in ${l.text}`)
+        const newlabeltext = l.text.replace(/\+/, '\\!+\\!').replace(/-/, '\\!-\\!')
+        katex.render(newlabeltext, innerlabel)
+      }
+
+      // position correctly - this could def be optimised - lots of back-and-forth
+
+      // adjust to *center* label, rather than anchor top-right
+      const lwidth = label.offsetWidth
+      const lheight = label.offsetHeight
+      label.style.left = (l.pos.x - lwidth / 2) + 'px'
+      label.style.top = (l.pos.y - lheight / 2) + 'px'
+
+      // I don't understand this adjustment. I think it might be needed in arithmagons, but it makes
+      // others go funny.
+
+      if (nudge) {
+        if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
+          label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
+          console.log(`nudged '${l.text}'`)
+        }
+        if (l.pos.x > this.canvas.width / 2 + 5 && l.pos.x - lwidth / 2 < this.canvas.width / 2) {
+          label.style.left = (this.canvas.width / 2 + 3) + 'px'
+          console.log(`nudged '${l.text}'`)
+        }
+      }
+    })
+  }
+
+  showAnswer () : void {
+    this.labels.forEach(l => {
+      l.text = l.texta
+      l.style = l.stylea
+    })
+    this.renderLabels(false)
+  }
+
+  hideAnswer () : void {
+    this.labels.forEach(l => {
+      l.text = l.textq
+      l.style = l.styleq
+    })
+    this.renderLabels(false)
+  }
+
+  // Point tranformations of all points
+
+  get allpoints () : Point[] {
+    return []
+  }
+
+  scale (sf : number) : void {
+    this.allpoints.forEach(function (p) {
+      p.scale(sf)
+    })
+  }
+
+  rotate (angle : number) : number {
+    this.allpoints.forEach(function (p) {
+      p.rotate(angle)
+    })
+    return angle
+  }
+
+  translate (x : number, y : number) : void {
+    this.allpoints.forEach(function (p) {
+      p.translate(x, y)
+    })
+  }
+
+  randomRotate () : number {
+    const angle = 2 * Math.PI * Math.random()
+    this.rotate(angle)
+    return angle
+  }
+
+  scaleToFit (width : number, height: number, margin : number) : void {
+    let topLeft : Point = Point.min(this.allpoints)
+    let bottomRight : Point = Point.max(this.allpoints)
+    const totalWidth : number = bottomRight.x - topLeft.x
+    const totalHeight : number = bottomRight.y - topLeft.y
+    this.scale(Math.min((width - margin) / totalWidth, (height - margin) / totalHeight))
+
+    // centre
+    topLeft = Point.min(this.allpoints)
+    bottomRight = Point.max(this.allpoints)
+    const center = Point.mean([topLeft, bottomRight])
+    this.translate(width / 2 - center.x, height / 2 - center.y) // centre
+  }
+}
 
 export abstract class GraphicQ extends Question {
   data: GraphicQData
   view: GraphicQView
 
-  constructor (options: any) {
-    super(options) // this.answered = false
+  constructor (options: Record<string, unknown>) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    super() // this.answered = false
     delete (this.DOM) // going to override getDOM using the view's DOM
 
     /* These are guaranteed to be overridden, so no point initializing here
@@ -51,169 +223,5 @@ export abstract class GraphicQ extends Question {
   hideAnswer () : void {
     super.hideAnswer()
     this.view.hideAnswer()
-  }
-}
-
-interface GraphicQData {
-  random: (options: any) => GraphicQData
-}
-
-interface Label {
-  pos: Point,
-  textq: string,
-  texta: string,
-  styleq: string,
-  stylea: string,
-  text: string,
-  style: string
-}
-
-export abstract class GraphicQView {
-  DOM:    HTMLElement
-  canvas: HTMLCanvasElement
-  width:  number
-  height: number
-  data:   GraphicQData
-  labels: Label[]
-
-  constructor (data, options) {
-    const defaults = {
-      width: 250,
-      height: 250
-    }
-
-    options = Object.assign({}, defaults, options)
-
-    this.width = options.width
-    this.height = options.height // only things I need from the options, generally?
-    this.data = data
-    // this.rotation?
-
-    this.labels = [] // labels on diagram
-
-    // DOM elements
-    this.DOM = createElem('div', 'question-div')
-    this.canvas = createElem('canvas', 'question-canvas', this.DOM)
-    this.canvas.width = this.width
-    this.canvas.height = this.height
-  }
-
-  getDOM () {
-    return this.DOM
-  }
-
-  abstract render ()
-
-  renderLabels (nudge) {
-    const container = this.DOM
-
-    // remove any existing labels
-    const oldLabels = container.getElementsByClassName('label')
-    while (oldLabels.length > 0) {
-      oldLabels[0].remove()
-    }
-
-    this.labels.forEach(l => {
-      const label = document.createElement('div')
-      const innerlabel = document.createElement('div')
-      label.classList.add('label')
-      label.className += " " + l.style //using className over classList since l.style is space-delimited list of classes
-      label.style.left = l.pos.x + 'px'
-      label.style.top = l.pos.y + 'px'
-
-      katex.render(l.text, innerlabel)
-      label.appendChild(innerlabel)
-      container.appendChild(label)
-
-      // remove space if the inner label is too big
-      if (innerlabel.offsetWidth / innerlabel.offsetHeight > 2) {
-        console.log(`removed space in ${l.text}`)
-        const newlabeltext = l.text.replace(/\+/, '\\!+\\!').replace(/-/, '\\!-\\!')
-        katex.render(newlabeltext, innerlabel)
-      }
-
-      // position correctly - this could def be optimised - lots of back-and-forth
-
-      // adjust to *center* label, rather than anchor top-right
-      const lwidth = label.offsetWidth
-      const lheight = label.offsetHeight
-      label.style.left = (l.pos.x - lwidth / 2) + 'px'
-      label.style.top = (l.pos.y - lheight / 2) + 'px'
-
-      // I don't understand this adjustment. I think it might be needed in arithmagons, but it makes
-      // others go funny.
-
-      if (nudge) {
-        if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
-          label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
-          console.log(`nudged '${l.text}'`)
-        }
-        if (l.pos.x > this.canvas.width / 2 + 5 && l.pos.x - lwidth / 2 < this.canvas.width / 2) {
-          label.style.left = (this.canvas.width / 2 + 3) + 'px'
-          console.log(`nudged '${l.text}'`)
-        }
-      }
-    })
-  }
-
-  showAnswer () {
-    this.labels.forEach(l => {
-      l.text = l.texta
-      l.style = l.stylea
-    })
-    this.renderLabels(false)
-  }
-
-  hideAnswer () {
-    this.labels.forEach(l => {
-      l.text = l.textq
-      l.style = l.styleq
-    })
-    this.renderLabels(false)
-  }
-
-  // Point tranformations of all points
-
-  get allpoints () {
-    return []
-  }
-
-  scale (sf) {
-    this.allpoints.forEach(function (p) {
-      p.scale(sf)
-    })
-  }
-
-  rotate (angle) {
-    this.allpoints.forEach(function (p) {
-      p.rotate(angle)
-    })
-    return angle
-  }
-
-  translate (x, y) {
-    this.allpoints.forEach(function (p) {
-      p.translate(x, y)
-    })
-  }
-
-  randomRotate () {
-    var angle = 2 * Math.PI * Math.random()
-    this.rotate(angle)
-    return angle
-  }
-
-  scaleToFit (width, height, margin) {
-    let topLeft = Point.min(this.allpoints)
-    let bottomRight = Point.max(this.allpoints)
-    const totalWidth = bottomRight.x - topLeft.x
-    const totalHeight = bottomRight.y - topLeft.y
-    this.scale(Math.min((width - margin) / totalWidth, (height - margin) / totalHeight))
-
-    // centre
-    topLeft = Point.min(this.allpoints)
-    bottomRight = Point.max(this.allpoints)
-    const center = Point.mean([topLeft, bottomRight])
-    this.translate(width / 2 - center.x, height / 2 - center.y) // centre
   }
 }

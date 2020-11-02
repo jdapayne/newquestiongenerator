@@ -6,11 +6,10 @@ import MissingAnglesNumberData from 'MissingAngles/MissingAnglesNumberData'
 
 export default class MissingAnglesTriangleQ extends GraphicQ {
   constructor (data, view, options) {
-    super(options) //this should be all that's required when refactored
+    super(options) // this should be all that's required when refactored
     this.data = data
     this.view = view
   }
-
 
   static random (options) {
     const defaults = {
@@ -22,9 +21,9 @@ export default class MissingAnglesTriangleQ extends GraphicQ {
     options = Object.assign({}, defaults, options)
 
     const data = MissingAnglesNumberData.random(options)
-    const view = new MissingAnglesTriangleView(data,options)
+    const view = new MissingAnglesTriangleView(data, options)
 
-    return new MissingAnglesTriangleQ(data,view,options)
+    return new MissingAnglesTriangleQ(data, view, options)
   }
 
   static get commandWord () { return 'Find the missing value' }

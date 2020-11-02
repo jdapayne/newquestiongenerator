@@ -32,7 +32,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup --config",
     "build-dev": "rollup --config -w",
-    "lint": "eslint \"modules/**/*.js\""
+    "lint": "eslint modules",
+    "lint-fix": "eslint --fix modules"
   },
   "author": "",
   "license": "ISC"

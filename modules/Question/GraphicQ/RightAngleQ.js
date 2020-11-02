@@ -1,6 +1,7 @@
+/* eslint-disable */
 import GraphicQ from 'GraphicQ'
 import Point from 'Point'
-import { randElem, randBetween, randBetweenFilter, gcd } from 'Utilities'
+import { randBetween } from 'Utilities'
 
 export default class ArithmagonQ extends GraphicQ {
   /* Members:

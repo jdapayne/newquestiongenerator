@@ -2,7 +2,7 @@ export default abstract class Question {
   DOM: HTMLElement
   answered: boolean
 
-  constructor (options: object) {
+  constructor () {
     this.DOM = document.createElement('div')
     this.DOM.className = 'question-div'
     this.answered = false
@@ -12,7 +12,7 @@ export default abstract class Question {
     return this.DOM
   }
 
-  abstract render () : void 
+  abstract render () : void
 
   showAnswer () : void {
     this.answered = true
@@ -31,6 +31,6 @@ export default abstract class Question {
   }
 
   static get commandWord () : string { // Should be overridden
-   return ""
+    return ''
   }
 }
