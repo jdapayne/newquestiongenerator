@@ -1,4 +1,4 @@
-import TextQ from 'TextQ'
+import TextQ from 'Question/TextQ/TextQ'
 import { randElem } from 'Utilities'
 
 export default class TestQ extends TextQ {

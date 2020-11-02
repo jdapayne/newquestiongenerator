@@ -1,5 +1,5 @@
 import { randBetween, gcd } from 'Utilities'
-import TextQ from 'TextQ'
+import TextQ from 'Question/TextQ/TextQ'
 
 /* Main question class. This will be spun off into different file and generalised */
 export default class AlgebraicFractionQ extends TextQ {

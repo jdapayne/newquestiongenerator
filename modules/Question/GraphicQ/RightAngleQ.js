@@ -1,5 +1,5 @@
 /* eslint-disable */
-import GraphicQ from 'GraphicQ'
+import GraphicQ from 'Question/GraphicQ'
 import Point from 'Point'
 import { randBetween } from 'Utilities'
 

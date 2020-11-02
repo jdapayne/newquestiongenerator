@@ -2,8 +2,8 @@
  * Reads options and then wraps the appropriate object, mirroring the main
  * public methods
 */
-import MissingAnglesAroundQ from 'MissingAngles/MissingAnglesAroundQ'
-import MissingAnglesTriangleQ from 'MissingAngles/MissingAnglesTriangleQ'
+import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
+import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
 import { randElem } from 'Utilities'
 
 export default class MissingAnglesQ {

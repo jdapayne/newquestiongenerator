@@ -1,5 +1,5 @@
-/* Generates and holds data for a missing angles question, where these is some given angle sum
- * Agnostic as to how these angles are arranged (e.g. in a polygon or around som point)
+/** Generates and holds data for a missing angles question, where these is some given angle sum
+ *  Agnostic as to how these angles are arranged (e.g. in a polygon or around som point)
  *
  * Options passed to constructors:
  *  angleSum::Int the number of angles to generate
@@ -8,18 +8,27 @@
  *  maxN::Int     the largest number of angles to generate
  *
  */
+
 import { randBetween } from 'Utilities'
 
-export default class MissingAnglesNumberData /* extends GraphicQData */ {
-  // this.angles :: [Int] -- list of angles
-  // this.missing :: [Bool] -- true if missing
-  // this.angleSum :: what the angles add up to
+interface MissingAnglesOptions {
+  angleSum?: number,
+  minAngle?: number,
+  minN?: number,
+  maxN?: number,
+  nMissing?: number
+}
 
-  constructor (angleSum, angles, missing) {
+export default class MissingAnglesNumberData /* extends GraphicQData */ {
+  angles : number[] // list of angles
+  missing : boolean[] // true if missing
+  angleSum : number // what the angles add up to
+
+  constructor (angleSum : number, angles: number[], missing: boolean[]) {
     // initialises with angles given explicitly
-    if (angles === [] || angles === undefined) { throw new Error('Must give angles') }
+    if (angles === []) { throw new Error('Must give angles') }
     if (Math.round(angles.reduce((x, y) => x + y)) !== angleSum) {
-      throw new Error('Angle sum must be ' + angleSum)
+      throw new Error(`Angle sum must be ${angleSum}`)
     }
 
     this.angles = angles // list of angles
@@ -27,27 +36,25 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     this.angleSum = angleSum // sum of angles
   }
 
-  static random (options) {
+  static random (options: MissingAnglesOptions) : MissingAnglesNumberData {
     // choose constructor method based on options
     return MissingAnglesNumberData.randomSimple(options)
   }
 
-  static randomSimple (options) {
-    const defaults = {
+  static randomSimple (options: MissingAnglesOptions): MissingAnglesNumberData {
+    const defaults : MissingAnglesOptions = {
       /* angleSum: 180 */ // must be set by caller
       minAngle: 10,
       minN: 2,
       maxN: 4
     }
-    const settings = Object.assign({}, defaults, options)
+    options = Object.assign({}, defaults, options)
 
-    if (!settings.angleSum) { throw new Error('No angle sum given') }
+    if (!options.angleSum) { throw new Error('No angle sum given') }
 
-    const angleSum = settings.angleSum
-    const n = settings.n
-      ? settings.n
-      : randBetween(settings.minN, settings.maxN)
-    const minAngle = settings.minAngle
+    const angleSum = options.angleSum
+    const n = randBetween(options.minN, options.maxN)
+    const minAngle = options.minAngle
 
     if (n < 2) throw new Error('Can\'t have missing fewer than 2 angles')
 
@@ -70,16 +77,13 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     return new MissingAnglesNumberData(angleSum, angles, missing)
   }
 
-  initAllEqual (numberEqual) {
-  }
+  randomRepeated (options: MissingAnglesOptions) : MissingAnglesNumberData {
+    const angleSum: number = options.angleSum
+    const minAngle: number = options.minAngle
 
-  randomRepeated (options) {
-    const angleSum = this.settings.angleSum
-    const minAngle = this.settings.minAngle
+    const n: number = randBetween(options.minN, options.maxN)
 
-    const n = options.n || randBetween(options.minN, options.maxN)
-
-    const m = options.nMissing || Math.random() < 0.1 ? n : randBetween(2, n - 1)
+    const m: number = options.nMissing || Math.random() < 0.1 ? n : randBetween(2, n - 1)
 
     if (n < 2 || m < 1 || m > n) throw new Error(`Invalid arguments: n=${n}, m=${m}`)
 
@@ -95,8 +99,8 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
       return new MissingAnglesNumberData(angleSum, angles, missing)
     }
 
-    const angles = []
-    const missing = []
+    const angles: number[] = []
+    const missing: boolean[] = []
     missing.length = n
     missing.fill(false)
 
@@ -105,7 +109,7 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     const repeatedAngle = randBetween(minAngle, maxRepeatedAngle)
 
     // choose values for the other angles
-    const otherAngles = []
+    const otherAngles: number[] = []
     let left = angleSum - repeatedAngle * m
     for (let i = 0; i < n - m - 1; i++) {
       const maxAngle = left - minAngle * (n - m - i - 1)
@@ -141,12 +145,3 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     return new MissingAnglesNumberData(angleSum, angles, missing)
   }
 }
-
-/* Thoughts on refactoring to make more factory like
- *
- * constructor(angleSum, angles, missing) { // existing init() }
- * createRandom(options) {
- *    ... same as current initRandom, byt returns new ...
- * }
- *
- */

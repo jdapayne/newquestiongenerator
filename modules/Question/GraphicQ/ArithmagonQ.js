@@ -1,6 +1,6 @@
 import { GraphicQ, GraphicQView } from 'Question/GraphicQ/GraphicQ'
 import Point from 'Point'
-import Fraction from 'fraction.js'
+import Fraction from 'vendor/fraction'
 import Polynomial from 'Polynomial'
 import { randElem, randBetween, randBetweenFilter, gcd } from 'Utilities'
 

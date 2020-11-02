@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": "./modules"
-  }
+    "rootDir": "modules",
+    "baseUrl": "./modules",
+    "allowJs": true,
+    "target": "ES6",
+    "outDir": "dist"
+  },
+    "exclude": ["node_modules", "dist"]
 }
 

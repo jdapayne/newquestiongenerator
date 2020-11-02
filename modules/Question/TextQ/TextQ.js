@@ -1,5 +1,5 @@
 /* global katex */
-import Question from 'Question'
+import Question from 'Question/Question'
 
 export default class TextQ extends Question {
   constructor (options) {

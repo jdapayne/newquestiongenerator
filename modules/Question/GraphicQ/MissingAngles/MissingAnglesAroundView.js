@@ -7,7 +7,7 @@
  */
 
 import Point from 'Point'
-import { GraphicQView } from 'GraphicQ'
+import { GraphicQView } from 'Question/GraphicQ/GraphicQ'
 
 export default class MissingAnglesAroundView extends GraphicQView {
   // this.O

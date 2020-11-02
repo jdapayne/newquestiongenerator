@@ -1,13 +1,10 @@
 import Question from 'Question/Question'
-import IOptions from 'IOptions'
 import { createElem } from 'Utilities'
 import Point from 'Point'
-declare const katex : {
-  render : (string: string, element: HTMLElement) => void
-}
+declare const katex : {render : (string: string, element: HTMLElement) => void}
 
 export interface GraphicQData {
-  random: (options: IOptions) => GraphicQData
+  random(options: Record<string, unknown>) : GraphicQData
 }
 
 export interface Label {

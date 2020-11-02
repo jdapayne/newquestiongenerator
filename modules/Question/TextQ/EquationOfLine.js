@@ -1,5 +1,5 @@
 import { randBetween } from 'Utilities'
-import TextQ from 'TextQ'
+import TextQ from 'Question/TextQ/TextQ'
 import Fraction from 'vendor/fraction'
 
 /* Main question class. This will be spun off into different file and generalised */

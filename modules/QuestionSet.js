@@ -1,7 +1,7 @@
-import RSlider from 'rslider'
+import RSlider from 'vendor/rslider'
 import OptionsSet from 'OptionsSet'
 import * as TopicChooser from 'TopicChooser'
-import Modal from 'Tingle'
+import Modal from 'vendor/Tingle'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'Utilities'
 
 /* TODO list:

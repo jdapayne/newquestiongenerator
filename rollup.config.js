@@ -1,5 +1,5 @@
 import includePaths from 'rollup-plugin-includepaths'
-import {terser} from 'rollup-plugin-terser'
+/*import {terser} from 'rollup-plugin-terser'*/
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 // import {eslint} from 'rollup-plugin-eslint'
@@ -7,7 +7,7 @@ import typescript from '@rollup/plugin-typescript'
 
 const includePathOptions = {
   include: {},
-  paths: ['modules', 'modules/Question', 'modules/Question/TextQ', 'modules/Question/GraphicQ', 'modules/vendor'],
+  paths: ['modules'],
   external: [],
   extensions: ['.js', '.mjs', '.ts']
 }
@@ -27,14 +27,16 @@ export default {
   input: 'main.js',
   output: [
     {
-      file: 'bundle.js',
+      dir: 'dist',
       format: 'iife',
       sourcemap: 'inline'
-    },
-    {
+    }
+    /* {
+      dir: 'dist',
       file: 'bundle.min.js',
       format: 'iife',
       plugins: [terser()]
-    }],
+    }*/
+  ],
   plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), typescript(typescriptOptions)]
 };

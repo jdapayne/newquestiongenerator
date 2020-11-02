@@ -1,5 +1,5 @@
 import Point from 'Point'
-import { GraphicQView } from 'GraphicQ'
+import { GraphicQView } from 'Question/GraphicQ/GraphicQ'
 import { sinDeg, dashedLine } from 'Utilities'
 
 export default class MissingAnglesTriangleView extends GraphicQView {

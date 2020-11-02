@@ -6,9 +6,9 @@
  *
  */
 
-import { GraphicQ } from 'GraphicQ'
-import MissingAnglesAroundView from 'MissingAngles/MissingAnglesAroundView'
-import MissingAnglesNumberData from 'MissingAngles/MissingAnglesNumberData'
+import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
+import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
+import MissingAnglesNumberData from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
 
 export default class MissingAnglesAroundQ extends GraphicQ {
   constructor (data, view, options) { // effectively private

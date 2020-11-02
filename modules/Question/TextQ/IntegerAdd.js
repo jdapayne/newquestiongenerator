@@ -1,4 +1,4 @@
-import TextQ from 'TextQ'
+import TextQ from 'Question/TextQ/TextQ'
 import { randBetween } from 'Utilities'
 
 export default class IntegerAddQ extends TextQ {

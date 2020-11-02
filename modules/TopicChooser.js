@@ -1,10 +1,10 @@
-import AlgebraicFractionQ from 'AlgebraicFractionQ'
-import IntegerAddQ from 'IntegerAdd'
-import ArithmagonQ from 'ArithmagonQ'
-import TestQ from 'TestQ'
-import AddAZero from 'AddAZero'
-import EquationOfLine from 'EquationOfLine'
-import MissingAnglesQ from 'MissingAngles/MissingAnglesWrapper'
+import AlgebraicFractionQ from 'Question/TextQ/AlgebraicFractionQ'
+import IntegerAddQ from 'Question/TextQ/IntegerAdd'
+import ArithmagonQ from 'Question/GraphicQ/ArithmagonQ'
+import TestQ from 'Question/TextQ/TestQ'
+import AddAZero from 'Question/TextQ/AddAZero'
+import EquationOfLine from 'Question/TextQ/EquationOfLine'
+import MissingAnglesQ from 'Question/GraphicQ/MissingAngles/MissingAnglesWrapper'
 
 import OptionsSet from 'OptionsSet'
 
