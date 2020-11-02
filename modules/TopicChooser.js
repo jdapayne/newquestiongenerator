@@ -54,7 +54,7 @@ function getClass (id) {
     if (topicList[i].id === id) {
       return topicList[i].class
     }
-  };
+  }
 
   return null
 }

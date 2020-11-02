@@ -2,7 +2,7 @@ import includePaths from 'rollup-plugin-includepaths'
 import {terser} from 'rollup-plugin-terser'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import {eslint} from 'rollup-plugin-eslint'
+// import {eslint} from 'rollup-plugin-eslint'
 import typescript from '@rollup/plugin-typescript'
 
 const includePathOptions = {
@@ -12,15 +12,16 @@ const includePathOptions = {
   extensions: ['.js', '.mjs', '.ts']
 }
 
+/*
 const eslintOptions = {
-  fix: function() {return true},
-  exclude: ['node_modules/**', 'modules/vendor/nouislider.js', 'modules/vendor/fraction.js']
+  fix: function() {return false},
+  exclude: ['node_modules/**', 'modules/vendor/*']
 }
+*/
 
 const typescriptOptions = {
   target: "ES6"
 }
-
 
 export default {
   input: 'main.js',
@@ -35,5 +36,5 @@ export default {
       format: 'iife',
       plugins: [terser()]
     }],
-  plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), eslint(eslintOptions), typescript(typescriptOptions)]
+  plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), typescript(typescriptOptions)]
 };

@@ -41,7 +41,7 @@ export default class QuestionSet {
     const topicSpan = createElem('span', null, this.headerBox)
     this.topicChooserButton = createElem('span', 'topic-chooser button', topicSpan)
     this.topicChooserButton.innerHTML = 'Choose topic'
-    this.topicChooserButton.addEventListener('click', e => this.chooseTopics())
+    this.topicChooserButton.addEventListener('click', () => this.chooseTopics())
 
     const difficultySpan = createElem('span', null, this.headerBox)
     difficultySpan.append('Difficulty: ')
@@ -54,14 +54,14 @@ export default class QuestionSet {
     nQuestionsInput.type = 'number'
     nQuestionsInput.min = '1'
     nQuestionsInput.value = '8'
-    nQuestionsInput.addEventListener('change', e => {
+    nQuestionsInput.addEventListener('change', () => {
       this.n = parseInt(nQuestionsInput.value)
     })
 
     this.generateButton = createElem('button', 'generate-button button', this.headerBox)
     this.generateButton.disabled = true
     this.generateButton.innerHTML = 'Generate!'
-    this.generateButton.addEventListener('click', e => this.generateAll())
+    this.generateButton.addEventListener('click', () => this.generateAll())
   }
 
   _initSlider () {
@@ -98,7 +98,7 @@ export default class QuestionSet {
       stickyFooter: false,
       closeMethods: ['overlay', 'escape'],
       closeLabel: 'Close',
-      onClose: x => {
+      onClose: () => {
         this.updateTopics()
       }
     })
@@ -106,7 +106,7 @@ export default class QuestionSet {
     this.topicsModal.addFooterBtn(
       'OK',
       'button modal-button',
-      x => {
+      () => {
         this.topicsModal.close()
       })
 
@@ -144,14 +144,14 @@ export default class QuestionSet {
     modal.addFooterBtn(
       'OK',
       'button modal-button',
-      x => {
+      () => {
         modal.close()
       })
 
     optionsSet.renderIn(modal.modalBoxContent)
 
     // link the modal to the button
-    optionsButton.addEventListener('click', e => {
+    optionsButton.addEventListener('click', () => {
       modal.open()
     })
   }
@@ -216,7 +216,7 @@ export default class QuestionSet {
 
     // Make show answers button
     this.answerButton = createElem('p', 'button show-answers', this.displayBox)
-    this.answerButton.addEventListener('click', e => {
+    this.answerButton.addEventListener('click', () => {
       this.toggleAnswers()
     })
     this.answerButton.innerHTML = 'Show answers'
@@ -289,18 +289,18 @@ export default class QuestionSet {
     const refreshIcon = createElem('div', 'question-refresh icon-button', actions)
     const answerIcon = createElem('div', 'question-answer icon-button', actions)
 
-    answerIcon.addEventListener('click', e => {
+    answerIcon.addEventListener('click', () => {
       question.toggleAnswer()
       hideAllActions()
     })
 
-    refreshIcon.addEventListener('click', e => {
+    refreshIcon.addEventListener('click', () => {
       this.generate(i, difficulty)
       hideAllActions()
     })
 
     // Q: is this best way - or an event listener on the whole displayBox?
-    container.addEventListener('click', e => {
+    container.addEventListener('click', () => {
       if (!hasAncestorClass(e.target, 'question-actions')) {
         // only do this if it didn't originate in action button
         this.showQuestionActions(e, i)

@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'standard'
   ],
+
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'

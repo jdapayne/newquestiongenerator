@@ -18,37 +18,36 @@ export default class ArithmagonQ extends GraphicQ {
     super(options)
     // TODO: Have more than two.
 
-    //Choose type:
+    // Choose type:
     //   Type | Given   | Description
     //   0    | O, A    | Pythagoras missing hypotenuse
     //   1    | A, H    | Pythagoras missing leg
     //   2    | θ, A    | Trig using tan (unknown on numerator) or cos (unknown on denominator)
-    //   3    | θ, O    | Trig using tan or sin (both unknown on denominator) 
+    //   3    | θ, O    | Trig using tan or sin (both unknown on denominator)
     //   4    | θ, H    | Trig using cos or sin (both unknown on numerator)
-    
-    const triangle1Type = randBetween(0,4)
-    let triangle1Options = {}
+
+    const triangle1Type = randBetween(0, 4)
+    const triangle1Options = {}
     // set O
     if (triangle1Type === 0 || triangle1Type === 3) {
-      triangle1Options.O = randBetween(1,20)
+      triangle1Options.O = randBetween(1, 20)
     }
     // set A
     if (triangle1Type === 0 || triangle1Type === 1 || triangle1Type === 2) {
-      triangle1Options.A = randBetween(1,20)
+      triangle1Options.A = randBetween(1, 20)
     }
     // set H
     if (triangle1Type === 1 || triangle1Type === 4) {
-      triangle1Options.H = randBetween(1,20)
+      triangle1Options.H = randBetween(1, 20)
     }
     // set θ
     if (triangle1Type === 2 || triangle1Type === 3 || triangle1Type === 4) {
-      triangle1Options.theta = randBetween(1,20)
+      triangle1Options.theta = randBetween(1, 20)
     }
 
     const triangle1 = new RightAngledTriangle(triangle1Options)
 
     // choose a non-given side
-
   }
 
   render () {
@@ -171,15 +170,15 @@ class RightAngledTriangle {
    *  phi: equal to 2pi-theta
    *  O, A, H: sides opposite to adjacent to theta and the hypotenuse
    */
-  constructor(options) {
+  constructor (options) {
     // whether to use degrees
-    const degrees = (options.degrees === false)? false : true
+    const degrees = options.degrees !== false
 
     this.known = []
 
     // given side and angle
     if (options.theta) {
-      this.theta = degrees? options.theta*Math.PI/180 : options.theta
+      this.theta = degrees ? options.theta * Math.PI / 180 : options.theta
       this.phi = Math.PI - this.theta
       this.known.push('theta')
       if (options.H) {
@@ -187,49 +186,42 @@ class RightAngledTriangle {
         this.known.push('H')
         this.O = this.H * Math.sin(this.theta)
         this.A = this.H * Math.cos(this.theta)
-      }
-      else if (options.A) {
+      } else if (options.A) {
         this.A = options.A
         this.known.push('A')
         this.O = this.A * Math.tan(this.theta) // tan(θ)=O/A
         this.H = this.A / Math.cos(this.theta) // cos(θ)=A/H
-      }
-      else if (options.O) {
+      } else if (options.O) {
         this.O = options.O
         this.known.push('O')
         this.A = this.O / Math.tan(this.theta) // tan(θ)=O/A
         this.H = this.O / Math.sin(this.theta) // sin(θ)=O/H
-      }
-      else {
+      } else {
         throw new Error('Angle given but no sides')
       }
-    }
-    else { // should have two sides now
+    } else { // should have two sides now
       if (options.A && options.O) {
         this.A = options.A
         this.O = options.O
         this.known.push('A')
         this.known.push('O')
-        this.H = Math.hypot(this.A,this.O)
-      }
-      else if (options.A && options.H) {
+        this.H = Math.hypot(this.A, this.O)
+      } else if (options.A && options.H) {
         this.A = options.A
         this.H = options.H
         this.known.push('A')
         this.known.push('H')
-        this.O = Math.sqrt(this.H**2 - this.A**2)
-      }
-      else if (options.O && options.H) {
+        this.O = Math.sqrt(this.H ** 2 - this.A ** 2)
+      } else if (options.O && options.H) {
         this.O = options.O
         this.H = options.H
         this.known.push('O')
         this.known.push('H')
-        this.A = Math.sqrt(this.H**2 - this.O**2)
-      }
-      else {
+        this.A = Math.sqrt(this.H ** 2 - this.O ** 2)
+      } else {
         throw new Error('No angle given but <2 sides given')
       }
-      this.theta = Math.atan(this.O/this.A)
+      this.theta = Math.atan(this.O / this.A)
       this.phi = Math.PI = this.theta
     }
 
@@ -237,7 +229,6 @@ class RightAngledTriangle {
       throw new Error(`Not all parameters initialised. ${options}`)
     }
   }
-
 }
 
 RightAngleQ.optionsSpec = [

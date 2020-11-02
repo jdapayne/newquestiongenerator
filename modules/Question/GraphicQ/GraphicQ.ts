@@ -1,6 +1,5 @@
-/* global katex */
 declare const katex : any
-import Question from 'Question'
+import Question from 'Question/Question'
 import { createElem } from 'Utilities'
 import Point from 'Point'
 
@@ -8,7 +7,7 @@ export abstract class GraphicQ extends Question {
   data: GraphicQData
   view: GraphicQView
 
-  constructor (options) {
+  constructor (options: any) {
     super(options) // this.answered = false
     delete (this.DOM) // going to override getDOM using the view's DOM
 
@@ -40,16 +39,16 @@ export abstract class GraphicQ extends Question {
    *
    */
 
-  getDOM () { return this.view.getDOM() }
+  getDOM () : HTMLElement { return this.view.getDOM() }
 
-  render () { this.view.render() }
+  render () : void { this.view.render() }
 
-  showAnswer () {
+  showAnswer () : void {
     super.showAnswer()
     this.view.showAnswer()
   }
 
-  hideAnswer () {
+  hideAnswer () : void {
     super.hideAnswer()
     this.view.hideAnswer()
   }
@@ -118,7 +117,7 @@ export abstract class GraphicQView {
       const label = document.createElement('div')
       const innerlabel = document.createElement('div')
       label.classList.add('label')
-      label.classList.add(l.style)
+      label.className += " " + l.style //using className over classList since l.style is space-delimited list of classes
       label.style.left = l.pos.x + 'px'
       label.style.top = l.pos.y + 'px'
 

@@ -12,6 +12,8 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
     "eslint": "^7.9.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
@@ -29,7 +31,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup --config",
-    "build-dev": "rollup --config -w"
+    "build-dev": "rollup --config -w",
+    "lint": "eslint \"modules/**/*.js\""
   },
   "author": "",
   "license": "ISC"

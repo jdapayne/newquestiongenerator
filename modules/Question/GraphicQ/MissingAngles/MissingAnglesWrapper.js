@@ -36,7 +36,7 @@ export default class MissingAnglesQ {
         break
       }
       case 'triangle': {
-        this.question = new MissingAnglesTriangleQ()
+        this.question = MissingAnglesTriangleQ.random({})
         break
       }
       default:

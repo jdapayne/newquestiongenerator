@@ -7,7 +7,7 @@ import QuestionSet from 'QuestionSet'
 //    - G area
 //    - T equation of a line
 
-document.addEventListener('DOMContentLoaded', x => {
+document.addEventListener('DOMContentLoaded', () => {
   const qs = new QuestionSet()
   qs.appendTo(document.body)
 })
