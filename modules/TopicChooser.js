@@ -7,7 +7,6 @@ import EquationOfLine from 'Question/TextQ/EquationOfLine'
 import MissingAnglesQ from 'Question/GraphicQ/MissingAngles/MissingAnglesWrapper'
 
 import OptionsSet from 'OptionsSet'
-import Question from 'Question/Question'
 
 const topicList = [
   {

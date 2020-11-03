@@ -2,7 +2,7 @@
 
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesTriangleView from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleView'
-import {MissingAnglesNumberData} from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
+import { MissingAnglesNumberData } from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
 
 export default class MissingAnglesTriangleQ extends GraphicQ {
   constructor (data, view, options) {

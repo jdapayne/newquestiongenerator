@@ -8,7 +8,7 @@
 
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
-import {MissingAnglesNumberData} from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
+import { MissingAnglesNumberData } from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
 
 export interface Options {
   angleSum?: number
@@ -22,13 +22,13 @@ export default class MissingAnglesAroundQ extends GraphicQ {
   data: MissingAnglesNumberData
   view: MissingAnglesAroundView
 
-  constructor (data, view) { // effectively private
+  constructor (data: MissingAnglesNumberData, view: MissingAnglesAroundView) { // effectively private
     super() // bubbles to Q
     this.data = data
     this.view = view
   }
 
-  static random (options: Options) {
+  static random (options: Options) : MissingAnglesAroundQ {
     const defaults : Options = {
       angleSum: 180,
       minAngle: 10,
@@ -44,5 +44,5 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     return new MissingAnglesAroundQ(data, view)
   }
 
-  static get commandWord () { return 'Find the missing value' }
+  static get commandWord () : string { return 'Find the missing value' }
 }

@@ -21,8 +21,8 @@ export interface Options {
   nMissing?: number
 }
 
-export const MissingAnglesNumberData : GraphicQDataConstructor = 
-class MissingAnglesNumberData implements GraphicQData  {
+export const MissingAnglesNumberData : GraphicQDataConstructor =
+class MissingAnglesNumberData implements GraphicQData {
   angles : number[] // list of angles
   missing : boolean[] // true if missing
   angleSum : number // what the angles add up to

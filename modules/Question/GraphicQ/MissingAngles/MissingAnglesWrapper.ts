@@ -1,61 +1,60 @@
 /**  Class to wrap various missing angles classes
  * Reads options and then wraps the appropriate object, mirroring the main
  * public methods
- * 
+ *
  * This class deals with translating difficulty into question types
 */
 
 import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
 import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
+import Question from 'Question/Question'
 import { randElem } from 'Utilities'
 import { GraphicQ } from '../GraphicQ'
 
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-interface QuestionOptions { //anything that can be passed to a subclass
+interface QuestionOptions { // anything that can be passed to a subclass
   repeated?: boolean
   angleSum?: number
 }
 
-export default class MissingAnglesQ {
+export default class MissingAnglesQ extends Question {
   question: GraphicQ
 
   constructor (question: GraphicQ) {
+    super()
     this.question = question
   }
 
-  static random(
+  static random (
     options: {
       types: QuestionType[],
       difficulty: number,
       custom: boolean,
       subtype?: QuestionSubType
-    }) {
-
+    }) : MissingAnglesQ {
     if (options.types.length === 0) {
-      throw new Error(`Types list must be non-empty`)
+      throw new Error('Types list must be non-empty')
     }
     const type = randElem(options.types)
 
-    let question: GraphicQ
     let subtype : QuestionSubType
     if (options.difficulty > 5) {
       subtype = 'repeated'
     } else {
       subtype = 'simple'
     }
-    return this.randomFromTypeWithOptions (type, subtype)
+    return this.randomFromTypeWithOptions(type, subtype)
   }
 
-  static randomFromTypeWithOptions ( type: QuestionType, subtype?: QuestionSubType, options?: QuestionOptions) : MissingAnglesQ {
-
+  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, options?: QuestionOptions) : MissingAnglesQ {
     let question: GraphicQ
-    let questionOptions : QuestionOptions = {}
+    const questionOptions : QuestionOptions = {}
     switch (type) {
       case 'aaap':
       case 'aosl': {
-        questionOptions.angleSum =  (type==='aaap') ? 360 : 180
+        questionOptions.angleSum = (type === 'aaap') ? 360 : 180
         if (subtype === 'repeated') {
           questionOptions.repeated = true
         }
@@ -73,15 +72,11 @@ export default class MissingAnglesQ {
     return new MissingAnglesQ(question)
   }
 
-  initDifficulty (type, difficulty) {
-    // Initialised based on a type and a difficulty
-  }
-
-  getDOM () { return this.question.getDOM() }
-  render () { return this.question.render() }
-  showAnswer () { return this.question.showAnswer() }
-  hideAnswer () { return this.question.hideAnswer() }
-  toggleAnswer () { return this.question.toggleAnswer() }
+  getDOM () : HTMLElement { return this.question.getDOM() }
+  render () : void { this.question.render() }
+  showAnswer () : void { this.question.showAnswer() }
+  hideAnswer () : void { this.question.hideAnswer() }
+  toggleAnswer () : void { this.question.toggleAnswer() }
 
   static get optionsSpec () {
     return [
@@ -100,7 +95,7 @@ export default class MissingAnglesQ {
     ]
   }
 
-  static get commandWord () {
+  static get commandWord () : string {
     return 'Find the missing value'
   }
 }

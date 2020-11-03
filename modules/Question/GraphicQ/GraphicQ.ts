@@ -3,12 +3,18 @@ import { createElem } from 'Utilities'
 import Point from 'Point'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
 
+/* GraphicQData can all be very different, so interface is empty
+ * Keeping empty interface for labelling these (as alternative to having different unrelated classes) */
+
+/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface GraphicQData {
 }
+/* eslint-enable @typescript-eslint/no-empty-interface */
 
+/* all we want is to guarantee a random() method */
 export interface GraphicQDataConstructor {
-  new(...args : any): GraphicQData
-  random(options: {}) : GraphicQData
+  new(...args : unknown[]): GraphicQData
+  random(options: unknown) : GraphicQData
 }
 
 export interface Label {
