@@ -10,16 +10,19 @@
  */
 
 import { randBetween } from 'Utilities'
+import { GraphicQData, GraphicQDataConstructor } from '../GraphicQ'
 
-interface MissingAnglesOptions {
+export interface Options {
   angleSum?: number,
   minAngle?: number,
   minN?: number,
   maxN?: number,
+  repeated?: boolean,
   nMissing?: number
 }
 
-export default class MissingAnglesNumberData /* extends GraphicQData */ {
+export const MissingAnglesNumberData : GraphicQDataConstructor = 
+class MissingAnglesNumberData implements GraphicQData  {
   angles : number[] // list of angles
   missing : boolean[] // true if missing
   angleSum : number // what the angles add up to
@@ -36,13 +39,17 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     this.angleSum = angleSum // sum of angles
   }
 
-  static random (options: MissingAnglesOptions) : MissingAnglesNumberData {
+  static random (options: Options) : MissingAnglesNumberData {
     // choose constructor method based on options
-    return MissingAnglesNumberData.randomSimple(options)
+    if (options.repeated) {
+      return MissingAnglesNumberData.randomRepeated(options)
+    } else {
+      return MissingAnglesNumberData.randomSimple(options)
+    }
   }
 
-  static randomSimple (options: MissingAnglesOptions): MissingAnglesNumberData {
-    const defaults : MissingAnglesOptions = {
+  static randomSimple (options: Options): MissingAnglesNumberData {
+    const defaults : Options = {
       /* angleSum: 180 */ // must be set by caller
       minAngle: 10,
       minN: 2,
@@ -77,7 +84,7 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     return new MissingAnglesNumberData(angleSum, angles, missing)
   }
 
-  randomRepeated (options: MissingAnglesOptions) : MissingAnglesNumberData {
+  static randomRepeated (options: Options) : MissingAnglesNumberData {
     const angleSum: number = options.angleSum
     const minAngle: number = options.minAngle
 
@@ -145,3 +152,5 @@ export default class MissingAnglesNumberData /* extends GraphicQData */ {
     return new MissingAnglesNumberData(angleSum, angles, missing)
   }
 }
+
+export type MissingAnglesNumberData = InstanceType<typeof MissingAnglesNumberData>

@@ -7,6 +7,7 @@ import EquationOfLine from 'Question/TextQ/EquationOfLine'
 import MissingAnglesQ from 'Question/GraphicQ/MissingAngles/MissingAnglesWrapper'
 
 import OptionsSet from 'OptionsSet'
+import Question from 'Question/Question'
 
 const topicList = [
   {
@@ -76,7 +77,14 @@ function getTopics () {
 
 function newQuestion (id, options) {
   // to avoid writing `let q = new (TopicChooser.getClass(id))(options)
-  return new (getClass(id))(options)
+  const QuestionClass = getClass(id)
+  let question
+  if (QuestionClass.random) {
+    question = QuestionClass.random(options)
+  } else {
+    question = new QuestionClass(options)
+  }
+  return question
 }
 
 function newOptionsSet (id) {

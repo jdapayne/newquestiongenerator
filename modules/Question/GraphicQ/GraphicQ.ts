@@ -4,7 +4,11 @@ import Point from 'Point'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
 
 export interface GraphicQData {
-  random(options: Record<string, unknown>) : GraphicQData
+}
+
+export interface GraphicQDataConstructor {
+  new(...args : any): GraphicQData
+  random(options: {}) : GraphicQData
 }
 
 export interface Label {
@@ -176,7 +180,7 @@ export abstract class GraphicQ extends Question {
   data: GraphicQData
   view: GraphicQView
 
-  constructor (options: Record<string, unknown>) { // eslint-disable-line @typescript-eslint/no-unused-vars
+  constructor () { // eslint-disable-line @typescript-eslint/no-unused-vars
     super() // this.answered = false
     delete (this.DOM) // going to override getDOM using the view's DOM
 

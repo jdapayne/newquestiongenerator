@@ -8,21 +8,33 @@
 
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
-import MissingAnglesNumberData from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
+import {MissingAnglesNumberData} from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
+
+export interface Options {
+  angleSum?: number
+  minAngle?: number
+  minN?: number
+  maxN?: number
+  repeated?: boolean
+}
 
 export default class MissingAnglesAroundQ extends GraphicQ {
-  constructor (data, view, options) { // effectively private
-    super(options) // want to reform GraphicQ.
+  data: MissingAnglesNumberData
+  view: MissingAnglesAroundView
+
+  constructor (data, view) { // effectively private
+    super() // bubbles to Q
     this.data = data
     this.view = view
   }
 
-  static random (options) {
-    const defaults = {
+  static random (options: Options) {
+    const defaults : Options = {
       angleSum: 180,
       minAngle: 10,
       minN: 2,
-      maxN: 4
+      maxN: 4,
+      repeated: false
     }
     options = Object.assign({}, defaults, options)
 

@@ -33,7 +33,9 @@
     "build": "rollup --config",
     "build-dev": "rollup --config -w",
     "lint": "eslint modules",
-    "lint-fix": "eslint --fix modules"
+    "lint-quiet": "eslint --quiet modules",
+    "lint-fix": "eslint --fix modules",
+    "lint-quiet-fix": "eslint --fix --quiet modules"
   },
   "author": "",
   "license": "ISC"
