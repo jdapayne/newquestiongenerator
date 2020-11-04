@@ -4,6 +4,8 @@ import * as TopicChooser from 'TopicChooser'
 import Modal from 'vendor/Tingle'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'Utilities'
 
+const SHOW_DIFFICULTY = true
+
 /* TODO list:
  * Additional question block - probably in main.js
  * Remove options button for topics without options
@@ -270,6 +272,7 @@ export default class QuestionSet {
 
     // make and render question number and command word (if needed)
     let qNumberText = questionLetter(i) + ')'
+    if (SHOW_DIFFICULTY) {qNumberText += options.difficulty}
     if (!this.useCommandWord) {
       qNumberText += ' ' + TopicChooser.getCommandWord(topicId)
       container.classList.add('individual-command-word')

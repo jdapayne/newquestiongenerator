@@ -5,7 +5,7 @@
  * This class deals with translating difficulty into question types
 */
 
-import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
+import MissingAnglesAroundQ, * as AnglesAround from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
 import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
 import Question from 'Question/Question'
 import { randElem } from 'Utilities'
@@ -14,10 +14,7 @@ import { GraphicQ } from '../GraphicQ'
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-interface QuestionOptions { // anything that can be passed to a subclass
-  repeated?: boolean
-  angleSum?: number
-}
+type QuestionOptions = AnglesAround.Options // to be &ed with other options types
 
 export default class MissingAnglesQ extends Question {
   question: GraphicQ
@@ -37,20 +34,36 @@ export default class MissingAnglesQ extends Question {
     if (options.types.length === 0) {
       throw new Error('Types list must be non-empty')
     }
-    const type = randElem(options.types)
 
+    const type = randElem(options.types)
     let subtype : QuestionSubType
-    if (options.difficulty > 5) {
-      subtype = 'repeated'
-    } else {
-      subtype = 'simple'
+    let questionOptions : QuestionOptions = {}
+
+    switch (options.difficulty) {
+      case 1:
+        subtype = 'simple'
+        questionOptions.minN = 2
+        questionOptions.maxN = 2
+        break
+      case 2:
+        subtype = 'simple'
+        questionOptions.minN = 3
+        questionOptions.maxN = 4
+        break
+      case 3:
+      default:
+        subtype = 'repeated'
+        questionOptions.minN = 3
+        questionOptions.maxN = 4
+        break
     }
-    return this.randomFromTypeWithOptions(type, subtype)
+
+    return this.randomFromTypeWithOptions(type, subtype, questionOptions)
   }
 
-  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, options?: QuestionOptions) : MissingAnglesQ {
+  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: QuestionOptions) : MissingAnglesQ {
     let question: GraphicQ
-    const questionOptions : QuestionOptions = {}
+    questionOptions = questionOptions || {}
     switch (type) {
       case 'aaap':
       case 'aosl': {
@@ -62,6 +75,7 @@ export default class MissingAnglesQ extends Question {
         break
       }
       case 'triangle': {
+        questionOptions.repeated = (subtype === "repeated")
         question = MissingAnglesTriangleQ.random(questionOptions)
         break
       }
@@ -78,7 +92,7 @@ export default class MissingAnglesQ extends Question {
   hideAnswer () : void { this.question.hideAnswer() }
   toggleAnswer () : void { this.question.toggleAnswer() }
 
-  static get optionsSpec () {
+  static get optionsSpec () : unknown[] {
     return [
       {
         title: '',

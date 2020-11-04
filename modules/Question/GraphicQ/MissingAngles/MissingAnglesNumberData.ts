@@ -10,7 +10,7 @@
  */
 
 import { randBetween } from 'Utilities'
-import { GraphicQData, GraphicQDataConstructor } from '../GraphicQ'
+import { GraphicQData} from '../GraphicQ'
 
 export interface Options {
   angleSum?: number,
@@ -21,8 +21,7 @@ export interface Options {
   nMissing?: number
 }
 
-export const MissingAnglesNumberData : GraphicQDataConstructor =
-class MissingAnglesNumberData implements GraphicQData {
+export class MissingAnglesNumberData {
   angles : number[] // list of angles
   missing : boolean[] // true if missing
   angleSum : number // what the angles add up to
@@ -42,9 +41,9 @@ class MissingAnglesNumberData implements GraphicQData {
   static random (options: Options) : MissingAnglesNumberData {
     // choose constructor method based on options
     if (options.repeated) {
-      return MissingAnglesNumberData.randomRepeated(options)
+      return this.randomRepeated(options)
     } else {
-      return MissingAnglesNumberData.randomSimple(options)
+      return this.randomSimple(options)
     }
   }
 
@@ -81,7 +80,7 @@ class MissingAnglesNumberData implements GraphicQData {
     missing.fill(false)
     missing[randBetween(0, n - 1)] = true
 
-    return new MissingAnglesNumberData(angleSum, angles, missing)
+    return new this(angleSum, angles, missing)
   }
 
   static randomRepeated (options: Options) : MissingAnglesNumberData {
@@ -90,7 +89,7 @@ class MissingAnglesNumberData implements GraphicQData {
 
     const n: number = randBetween(options.minN, options.maxN)
 
-    const m: number = options.nMissing || Math.random() < 0.1 ? n : randBetween(2, n - 1)
+    const m: number = options.nMissing || (Math.random() < 0.1 ? n : randBetween(2, n - 1))
 
     if (n < 2 || m < 1 || m > n) throw new Error(`Invalid arguments: n=${n}, m=${m}`)
 
@@ -103,7 +102,7 @@ class MissingAnglesNumberData implements GraphicQData {
       missing.length = n
       missing.fill(true)
 
-      return new MissingAnglesNumberData(angleSum, angles, missing)
+      return new this(angleSum, angles, missing)
     }
 
     const angles: number[] = []
@@ -152,5 +151,3 @@ class MissingAnglesNumberData implements GraphicQData {
     return new MissingAnglesNumberData(angleSum, angles, missing)
   }
 }
-
-export type MissingAnglesNumberData = InstanceType<typeof MissingAnglesNumberData>

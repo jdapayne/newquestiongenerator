@@ -23,15 +23,24 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     // Create labels
     const inCenter = Point.inCenter(this.A, this.B, this.C)
 
+    let j = 0 // keeps track of 'x' and 'y' as labels
     for (let i = 0; i < 3; i++) {
       const p = [this.A, this.B, this.C][i]
 
       // nudging label toward center
       // const nudgeDistance = this.data.angles[i]
       // const position = p.clone().moveToward(inCenter,
+      let textq
+      if (this.data.missing[i]) {
+        textq = String.fromCharCode(120+j) // 120 = 'x'
+        j++
+      } else {
+        textq = this.data.angles[i].toString()
+      }
+      textq += '^\\circ'
       this.labels[i] = {
         pos: Point.mean(p, p, inCenter), // weighted mean - position from inCenter
-        textq: this.data.missing[i] ? 'x^\\circ' : this.data.angles[i].toString() + '^\\circ',
+        textq: textq,
         styleq: 'normal'
       }
       if (this.data.missing[i]) {
