@@ -1,17 +1,27 @@
 import Point from 'Point'
-import { GraphicQView } from 'Question/GraphicQ/GraphicQ'
+import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
 import { sinDeg, dashedLine } from 'Utilities'
+import MissingAnglesTriangleData from './MissingAnglesTriangleData'
 
 export default class MissingAnglesTriangleView extends GraphicQView {
-  // this.A, this.B, this.C :: Point -- the vertices of the triangle
-  // this.labels = []
-  // this.canvas
-  // this.DOM
-  // this.rotation
+  A : Point // the vertices of the triangle
+  B : Point
+  C : Point
+  rotation: number
+  // Inherited members:
+  labels: Label[]
+  canvas: HTMLCanvasElement
+  DOM: HTMLElement
+  width: number
+  height: number
+  data: MissingAnglesTriangleData
+
   constructor (data, options) {
     super(data, options) // sets this.width this.height, this.data initialises this.labels, creates dom elements
     const width = this.width
     const height = this.height
+
+    const displayAngles : number[] = []
 
     // generate points (with longest side 1
     this.A = new Point(0, 0)
@@ -27,9 +37,9 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     for (let i = 0; i < 3; i++) {
       const p = [this.A, this.B, this.C][i]
 
-      // nudging label toward center
-      // const nudgeDistance = this.data.angles[i]
-      // const position = p.clone().moveToward(inCenter,
+      const label : Partial<Label> = {}
+
+      // question text
       let textq
       if (this.data.missing[i]) {
         textq = String.fromCharCode(120+j) // 120 = 'x'
@@ -38,24 +48,23 @@ export default class MissingAnglesTriangleView extends GraphicQView {
         textq = this.data.angles[i].toString()
       }
       textq += '^\\circ'
-      this.labels[i] = {
-        pos: Point.mean(p, p, inCenter), // weighted mean - position from inCenter
-        textq: textq,
-        styleq: 'normal'
-      }
-      if (this.data.missing[i]) {
-        this.labels[i].texta = this.data.angles[i].toString() + '^\\circ'
-        this.labels[i].stylea = 'answer'
-      } else {
-        this.labels[i].texta = this.labels[i].textq
-        this.labels[i].stylea = this.labels[i].styleq
-      }
-    }
 
-    this.labels.forEach(l => {
-      l.text = l.textq
-      l.style = l.styleq
-    })
+      label.pos = Point.mean(p, p, inCenter) 
+      label.textq = textq
+      label.styleq = 'normal'
+
+      if (this.data.missing[i]) {
+        label.texta = this.data.angles[i].toString() + '^\\circ'
+        label.stylea = 'answer'
+      } else {
+        label.texta = label.textq
+        label.stylea = label.styleq
+      }
+      label.text = label.textq
+      label.style = label.styleq
+
+      this.labels[i] = label as Label
+    }
 
     // rotate randomly
     this.rotation = (options.rotation !== undefined) ? this.rotate(options.rotation) : this.randomRotate()

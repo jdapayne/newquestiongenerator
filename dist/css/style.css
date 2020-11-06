@@ -25,14 +25,15 @@ body {
 /* {{{ Questions styling */
 
 .question-displaybox {
-    display:grid;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fit,minmax(max-content,251px));
-    grid-gap: 25px;
-    width: 80%;
-    margin-left :auto;
-    margin-right: auto;
-    margin-top: 30px;
+  --column-width: 250px; /* will be updated by js */
+  display:grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
+  grid-gap: 25px;
+  width: 80%;
+  margin-left :auto;
+  margin-right: auto;
+  margin-top: 30px;
 }
 
 /*flex version*/

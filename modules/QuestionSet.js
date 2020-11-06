@@ -4,12 +4,13 @@ import * as TopicChooser from 'TopicChooser'
 import Modal from 'vendor/Tingle'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'Utilities'
 
-const SHOW_DIFFICULTY = true
+window.SHOW_DIFFICULTY = false // for debugging questions
 
 /* TODO list:
  * Additional question block - probably in main.js
- * Remove options button for topics without options
  * Zoom/scale buttons
+ *    Need to change css grid spacing with JS on generation
+ * Display options
  */
 
 // Make an overlay to capture any clicks outside boxes, if necessary
@@ -272,7 +273,7 @@ export default class QuestionSet {
 
     // make and render question number and command word (if needed)
     let qNumberText = questionLetter(i) + ')'
-    if (SHOW_DIFFICULTY) {qNumberText += options.difficulty}
+    if (window.SHOW_DIFFICULTY) {qNumberText += options.difficulty}
     if (!this.useCommandWord) {
       qNumberText += ' ' + TopicChooser.getCommandWord(topicId)
       container.classList.add('individual-command-word')

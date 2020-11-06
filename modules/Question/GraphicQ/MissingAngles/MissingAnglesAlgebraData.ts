@@ -73,6 +73,8 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
 
         return new MissingAnglesAlgebraData (angles,missing,options.angleSum,labels,x)
     }
+
+    initLabels() : void {} // makes typescript shut up
 }
 
 /** Given a set of expressions, set their sum  */
