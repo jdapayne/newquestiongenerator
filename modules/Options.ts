@@ -3,5 +3,5 @@
  *  Will be extended
  */
 export default interface Options {
-  difficulty: number
+  difficulty?: number
 }

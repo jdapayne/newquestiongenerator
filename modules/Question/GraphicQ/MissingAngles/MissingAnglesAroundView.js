@@ -37,9 +37,14 @@ export default class MissingAnglesAroundView extends GraphicQView {
     totalangle = 0
     for (let i = 0; i < this.data.angles.length; i++) {
       const theta = this.data.angles[i]
+      /* calculate distance out from center of label */
+      let d = 0.4
+      const labelLength = this.data.angleLabels[i].length - '^\\circ'.length
+      d += 3*labelLength/theta // inversely proportional to angle, proportional to lenght of label
+      d = Math.min(d,1)
       this.labels[i] = {
-        pos: Point.fromPolarDeg(radius * (0.4 + 6 / theta), totalangle + theta / 2),
-        textq: this.data.missing[i] ? 'x^\\circ' : this.data.angles[i].toString() + '^\\circ',
+        pos: Point.fromPolarDeg(radius * d, totalangle + theta / 2),
+        textq: this.data.angleLabels[i],
         styleq: 'normal'
       }
       if (this.data.missing[i]) {

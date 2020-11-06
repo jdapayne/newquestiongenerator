@@ -9,14 +9,7 @@
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
 import { MissingAnglesNumberData } from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
-
-export interface Options {
-  angleSum?: number
-  minAngle?: number
-  minN?: number
-  maxN?: number
-  repeated?: boolean
-}
+import { NumberOptions } from './NumberOptions'
 
 export default class MissingAnglesAroundQ extends GraphicQ {
   data: MissingAnglesNumberData
@@ -28,8 +21,8 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: Options) : MissingAnglesAroundQ {
-    const defaults : Options = {
+  static random (options: NumberOptions) : MissingAnglesAroundQ {
+    const defaults : NumberOptions = {
       angleSum: 180,
       minAngle: 10,
       minN: 2,

@@ -101,15 +101,17 @@ export abstract class GraphicQView {
       // position correctly - this could def be optimised - lots of back-and-forth
 
       // adjust to *center* label, rather than anchor top-right
-      const lwidth = label.offsetWidth
-      const lheight = label.offsetHeight
+      /* using css transform instead
       label.style.left = (l.pos.x - lwidth / 2) + 'px'
       label.style.top = (l.pos.y - lheight / 2) + 'px'
+      */
 
       // I don't understand this adjustment. I think it might be needed in arithmagons, but it makes
       // others go funny.
 
       if (nudge) {
+        const lwidth = label.offsetWidth
+        const lheight = label.offsetHeight
         if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
           label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
           console.log(`nudged '${l.text}'`)

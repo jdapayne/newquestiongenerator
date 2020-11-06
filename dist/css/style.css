@@ -207,6 +207,7 @@ p.question {
   flex-direction:column;
   text-align: center;
   white-space: nowrap;
+  transform: translate(-50%,-50%);
 }
 .label.answer {
   color: red;

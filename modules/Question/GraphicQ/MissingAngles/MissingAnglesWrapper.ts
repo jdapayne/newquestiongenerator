@@ -5,16 +5,19 @@
  * This class deals with translating difficulty into question types
 */
 
-import MissingAnglesAroundQ, * as AnglesAround from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
+import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
 import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
 import Question from 'Question/Question'
 import { randElem } from 'Utilities'
 import { GraphicQ } from '../GraphicQ'
+import { AlgebraOptions } from './AlgebraOptions'
+import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
+import { NumberOptions } from './NumberOptions'
 
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-type QuestionOptions = AnglesAround.Options // to be &ed with other options types
+type QuestionOptions = NumberOptions & AlgebraOptions
 
 export default class MissingAnglesQ extends Question {
   question: GraphicQ
@@ -51,10 +54,31 @@ export default class MissingAnglesQ extends Question {
         questionOptions.maxN = 4
         break
       case 3:
-      default:
         subtype = 'repeated'
         questionOptions.minN = 3
         questionOptions.maxN = 4
+        break
+      case 4:
+        subtype = 'algebra'
+        questionOptions.expressionTypes = ['multiply']
+        questionOptions.includeConstants = false
+        questionOptions.minN = 2
+        questionOptions.maxN = 4
+        break
+      case 5:
+        subtype='algebra'
+        questionOptions.expressionTypes = ['add','multiply']
+        questionOptions.includeConstants = ['multiply']
+        questionOptions.ensureX = true
+        questionOptions.minN = 2
+        questionOptions.maxN = 3
+        break
+      case 6:
+      default:
+        subtype = 'algebra'
+        questionOptions.expressionTypes = ['mixed']
+        questionOptions.minN = 2
+        questionOptions.maxN = 3
         break
     }
 
@@ -68,10 +92,18 @@ export default class MissingAnglesQ extends Question {
       case 'aaap':
       case 'aosl': {
         questionOptions.angleSum = (type === 'aaap') ? 360 : 180
-        if (subtype === 'repeated') {
-          questionOptions.repeated = true
+        switch (subtype) {
+          case 'simple':
+          case 'repeated':
+            questionOptions.repeated = subtype === 'repeated'
+            question = MissingAnglesAroundQ.random(questionOptions)
+            break
+          case 'algebra':
+            question = MissingAnglesAroundAlgebraQ.random(questionOptions)
+            break
+          default:
+            throw new Error (`unexpected subtype ${subtype}`)
         }
-        question = MissingAnglesAroundQ.random(questionOptions)
         break
       }
       case 'triangle': {

@@ -11,22 +11,16 @@
 
 import { randBetween } from 'Utilities'
 import { GraphicQData} from '../GraphicQ'
+import { MissingAnglesData } from './MissingAnglesData'
+import {NumberOptions as Options} from './NumberOptions' 
 
-export interface Options {
-  angleSum?: number,
-  minAngle?: number,
-  minN?: number,
-  maxN?: number,
-  repeated?: boolean,
-  nMissing?: number
-}
-
-export class MissingAnglesNumberData {
+export class MissingAnglesNumberData implements MissingAnglesData {
   angles : number[] // list of angles
   missing : boolean[] // true if missing
   angleSum : number // what the angles add up to
+  angleLabels: string[]
 
-  constructor (angleSum : number, angles: number[], missing: boolean[]) {
+  constructor (angleSum : number, angles: number[], missing: boolean[], angleLabels?: string[]) {
     // initialises with angles given explicitly
     if (angles === []) { throw new Error('Must give angles') }
     if (Math.round(angles.reduce((x, y) => x + y)) !== angleSum) {
@@ -36,25 +30,30 @@ export class MissingAnglesNumberData {
     this.angles = angles // list of angles
     this.missing = missing // which angles are missing - array of booleans
     this.angleSum = angleSum // sum of angles
+    this.angleLabels = angleLabels || []
   }
 
   static random (options: Options) : MissingAnglesNumberData {
-    // choose constructor method based on options
-    if (options.repeated) {
-      return this.randomRepeated(options)
-    } else {
-      return this.randomSimple(options)
-    }
-  }
-
-  static randomSimple (options: Options): MissingAnglesNumberData {
     const defaults : Options = {
       /* angleSum: 180 */ // must be set by caller
-      minAngle: 10,
+      minAngle: 15,
       minN: 2,
       maxN: 4
     }
+
     options = Object.assign({}, defaults, options)
+
+    let question : MissingAnglesNumberData
+    if (options.repeated) {
+      question = this.randomRepeated(options)
+    } else {
+      question = this.randomSimple(options)
+    }
+    question.initLabels()
+    return question
+  }
+
+  static randomSimple (options: Options): MissingAnglesNumberData {
 
     if (!options.angleSum) { throw new Error('No angle sum given') }
 
@@ -75,6 +74,7 @@ export class MissingAnglesNumberData {
     }
     angles[n - 1] = left
 
+    // pick one to be missing
     const missing = []
     missing.length = n
     missing.fill(false)
@@ -98,6 +98,7 @@ export class MissingAnglesNumberData {
       const angles = []
       angles.length = n
       angles.fill(angleSum / n)
+
       const missing = []
       missing.length = n
       missing.fill(true)
@@ -149,5 +150,16 @@ export class MissingAnglesNumberData {
       }
     }
     return new MissingAnglesNumberData(angleSum, angles, missing)
+  }
+
+  initLabels() : void {
+    const n = this.angles.length
+    for (let i = 0; i < n; i++) {
+      if (!this.missing[i]) {
+        this.angleLabels[i] = `${this.angles[i].toString()}^\\circ`
+      } else {
+        this.angleLabels[i] = 'x^\\circ'
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "modules",
+    "rootDir": ".",
     "baseUrl": "./modules",
     "allowJs": true,
     "target": "ES6",
