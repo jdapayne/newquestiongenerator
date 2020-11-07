@@ -218,7 +218,10 @@ p.question {
   transform: translateY(-50%);
 }
 .label.extra-info {
-  transform: translateY(-50%);
+  transform: translateY(-100%);
+  font-size: small;
+  display: block;
+  text-align: left;
 }
 .label.side {
   min-width: 35px;
@@ -236,6 +239,12 @@ p.question {
 .label>div {
     margin: 5px;
 }
+
+/*
+.question-canvas {
+  border: thin solid red
+}
+*/
 /*}}}*/
 
 
@@ -310,18 +319,6 @@ input[type="number"]{
 .hidden {
     display: none !important
 }
-
-/*Printing{{{*/
-@media only print {
-    body {font-size: 8pt !important}
-    .question-headerbox {display:none !important}
-    .question-displaybox {width:90% !important}
-    .button {display:none !important}
-    .mainq {grid-column: 1 / span all !important}
-    #print-button {display:none !important}
-    #home-button {display:none !important}
-}
-/*}}}*/
 
 /*Mobile styling {{{*/
 
