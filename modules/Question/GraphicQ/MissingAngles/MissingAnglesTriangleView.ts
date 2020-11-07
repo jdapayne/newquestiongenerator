@@ -1,6 +1,7 @@
 import Point from 'Point'
-import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
-import { sinDeg, dashedLine } from 'Utilities'
+import { GraphicQData, GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
+import { sinDeg, dashedLine, roundDP } from 'Utilities'
+import ViewOptions from '../ViewOptions'
 import MissingAnglesTriangleData from './MissingAnglesTriangleData'
 
 export default class MissingAnglesTriangleView extends GraphicQView {
@@ -16,7 +17,7 @@ export default class MissingAnglesTriangleView extends GraphicQView {
   height: number
   data: MissingAnglesTriangleData
 
-  constructor (data, options) {
+  constructor (data: MissingAnglesTriangleData, options: ViewOptions) {
     super(data, options) // sets this.width this.height, this.data initialises this.labels, creates dom elements
     const width = this.width
     const height = this.height
@@ -33,35 +34,24 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     // Create labels
     const inCenter = Point.inCenter(this.A, this.B, this.C)
 
-    let j = 0 // keeps track of 'x' and 'y' as labels
     for (let i = 0; i < 3; i++) {
       const p = [this.A, this.B, this.C][i]
 
-      const label : Partial<Label> = {}
-
-      // question text
-      let textq
-      if (this.data.missing[i]) {
-        textq = String.fromCharCode(120+j) // 120 = 'x'
-        j++
-      } else {
-        textq = this.data.angles[i].toString()
+      const label : Partial<Label> = {
+        textq: this.data.angleLabels[i],
+        text: this.data.angleLabels[i],
+        styleq: 'normal',
+        style: 'normal',
+        pos: Point.mean(p, p, inCenter) 
       }
-      textq += '^\\circ'
-
-      label.pos = Point.mean(p, p, inCenter) 
-      label.textq = textq
-      label.styleq = 'normal'
 
       if (this.data.missing[i]) {
-        label.texta = this.data.angles[i].toString() + '^\\circ'
+        label.texta = roundDP(this.data.angles[i],2).toString() + '^\\circ'
         label.stylea = 'answer'
       } else {
         label.texta = label.textq
         label.stylea = label.styleq
       }
-      label.text = label.textq
-      label.style = label.styleq
 
       this.labels[i] = label as Label
     }

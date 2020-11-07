@@ -13,6 +13,7 @@ import { GraphicQ } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
 import { AlgebraOptions } from './AlgebraOptions'
 import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
+import MissingAnglesTriangleAlgebraQ from './MissingAnglesTriangleAlgebraQ'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 import MissingAnglesWordedQ from './MissingAnglesWordedQ'
@@ -139,7 +140,16 @@ export default class MissingAnglesQ extends Question {
       }
       case 'triangle': {
         questionOptions.repeated = (subtype === "repeated")
-        question = MissingAnglesTriangleQ.random(questionOptions, viewOptions)
+        switch (subtype) {
+          case 'simple':
+          case 'repeated':
+            question = MissingAnglesTriangleQ.random(questionOptions, viewOptions)
+            break;
+          case 'algebra':
+          default:
+            question = MissingAnglesTriangleAlgebraQ.random(questionOptions,viewOptions)
+            break
+        }
         break
       }
       default:

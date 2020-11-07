@@ -8,9 +8,9 @@ import { MissingAngleOptions } from './NumberOptions'
 type Options = MissingAngleOptions & {givenAngle?: 'apex' | 'base'}
 
 export default class MissingAnglesTriangleData extends MissingAnglesNumberData {
-    apex: 0 | 1 | 2 | undefined // which of the three given angles is the apex of an isosceles triangle
-    constructor(angleSum: number, angles: number[], missing: boolean[], apex?: 0|1|2|undefined) {
-        super(angleSum,angles,missing)
+    apex?: 0 | 1 | 2 | undefined // which of the three given angles is the apex of an isosceles triangle
+    constructor(angleSum: number, angles: number[], missing: boolean[], angleLabels?: string[], apex?: 0|1|2|undefined) {
+        super(angleSum,angles,missing,angleLabels)
         this.apex = apex
     }
 
@@ -33,7 +33,22 @@ export default class MissingAnglesTriangleData extends MissingAnglesNumberData {
             question.missing[(question.apex + 1)%3] = false;
         }
 
+        question.initLabels()
+
        return question
     } 
+
+    initLabels(): void {
+        const n = this.angles.length
+        let j = 0 // keep track of unknowns
+        for (let i = 0; i < n; i++) {
+            if (!this.missing[i]) {
+                this.angleLabels[i] = `${this.angles[i].toString()}^\\circ`
+            } else {
+                this.angleLabels[i] = `${String.fromCharCode(120 + j)}^\\circ` // 120 = 'x'
+                j++
+            }
+        }
+    }
 
 }

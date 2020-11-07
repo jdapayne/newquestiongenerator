@@ -149,7 +149,7 @@ export class MissingAnglesNumberData implements MissingAnglesData {
         }
       }
     }
-    return new MissingAnglesNumberData(angleSum, angles, missing)
+    return new this(angleSum, angles, missing)
   }
 
   initLabels() : void {
