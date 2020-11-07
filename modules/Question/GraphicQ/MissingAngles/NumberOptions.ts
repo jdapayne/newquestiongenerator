@@ -1,6 +1,6 @@
-import GraphicOptions from "../GraphicOptions";
+import ViewOptions from "../ViewOptions";
 
-export interface NumberOptions extends GraphicOptions {
+export interface MissingAngleOptions {
   angleSum?: number
   minAngle?: number
   minN?: number

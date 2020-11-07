@@ -12,7 +12,7 @@
 import { randBetween } from 'Utilities'
 import { GraphicQData} from '../GraphicQ'
 import { MissingAnglesData } from './MissingAnglesData'
-import {NumberOptions as Options} from './NumberOptions' 
+import {MissingAngleOptions as Options} from './NumberOptions' 
 
 export class MissingAnglesNumberData implements MissingAnglesData {
   angles : number[] // list of angles
@@ -34,7 +34,7 @@ export class MissingAnglesNumberData implements MissingAnglesData {
   }
 
   static random (options: Options) : MissingAnglesNumberData {
-    const defaults : Options = {
+    const defaults : Partial<Options> = {
       /* angleSum: 180 */ // must be set by caller
       minAngle: 15,
       minN: 2,

@@ -9,7 +9,8 @@
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
 import { MissingAnglesNumberData } from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
-import { NumberOptions } from './NumberOptions'
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
+import { MissingAngleOptions } from './NumberOptions'
 
 export default class MissingAnglesAroundQ extends GraphicQ {
   data: MissingAnglesNumberData
@@ -21,8 +22,8 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: NumberOptions) : MissingAnglesAroundQ {
-    const defaults : NumberOptions = {
+  static random (options: MissingAngleOptions, viewOptions: MissingAnglesViewOptions ) : MissingAnglesAroundQ {
+    const defaults : MissingAngleOptions = {
       angleSum: 180,
       minAngle: 10,
       minN: 2,
@@ -32,7 +33,7 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     options = Object.assign({}, defaults, options)
 
     const data = MissingAnglesNumberData.random(options)
-    const view = new MissingAnglesAroundView(data, options) // TODO eliminate public constructors
+    const view = new MissingAnglesAroundView(data, viewOptions) // TODO eliminate public constructors
 
     return new MissingAnglesAroundQ(data, view)
   }

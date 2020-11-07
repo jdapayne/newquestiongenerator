@@ -101,10 +101,19 @@ export function lcm (a, b) {
 }
 
 /* Arrays and similar */
+
+/**
+ * Sorts two arrays together based on sorting arr0
+ * @param {*[]} arr0 
+ * @param {*[]} arr1 
+ * @param {*} f 
+ */
 export function sortTogether (arr0, arr1, f) {
   if (arr0.length !== arr1.length) {
     throw new TypeError('Both arguments must be arrays of the same length')
   }
+
+  f = f || ((x,y)=>x-y)
 
   const n = arr0.length
   const combined = []

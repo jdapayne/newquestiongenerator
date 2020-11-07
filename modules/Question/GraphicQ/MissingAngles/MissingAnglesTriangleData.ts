@@ -3,9 +3,9 @@
 import { firstUniqueIndex, sortTogether } from 'Utilities'
 import { GraphicQData } from '../GraphicQ'
 import { MissingAnglesNumberData} from './MissingAnglesNumberData'
-import { NumberOptions } from './NumberOptions'
+import { MissingAngleOptions } from './NumberOptions'
 
-type Options = NumberOptions & {givenAngle?: 'apex' | 'base'}
+type Options = MissingAngleOptions & {givenAngle?: 'apex' | 'base'}
 
 export default class MissingAnglesTriangleData extends MissingAnglesNumberData {
     apex: 0 | 1 | 2 | undefined // which of the three given angles is the apex of an isosceles triangle

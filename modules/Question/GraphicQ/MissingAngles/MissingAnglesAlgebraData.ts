@@ -2,7 +2,7 @@ import LinExpr from "LinExpr";
 import { randBetween, randElem, randMultBetween, shuffle, weakIncludes } from "Utilities";
 import { AlgebraOptions } from "./AlgebraOptions";
 import { MissingAnglesData } from "./MissingAnglesData";
-import { NumberOptions } from "./NumberOptions";
+import { MissingAngleOptions } from "./NumberOptions";
 
 type Options = AlgebraOptions
 
@@ -23,7 +23,7 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
     }
 
     static random (options: Options) : MissingAnglesAlgebraData {
-        const defaults : Options = {
+        const defaults : Partial<Options> = {
             expressionTypes: ['add','multiply', 'mixed'],
             ensureX: true,
             includeConstants: true,

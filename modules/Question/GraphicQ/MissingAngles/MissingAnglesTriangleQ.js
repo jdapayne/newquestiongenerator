@@ -11,7 +11,7 @@ export default class MissingAnglesTriangleQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options) {
+  static random (options, viewOptions) {
     const optionsOverride = {
       angleSum: 180,
       minAngle: 25,
@@ -22,7 +22,7 @@ export default class MissingAnglesTriangleQ extends GraphicQ {
     options.repeated  = options.repeated || false
 
     const data = MissingAnglesTriangleData.random(options)
-    const view = new MissingAnglesTriangleView(data, options)
+    const view = new MissingAnglesTriangleView(data, viewOptions)
 
     return new MissingAnglesTriangleQ(data, view, options)
   }

@@ -10,14 +10,16 @@ import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAngle
 import Question from 'Question/Question'
 import { randElem } from 'Utilities'
 import { GraphicQ } from '../GraphicQ'
+import ViewOptions from '../ViewOptions'
 import { AlgebraOptions } from './AlgebraOptions'
 import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
-import { NumberOptions } from './NumberOptions'
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
+import { MissingAngleOptions } from './NumberOptions'
 
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-type QuestionOptions = NumberOptions & AlgebraOptions
+type QuestionOptions = MissingAngleOptions & AlgebraOptions
 
 export default class MissingAnglesQ extends Question {
   question: GraphicQ
@@ -85,9 +87,10 @@ export default class MissingAnglesQ extends Question {
     return this.randomFromTypeWithOptions(type, subtype, questionOptions)
   }
 
-  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: QuestionOptions) : MissingAnglesQ {
+  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: QuestionOptions, viewOptions?: MissingAnglesViewOptions) : MissingAnglesQ {
     let question: GraphicQ
     questionOptions = questionOptions || {}
+    viewOptions = viewOptions || {}
     switch (type) {
       case 'aaap':
       case 'aosl': {
@@ -96,10 +99,10 @@ export default class MissingAnglesQ extends Question {
           case 'simple':
           case 'repeated':
             questionOptions.repeated = subtype === 'repeated'
-            question = MissingAnglesAroundQ.random(questionOptions)
+            question = MissingAnglesAroundQ.random(questionOptions, viewOptions)
             break
           case 'algebra':
-            question = MissingAnglesAroundAlgebraQ.random(questionOptions)
+            question = MissingAnglesAroundAlgebraQ.random(questionOptions, viewOptions)
             break
           default:
             throw new Error (`unexpected subtype ${subtype}`)
@@ -108,7 +111,7 @@ export default class MissingAnglesQ extends Question {
       }
       case 'triangle': {
         questionOptions.repeated = (subtype === "repeated")
-        question = MissingAnglesTriangleQ.random(questionOptions)
+        question = MissingAnglesTriangleQ.random(questionOptions, viewOptions)
         break
       }
       default:

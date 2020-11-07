@@ -1,6 +1,7 @@
 import Question from 'Question/Question'
 import { createElem } from 'Utilities'
 import Point from 'Point'
+import ViewOptions from './ViewOptions'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
 
 /* GraphicQData can all be very different, so interface is empty
@@ -37,21 +38,16 @@ export abstract class GraphicQView {
   data: GraphicQData
   labels: Label[]
 
-  constructor (
-    data : GraphicQData,
-    options : {
-      width: number,
-      height: number
-    }) {
-    const defaults = {
+  constructor ( data : GraphicQData, viewOptions : ViewOptions) {
+    const defaults : ViewOptions = {
       width: 250,
       height: 250
     }
 
-    options = Object.assign({}, defaults, options)
+    viewOptions = Object.assign({}, defaults, viewOptions)
 
-    this.width = options.width
-    this.height = options.height // only things I need from the options, generally?
+    this.width = viewOptions.width
+    this.height = viewOptions.height // only things I need from the options, generally?
     this.data = data
     // this.rotation?
 

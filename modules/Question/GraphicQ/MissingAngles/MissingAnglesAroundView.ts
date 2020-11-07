@@ -8,21 +8,28 @@
 
 import Point from 'Point'
 import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
+import { sortTogether } from 'Utilities'
+import ViewOptions from '../ViewOptions'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 export default class MissingAnglesAroundView extends GraphicQView {
   radius: number
   O: Point
   A: Point
   C: Point[]
+  viewAngles: number[] // 'fudged' versions of data.angles for display
   data: MissingAnglesNumberData
   rotation: number
   
-  constructor (data, options) {
+  constructor (data : MissingAnglesNumberData, options : MissingAnglesViewOptions) {
     super(data, options) // sets this.width this.height, initialises this.labels, creates dom elements
     const width = this.width
     const height = this.height
     const radius = this.radius = Math.min(width, height) / 2.5
+    const minViewAngle = options.minViewAngle || 25
+
+    this.viewAngles = fudgeAngles(this.data.angles,  minViewAngle)
 
     // Set up main points
     this.O = new Point(0, 0) // center point
@@ -30,15 +37,15 @@ export default class MissingAnglesAroundView extends GraphicQView {
     this.C = [] // Points around outside
     let totalangle = 0 // nb in radians
     for (let i = 0; i < this.data.angles.length; i++) {
-      totalangle += this.data.angles[i] * Math.PI / 180
+      totalangle += this.viewAngles[i] * Math.PI / 180
       this.C[i] = Point.fromPolar(radius, totalangle)
     }
 
     // Set up labels
     totalangle = 0
-    for (let i = 0; i < this.data.angles.length; i++) {
+    for (let i = 0; i < this.viewAngles.length; i++) {
       const label : Partial<Label> = {}
-      const theta = this.data.angles[i]
+      const theta = this.viewAngles[i]
 
       /* calculate distance out from center of label */
       let d = 0.4
@@ -94,8 +101,8 @@ export default class MissingAnglesAroundView extends GraphicQView {
 
     ctx.beginPath()
     let totalangle = this.rotation
-    for (let i = 0; i < this.data.angles.length; i++) {
-      const theta = this.data.angles[i] * Math.PI / 180
+    for (let i = 0; i < this.viewAngles.length; i++) {
+      const theta = this.viewAngles[i] * Math.PI / 180
       ctx.arc(this.O.x, this.O.y, this.radius * (0.2 + 0.07 / theta), totalangle, totalangle + theta)
       ctx.stroke()
       totalangle += theta
@@ -119,4 +126,55 @@ export default class MissingAnglesAroundView extends GraphicQView {
     })
     return allpoints
   }
+}
+
+/** Adjusts small angles in a set to be above minAngle, adjusting other angles appropriately
+ *  Attempts not to change any angles from obtuse to acute etc.
+ */
+function fudgeAngles(angles: number[], minAngle: number) : number[] {
+  const n = angles.length
+  const anglesCopy = [...angles]
+  const indices = new Array(n)
+  for (let i = 0; i < n; i++) { indices[i]=i }
+
+  // keep track of original indices to put them back in original order
+  sortTogether(anglesCopy,indices,(x,y)=>x-y)
+
+  // start from smallest values, adjust if needed
+  for(let i = 0; i< n; i++) {
+    if (anglesCopy[i] < minAngle) {
+      const difference = minAngle - anglesCopy[i]
+      anglesCopy[i] += difference
+    
+      //choose an angle to decrease
+      for (let j = n-1; j>=i; j--) {
+        if (j===i) throw new Error(`can't adjust angle ${anglesCopy[i]} in set ${angles}`)
+        if (angleType(anglesCopy[j]) === angleType(anglesCopy[j]-difference)) {
+          anglesCopy[j] -= difference
+          break
+        }
+      }
+    }
+  }
+
+  // put back in order
+  sortTogether(indices,anglesCopy,(x,y)=>x-y)
+
+  return anglesCopy
+}
+
+enum AngleType{
+  acute,     // ≤ 90
+  obtuse,    // 90<x≤180
+  reflex,    // 180<x≤270
+  veryReflex // >270
+}
+
+function angleType(angle: number) : AngleType {
+  if (angle < 0) throw new Error (`Invalid angle ${angle}`)
+  if (angle <= 90) return AngleType.acute
+  if (angle <= 180) return AngleType.obtuse
+  if (angle <= 270 ) return AngleType.reflex
+  if (angle <= 360 ) return AngleType.veryReflex
+  throw new Error(`Invalid angle ${angle}`)
 }
