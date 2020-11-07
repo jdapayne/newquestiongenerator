@@ -8,7 +8,7 @@
 
 import Point from 'Point'
 import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
-import { sortTogether } from 'Utilities'
+import { roundDP, sinDeg, sortTogether } from 'Utilities'
 import ViewOptions from '../ViewOptions'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
@@ -41,24 +41,45 @@ export default class MissingAnglesAroundView extends GraphicQView {
       this.C[i] = Point.fromPolar(radius, totalangle)
     }
 
-    // Set up labels
-    totalangle = 0
+    // Randomly rotate and center
+    this.rotation = (options.rotation !== undefined) ? this.rotate(options.rotation) : this.randomRotate()
+    // this.scaleToFit(width,height,10)
+    this.translate(width/2, height/2)
+
+    // Set up labels (after scaling and rotating)
+    totalangle = Point.angleFrom(this.O,this.A) * 180/Math.PI // angle from O that A is 
     for (let i = 0; i < this.viewAngles.length; i++) {
+      // Label text
       const label : Partial<Label> = {}
+      const textq = this.data.angleLabels[i]
+      const texta = roundDP(this.data.angles[i],2).toString() + '^\\circ'
+
+      // Positioning
       const theta = this.viewAngles[i]
+      const midAngle = totalangle + theta/2
+      const minDistance = 0.3 // as a fraction of radius
+      const labelLength = Math.max(textq.length, texta.length) - '^\\circ'.length // ° takes up very little space
 
-      /* calculate distance out from center of label */
-      let d = 0.4
-      const labelLength = this.data.angleLabels[i].length - '^\\circ'.length
-      d += 3*labelLength/theta // inversely proportional to angle, proportional to lenght of label
-      d = Math.min(d,1)
+      /* Explanation: Further out if:
+      *   More vertical (sin(midAngle))
+      *   Longer label
+      *   smaller angle
+      *   E.g. totally vertical, 45°, length = 3
+      *   d = 0.3 + 1*3/45 = 0.3 + 0.7 = 0.37 
+      */
+      //const factor = 1        // constant of proportionality. Set by trial and error
+      //let distance = minDistance + factor * Math.abs(sinDeg(midAngle)) * labelLength / theta
 
-      label.pos = Point.fromPolarDeg(radius * d, totalangle + theta / 2),
-      label.textq = this.data.angleLabels[i],
+      // Just revert to old method
+
+      const distance = 0.4 + 6/theta
+
+      label.pos = Point.fromPolarDeg(radius * distance, totalangle + theta / 2).translate(this.O.x,this.O.y),
+      label.textq = textq
       label.styleq = 'normal'
 
       if (this.data.missing[i]) {
-        label.texta = this.data.angles[i].toString() + '^\\circ'
+        label.texta = texta
         label.stylea = 'answer'
       } else {
         label.texta = label.textq
@@ -78,9 +99,6 @@ export default class MissingAnglesAroundView extends GraphicQView {
       l.style = l.styleq
     })
 
-    // Randomly rotate and center
-    this.rotation = (options.rotation !== undefined) ? this.rotate(options.rotation) : this.randomRotate()
-    this.translate(width / 2 - this.O.x, height / 2 - this.O.y) // centre
   }
 
   render () {
@@ -103,6 +121,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
     let totalangle = this.rotation
     for (let i = 0; i < this.viewAngles.length; i++) {
       const theta = this.viewAngles[i] * Math.PI / 180
+      // 0.07/theta radians ~= 4/theta
       ctx.arc(this.O.x, this.O.y, this.radius * (0.2 + 0.07 / theta), totalangle, totalangle + theta)
       ctx.stroke()
       totalangle += theta
@@ -128,53 +147,27 @@ export default class MissingAnglesAroundView extends GraphicQView {
   }
 }
 
-/** Adjusts small angles in a set to be above minAngle, adjusting other angles appropriately
- *  Attempts not to change any angles from obtuse to acute etc.
+/**
+ * Adjusts a set of angles so that all angles are greater than {minAngle} by reducing other angles in proportion
+ * @param angles The set of angles to adjust
+ * @param minAngle The smallest angle in the output
  */
 function fudgeAngles(angles: number[], minAngle: number) : number[] {
-  const n = angles.length
-  const anglesCopy = [...angles]
-  const indices = new Array(n)
-  for (let i = 0; i < n; i++) { indices[i]=i }
+  const mappedAngles = angles.map((x,i)=>[x,i]) // remember original indices
+  const smallAngles = mappedAngles.filter(x=> x[0]<minAngle)
+  const largeAngles = mappedAngles.filter(x=> x[0]>=minAngle)
+  let largeAngleSum = largeAngles.reduce( (accumulator,currentValue) => accumulator + currentValue[0] , 0)
 
-  // keep track of original indices to put them back in original order
-  sortTogether(anglesCopy,indices,(x,y)=>x-y)
+  smallAngles.forEach( small => {
+    const difference = minAngle - small[0]
+    small[0] += difference
+    largeAngles.forEach( large => {
+      const reduction = difference * large[0]/largeAngleSum
+      large[0] -= reduction
+    })
+  })
 
-  // start from smallest values, adjust if needed
-  for(let i = 0; i< n; i++) {
-    if (anglesCopy[i] < minAngle) {
-      const difference = minAngle - anglesCopy[i]
-      anglesCopy[i] += difference
-    
-      //choose an angle to decrease
-      for (let j = n-1; j>=i; j--) {
-        if (j===i) throw new Error(`can't adjust angle ${anglesCopy[i]} in set ${angles}`)
-        if (angleType(anglesCopy[j]) === angleType(anglesCopy[j]-difference)) {
-          anglesCopy[j] -= difference
-          break
-        }
-      }
-    }
-  }
-
-  // put back in order
-  sortTogether(indices,anglesCopy,(x,y)=>x-y)
-
-  return anglesCopy
-}
-
-enum AngleType{
-  acute,     // ≤ 90
-  obtuse,    // 90<x≤180
-  reflex,    // 180<x≤270
-  veryReflex // >270
-}
-
-function angleType(angle: number) : AngleType {
-  if (angle < 0) throw new Error (`Invalid angle ${angle}`)
-  if (angle <= 90) return AngleType.acute
-  if (angle <= 180) return AngleType.obtuse
-  if (angle <= 270 ) return AngleType.reflex
-  if (angle <= 360 ) return AngleType.veryReflex
-  throw new Error(`Invalid angle ${angle}`)
+  return  smallAngles.concat(largeAngles)       // combine together
+                     .sort((x,y) => x[1]-y[1])  // sort by previous index
+                     .map(x=>x[0])              // strip out index
 }

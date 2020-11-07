@@ -94,14 +94,6 @@ export abstract class GraphicQView {
         katex.render(newlabeltext, innerlabel)
       }
 
-      // position correctly - this could def be optimised - lots of back-and-forth
-
-      // adjust to *center* label, rather than anchor top-right
-      /* using css transform instead
-      label.style.left = (l.pos.x - lwidth / 2) + 'px'
-      label.style.top = (l.pos.y - lheight / 2) + 'px'
-      */
-
       // I don't understand this adjustment. I think it might be needed in arithmagons, but it makes
       // others go funny.
 
@@ -167,18 +159,28 @@ export abstract class GraphicQView {
     return angle
   }
 
-  scaleToFit (width : number, height: number, margin : number) : void {
+  /**
+   * Scales all the points to within a given width and height, centering the result. Returns the scale factor
+   * @param width The width of the bounding rectangle to scale to
+   * @param height The height of the bounding rectangle to scale to
+   * @param margin Margin to leave outside the rectangle
+   * @returns 
+   */
+  scaleToFit (width : number, height: number, margin : number) : number {
     let topLeft : Point = Point.min(this.allpoints)
     let bottomRight : Point = Point.max(this.allpoints)
     const totalWidth : number = bottomRight.x - topLeft.x
     const totalHeight : number = bottomRight.y - topLeft.y
-    this.scale(Math.min((width - margin) / totalWidth, (height - margin) / totalHeight))
+    const sf = Math.min((width - margin) / totalWidth, (height - margin) / totalHeight)
+    this.scale(sf)
 
     // centre
     topLeft = Point.min(this.allpoints)
     bottomRight = Point.max(this.allpoints)
-    const center = Point.mean([topLeft, bottomRight])
+    const center = Point.mean(topLeft, bottomRight)
     this.translate(width / 2 - center.x, height / 2 - center.y) // centre
+
+    return sf
   }
 }
 

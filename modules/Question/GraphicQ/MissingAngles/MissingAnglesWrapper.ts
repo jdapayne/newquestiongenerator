@@ -14,12 +14,15 @@ import ViewOptions from '../ViewOptions'
 import { AlgebraOptions } from './AlgebraOptions'
 import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
+import MissingAnglesWordedData from './MissingAnglesWordedData'
+import MissingAnglesWordedQ from './MissingAnglesWordedQ'
 import { MissingAngleOptions } from './NumberOptions'
+import { WordedOptions } from './WordedOptions'
 
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-type QuestionOptions = MissingAngleOptions & AlgebraOptions
+type QuestionOptions = MissingAngleOptions & AlgebraOptions & WordedOptions
 
 export default class MissingAnglesQ extends Question {
   question: GraphicQ
@@ -76,12 +79,34 @@ export default class MissingAnglesQ extends Question {
         questionOptions.maxN = 3
         break
       case 6:
-      default:
         subtype = 'algebra'
         questionOptions.expressionTypes = ['mixed']
         questionOptions.minN = 2
         questionOptions.maxN = 3
         break
+      case 7:
+        subtype = 'worded'
+        questionOptions.types= [randElem(['add', 'multiply'])]
+        questionOptions.minN = questionOptions.maxN = 2
+        break
+      case 8:
+        subtype = 'worded'
+        questionOptions.types = ['add','multiply']
+        questionOptions.minN = questionOptions.maxN = 3
+        break
+      case 9:
+        subtype = 'worded'
+        questionOptions.types = ['multiply','ratio']
+        questionOptions.minN = questionOptions.maxN = 3
+        break
+      case 10:
+        subtype = 'worded'
+        questionOptions.types = ['multiply','add','ratio','percent']
+        questionOptions.minN = questionOptions.maxN = 3
+        break
+      default:
+        throw new Error(`Can't generate difficulty ${options.difficulty}`)
+
     }
 
     return this.randomFromTypeWithOptions(type, subtype, questionOptions)
@@ -103,6 +128,9 @@ export default class MissingAnglesQ extends Question {
             break
           case 'algebra':
             question = MissingAnglesAroundAlgebraQ.random(questionOptions, viewOptions)
+            break
+          case 'worded':
+            question = MissingAnglesWordedQ.random(questionOptions, viewOptions)
             break
           default:
             throw new Error (`unexpected subtype ${subtype}`)
