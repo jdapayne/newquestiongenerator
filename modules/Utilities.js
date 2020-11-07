@@ -50,6 +50,12 @@ export function roundToTen (n) {
   return Math.round(n / 10) * 10
 }
 
+/**
+ * Rounds a number to a given number of decimal places
+ * @param {number} x The number to round
+ * @param {number} n The number of decimal places
+ * @returns {number}
+ */
 export function roundDP (x, n) {
   return Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
 }

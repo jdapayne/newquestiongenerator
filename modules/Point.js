@@ -1,3 +1,6 @@
+/**
+ * Class representing a point, and static utitlity methods
+ */
 export default class Point {
   constructor (x, y) {
     this.x = x
@@ -52,6 +55,10 @@ export default class Point {
     return Point.fromPolar(r, theta)
   }
 
+  /**
+   * Find the mean of 
+   * @param  {...Point} points The points to find the mean of
+   */
   static mean (...points) {
     const sumx = points.map(p => p.x).reduce((x, y) => x + y)
     const sumy = points.map(p => p.y).reduce((x, y) => x + y)
@@ -104,6 +111,19 @@ export default class Point {
 
   static distance (p1, p2) {
     return Math.hypot(p1.x - p2.x, p1.y - p2.y)
+  }
+
+  /**
+   * Calculate the angle in radians from horizontal to p2, with centre p1.
+   * E.g. angleFrom( (0,0), (1,1) ) = pi/2
+   * Angle is from 0 to 2pi
+   * @param {Point} p1 The start point
+   * @param {Point} p2 The end point
+   * @returns {number} The angle in radians 
+   */
+  static angleFrom(p1,p2) {
+    const angle =  Math.atan2(p2.y-p1.y,p2.x-p1.x)
+    return angle >= 0 ? angle : 2*Math.PI + angle
   }
 
   static repel (p1, p2, trigger, distance) {

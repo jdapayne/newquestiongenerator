@@ -10,4 +10,5 @@ import QuestionSet from 'QuestionSet'
 document.addEventListener('DOMContentLoaded', () => {
   const qs = new QuestionSet()
   qs.appendTo(document.body)
+  qs.chooseTopics()
 })
