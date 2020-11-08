@@ -170,10 +170,10 @@ export default class MissingAnglesQ extends Question {
   hideAnswer () : void { this.question.hideAnswer() }
   toggleAnswer () : void { this.question.toggleAnswer() }
 
-  static get optionsSpec () : unknown[] {
+  static get optionsSpec () : OptionsSpec {
     return [
       {
-        title: '',
+        title: 'Types',
         id: 'types',
         type: 'select-inclusive',
         selectOptions: [
@@ -183,6 +183,13 @@ export default class MissingAnglesQ extends Question {
         ],
         default: ['aosl', 'aaap', 'triangle'],
         vertical: true
+      },
+      {
+        type: 'column-break'
+      },
+      {
+        type: 'heading',
+        title: 'Customise (disables difficulty setting)'
       }
     ]
   }

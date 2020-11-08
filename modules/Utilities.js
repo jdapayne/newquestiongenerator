@@ -210,6 +210,14 @@ export function mIf (p, q) { // material conditional
 }
 
 /* DOM manipulation and querying */
+
+/**
+ * Creates a new HTML element, sets classes and appends
+ * @param {string} tagName Tag name of element
+ * @param {string|undefined} className A class or classes to assign to the element
+ * @param {HTMLElement} parent A parent element to append the element to
+ * @returns {HTMLElement}
+ */
 export function createElem (tagName, className, parent) {
   // create, set class and append in one
   const elem = document.createElement(tagName)

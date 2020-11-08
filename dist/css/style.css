@@ -255,12 +255,13 @@ p.question {
     padding: 0;
     margin: 0;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row;
     height: 100%;
     align-content: flex-start;
 }
 
-.options-list > li {
+
+.options-column > li {
     margin-top: 0.5em;
     margin-right: 2em;
     display: flex;
