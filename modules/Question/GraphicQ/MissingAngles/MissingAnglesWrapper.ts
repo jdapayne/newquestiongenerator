@@ -14,6 +14,7 @@ import ViewOptions from '../ViewOptions'
 import { AlgebraOptions } from './AlgebraOptions'
 import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
 import MissingAnglesTriangleAlgebraQ from './MissingAnglesTriangleAlgebraQ'
+import MissingAnglesTriangleWordedQ from './MissingAnglesTriangleWordedQ'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 import MissingAnglesWordedQ from './MissingAnglesWordedQ'
@@ -144,11 +145,15 @@ export default class MissingAnglesQ extends Question {
           case 'simple':
           case 'repeated':
             question = MissingAnglesTriangleQ.random(questionOptions, viewOptions)
-            break;
+            break
           case 'algebra':
-          default:
             question = MissingAnglesTriangleAlgebraQ.random(questionOptions,viewOptions)
             break
+          case 'worded':
+            question = MissingAnglesTriangleWordedQ.random(questionOptions,viewOptions)
+            break
+          default:
+            throw new Error (`unexpected subtype ${subtype}`)
         }
         break
       }
