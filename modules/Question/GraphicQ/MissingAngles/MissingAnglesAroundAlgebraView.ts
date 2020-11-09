@@ -1,8 +1,8 @@
-import Point from "Point";
-import { Label } from "../GraphicQ";
-import MissingAnglesAlgebraData from "./MissingAnglesAlgebraData";
-import MissingAnglesAroundView from "./MissingAnglesAroundView";
-import { MissingAnglesViewOptions } from "./MissingAnglesViewOptions";
+import Point from 'Point'
+import { Label } from '../GraphicQ'
+import MissingAnglesAlgebraData from './MissingAnglesAlgebraData'
+import MissingAnglesAroundView from './MissingAnglesAroundView'
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 export default class MissingAnglesAroundAlgebraView extends MissingAnglesAroundView {
     O : Point
@@ -16,19 +16,18 @@ export default class MissingAnglesAroundAlgebraView extends MissingAnglesAroundV
     height: number
     data: MissingAnglesAlgebraData
 
-    constructor( data: MissingAnglesAlgebraData, options: MissingAnglesViewOptions) {
-        super(data, options) // super constructor does real work
-        const solutionLabel: Partial<Label> = {
-            pos: new Point(10, this.height - 10),
-            textq: '',
-            texta: `x = ${this.data.x}^\\circ`,
-            styleq: 'hidden',
-            stylea: 'extra-answer',
-        }
-        solutionLabel.style = solutionLabel.styleq
-        solutionLabel.text = solutionLabel.textq
+    constructor (data: MissingAnglesAlgebraData, options: MissingAnglesViewOptions) {
+      super(data, options) // super constructor does real work
+      const solutionLabel: Partial<Label> = {
+        pos: new Point(10, this.height - 10),
+        textq: '',
+        texta: `x = ${this.data.x}^\\circ`,
+        styleq: 'hidden',
+        stylea: 'extra-answer'
+      }
+      solutionLabel.style = solutionLabel.styleq
+      solutionLabel.text = solutionLabel.textq
 
-        this.labels.push(solutionLabel as Label)
+      this.labels.push(solutionLabel as Label)
     }
-
 }

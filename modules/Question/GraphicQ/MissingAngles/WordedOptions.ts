@@ -1,5 +1,5 @@
-import { MissingAngleOptions } from "./NumberOptions";
-import { WordedType } from "./MissingAnglesWordedData";
+import { MissingAngleOptions } from './NumberOptions'
+import { WordedType } from './MissingAnglesWordedData'
 
 export interface WordedOptions extends MissingAngleOptions {
   minAddend?: number;

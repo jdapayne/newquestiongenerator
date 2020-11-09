@@ -21,7 +21,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
   viewAngles: number[] // 'fudged' versions of data.angles for display
   data: MissingAnglesNumberData
   rotation: number
-  
+
   constructor (data : MissingAnglesNumberData, options : MissingAnglesViewOptions) {
     super(data, options) // sets this.width this.height, initialises this.labels, creates dom elements
     const width = this.width
@@ -29,7 +29,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
     const radius = this.radius = Math.min(width, height) / 2.5
     const minViewAngle = options.minViewAngle || 25
 
-    this.viewAngles = fudgeAngles(this.data.angles,  minViewAngle)
+    this.viewAngles = fudgeAngles(this.data.angles, minViewAngle)
 
     // Set up main points
     this.O = new Point(0, 0) // center point
@@ -44,19 +44,19 @@ export default class MissingAnglesAroundView extends GraphicQView {
     // Randomly rotate and center
     this.rotation = (options.rotation !== undefined) ? this.rotate(options.rotation) : this.randomRotate()
     // this.scaleToFit(width,height,10)
-    this.translate(width/2, height/2)
+    this.translate(width / 2, height / 2)
 
     // Set up labels (after scaling and rotating)
-    totalangle = Point.angleFrom(this.O,this.A) * 180/Math.PI // angle from O that A is 
+    totalangle = Point.angleFrom(this.O, this.A) * 180 / Math.PI // angle from O that A is
     for (let i = 0; i < this.viewAngles.length; i++) {
       // Label text
       const label : Partial<Label> = {}
       const textq = this.data.angleLabels[i]
-      const texta = roundDP(this.data.angles[i],2).toString() + '^\\circ'
+      const texta = roundDP(this.data.angles[i], 2).toString() + '^\\circ'
 
       // Positioning
       const theta = this.viewAngles[i]
-      const midAngle = totalangle + theta/2
+      const midAngle = totalangle + theta / 2
       const minDistance = 0.3 // as a fraction of radius
       const labelLength = Math.max(textq.length, texta.length) - '^\\circ'.length // ° takes up very little space
 
@@ -65,16 +65,16 @@ export default class MissingAnglesAroundView extends GraphicQView {
       *   Longer label
       *   smaller angle
       *   E.g. totally vertical, 45°, length = 3
-      *   d = 0.3 + 1*3/45 = 0.3 + 0.7 = 0.37 
+      *   d = 0.3 + 1*3/45 = 0.3 + 0.7 = 0.37
       */
-      //const factor = 1        // constant of proportionality. Set by trial and error
-      //let distance = minDistance + factor * Math.abs(sinDeg(midAngle)) * labelLength / theta
+      // const factor = 1        // constant of proportionality. Set by trial and error
+      // let distance = minDistance + factor * Math.abs(sinDeg(midAngle)) * labelLength / theta
 
       // Just revert to old method
 
-      const distance = 0.4 + 6/theta
+      const distance = 0.4 + 6 / theta
 
-      label.pos = Point.fromPolarDeg(radius * distance, totalangle + theta / 2).translate(this.O.x,this.O.y),
+      label.pos = Point.fromPolarDeg(radius * distance, totalangle + theta / 2).translate(this.O.x, this.O.y),
       label.textq = textq
       label.styleq = 'normal'
 
@@ -98,7 +98,6 @@ export default class MissingAnglesAroundView extends GraphicQView {
       l.text = l.textq
       l.style = l.styleq
     })
-
   }
 
   render () {
@@ -152,22 +151,22 @@ export default class MissingAnglesAroundView extends GraphicQView {
  * @param angles The set of angles to adjust
  * @param minAngle The smallest angle in the output
  */
-function fudgeAngles(angles: number[], minAngle: number) : number[] {
-  const mappedAngles = angles.map((x,i)=>[x,i]) // remember original indices
-  const smallAngles = mappedAngles.filter(x=> x[0]<minAngle)
-  const largeAngles = mappedAngles.filter(x=> x[0]>=minAngle)
-  let largeAngleSum = largeAngles.reduce( (accumulator,currentValue) => accumulator + currentValue[0] , 0)
+function fudgeAngles (angles: number[], minAngle: number) : number[] {
+  const mappedAngles = angles.map((x, i) => [x, i]) // remember original indices
+  const smallAngles = mappedAngles.filter(x => x[0] < minAngle)
+  const largeAngles = mappedAngles.filter(x => x[0] >= minAngle)
+  const largeAngleSum = largeAngles.reduce((accumulator, currentValue) => accumulator + currentValue[0], 0)
 
-  smallAngles.forEach( small => {
+  smallAngles.forEach(small => {
     const difference = minAngle - small[0]
     small[0] += difference
-    largeAngles.forEach( large => {
-      const reduction = difference * large[0]/largeAngleSum
+    largeAngles.forEach(large => {
+      const reduction = difference * large[0] / largeAngleSum
       large[0] -= reduction
     })
   })
 
-  return  smallAngles.concat(largeAngles)       // combine together
-                     .sort((x,y) => x[1]-y[1])  // sort by previous index
-                     .map(x=>x[0])              // strip out index
+  return smallAngles.concat(largeAngles) // combine together
+    .sort((x, y) => x[1] - y[1]) // sort by previous index
+    .map(x => x[0]) // strip out index
 }

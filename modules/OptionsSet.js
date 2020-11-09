@@ -1,7 +1,7 @@
 import { createElem } from 'Utilities'
 
 export default class OptionsSet {
-  constructor(optionSpec, template) {
+  constructor (optionSpec, template) {
     this.optionSpec = optionSpec
 
     this.options = {}
@@ -21,7 +21,7 @@ export default class OptionsSet {
    * Given an option, find its UI element and update the state from that
    * @param {*} option An element of this.optionSpec or an id
    */
-  updateStateFromUI(option) {
+  updateStateFromUI (option) {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
       option = this.optionsSpec.find(x => x.id === option)
@@ -55,19 +55,19 @@ export default class OptionsSet {
     // console.log(this.options)
   }
 
-  updateStateFromUIAll() {
-    this.optionSpec.forEach( options => this.updateStateFromUI(option))
+  updateStateFromUIAll () {
+    this.optionSpec.forEach(options => this.updateStateFromUI(option))
   }
 
-  disableOrEnableAll() {
-    this.optionSpec.forEach( option => this.disableOrEnable(option))
+  disableOrEnableAll () {
+    this.optionSpec.forEach(option => this.disableOrEnable(option))
   }
 
   /**
    * Given an option, find its UI element and update it according to the options ID
    * @param {*} option An element of this.optionsSpec or an option id
    */
-  updateUIFromState(option) {
+  updateUIFromState (option) {
   }
 
   /**
@@ -75,7 +75,7 @@ export default class OptionsSet {
    * state of the corresponding boolean option
    * @param {*} option An element of this.optionsSpec or an option id
    */
-  disableOrEnable(option) {
+  disableOrEnable (option) {
     if (typeof (option) === 'string') {
       option = this.optionsSpec.find(x => x.id === option)
       if (!option) throw new Error(`no option with id '${option}'`)
@@ -83,7 +83,7 @@ export default class OptionsSet {
 
     if (!option.disabledIf) return
 
-    //Inverse everything if begining with !
+    // Inverse everything if begining with !
     let disablerId = option.disabledIf
     let enable = false // disable iff disabler is true
     if (disablerId.startsWith('!')) {
@@ -91,17 +91,17 @@ export default class OptionsSet {
       disablerId = disablerId.slice(1)
     }
 
-    //Endable or disable
-    if (this.options[disablerId] === enable) { //enable
+    // Endable or disable
+    if (this.options[disablerId] === enable) { // enable
       option.element.classList.remove('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach( e=> e.disabled=false)
-    } else { //disable
+      ;[...option.element.getElementsByTagName('input')].forEach(e => e.disabled = false)
+    } else { // disable
       option.element.classList.add('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach( e=> e.disabled=true)
+      ;[...option.element.getElementsByTagName('input')].forEach(e => e.disabled = true)
     }
   }
 
-  renderIn(element) {
+  renderIn (element) {
     const list = createElem('ul', 'options-list')
     let column = createElem('div', 'options-column', list)
 
@@ -124,10 +124,10 @@ export default class OptionsSet {
           case 'select-exclusive':
             this.renderListOption(option, li)
         }
-        li.addEventListener('change', e => {this.updateStateFromUI(option); this.disableOrEnableAll()})
+        li.addEventListener('change', e => { this.updateStateFromUI(option); this.disableOrEnableAll() })
         option.element = li
 
-        if (option.style === 'emph') {li.classList.add('emphasise')}
+        if (option.style === 'emph') { li.classList.add('emphasise') }
       }
     })
     element.append(list)
@@ -135,7 +135,7 @@ export default class OptionsSet {
     this.disableOrEnableAll()
   }
 
-  renderListOption(option, li) {
+  renderListOption (option, li) {
     li.append(option.title + ': ')
 
     const sublist = createElem('ul', 'options-sublist', li)
@@ -170,17 +170,17 @@ export default class OptionsSet {
  * @param {string} title The title of the heading
  * @param {HTMLElement} li The element to render into
  */
-function renderHeading(title, li) {
+function renderHeading (title, li) {
   li.append(title)
   li.classList.add('options-heading')
 }
 
 /**
  * Renders single parameter
- * @param {*} option 
- * @param {*} li 
+ * @param {*} option
+ * @param {*} li
  */
-function renderSingleOption(option, li) {
+function renderSingleOption (option, li) {
   const label = createElem('label', undefined, li)
 
   if (!option.swapLabel && option.title !== '') label.append(option.title + ': ')
@@ -203,7 +203,6 @@ function renderSingleOption(option, li) {
 
   if (option.swapLabel && option.title !== '') label.append(' ' + option.title)
 }
-
 
 OptionsSet.idCounter = 0 // increment each time to create unique ids to use in ids/names of elements
 

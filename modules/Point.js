@@ -56,7 +56,7 @@ export default class Point {
   }
 
   /**
-   * Find the mean of 
+   * Find the mean of
    * @param  {...Point} points The points to find the mean of
    */
   static mean (...points) {
@@ -119,11 +119,11 @@ export default class Point {
    * Angle is from 0 to 2pi
    * @param {Point} p1 The start point
    * @param {Point} p2 The end point
-   * @returns {number} The angle in radians 
+   * @returns {number} The angle in radians
    */
-  static angleFrom(p1,p2) {
-    const angle =  Math.atan2(p2.y-p1.y,p2.x-p1.x)
-    return angle >= 0 ? angle : 2*Math.PI + angle
+  static angleFrom (p1, p2) {
+    const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x)
+    return angle >= 0 ? angle : 2 * Math.PI + angle
   }
 
   static repel (p1, p2, trigger, distance) {

@@ -42,11 +42,11 @@ export default class MissingAnglesTriangleView extends GraphicQView {
         text: this.data.angleLabels[i],
         styleq: 'normal',
         style: 'normal',
-        pos: Point.mean(p, p, inCenter) 
+        pos: Point.mean(p, p, inCenter)
       }
 
       if (this.data.missing[i]) {
-        label.texta = roundDP(this.data.angles[i],2).toString() + '^\\circ'
+        label.texta = roundDP(this.data.angles[i], 2).toString() + '^\\circ'
         label.stylea = 'answer'
       } else {
         label.texta = label.textq

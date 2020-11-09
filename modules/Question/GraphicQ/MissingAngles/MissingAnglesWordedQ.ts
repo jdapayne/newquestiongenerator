@@ -1,7 +1,7 @@
-import { GraphicQ } from "../GraphicQ";
-import MissingAnglesAroundWordedView from "./MissingAnglesAroundWordedView";
-import MissingAnglesWordedData from "./MissingAnglesWordedData";
-import { WordedOptions } from "./WordedOptions";
+import { GraphicQ } from '../GraphicQ'
+import MissingAnglesAroundWordedView from './MissingAnglesAroundWordedView'
+import MissingAnglesWordedData from './MissingAnglesWordedData'
+import { WordedOptions } from './WordedOptions'
 
 export default class MissingAnglesWordedQ extends GraphicQ {
   data: MissingAnglesWordedData
@@ -19,15 +19,15 @@ export default class MissingAnglesWordedQ extends GraphicQ {
       minAngle: 10,
       minN: 2,
       maxN: 2,
-      repeated: false,
+      repeated: false
     }
-    options = Object.assign({},defaults,options)
+    options = Object.assign({}, defaults, options)
 
     viewOptions = viewOptions || {}
 
     const data = MissingAnglesWordedData.random(options)
-    const view = new MissingAnglesAroundWordedView (data, viewOptions)
+    const view = new MissingAnglesAroundWordedView(data, viewOptions)
 
-    return new this(data,view)
+    return new this(data, view)
   }
 }

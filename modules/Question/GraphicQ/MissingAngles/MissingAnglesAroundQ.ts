@@ -22,7 +22,7 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: MissingAngleOptions, viewOptions: MissingAnglesViewOptions ) : MissingAnglesAroundQ {
+  static random (options: MissingAngleOptions, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundQ {
     const defaults : MissingAngleOptions = {
       angleSum: 180,
       minAngle: 10,

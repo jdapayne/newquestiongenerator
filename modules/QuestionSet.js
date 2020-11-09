@@ -273,7 +273,7 @@ export default class QuestionSet {
 
     // make and render question number and command word (if needed)
     let qNumberText = questionLetter(i) + ')'
-    if (window.SHOW_DIFFICULTY) {qNumberText += options.difficulty}
+    if (window.SHOW_DIFFICULTY) { qNumberText += options.difficulty }
     if (!this.useCommandWord) {
       qNumberText += ' ' + TopicChooser.getCommandWord(topicId)
       container.classList.add('individual-command-word')

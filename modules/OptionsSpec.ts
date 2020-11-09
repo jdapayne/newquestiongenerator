@@ -26,7 +26,7 @@ interface SelectExclusiveOption extends SelectOption {
 }
 
 interface IntegerOption extends Option{
-  type: 'int', 
+  type: 'int',
   min?: number,
   max?: number,
   default: number,
@@ -55,5 +55,5 @@ export type OptionsSpec = (
   IntegerOption |
   BooleanOption |
   ColumnBreak |
-  OptionHeading 
+  OptionHeading
 )[]

@@ -48,7 +48,7 @@ export default class MissingAnglesQ extends Question {
 
     const type = randElem(options.types)
     let subtype : QuestionSubType
-    let questionOptions : QuestionOptions = {}
+    const questionOptions : QuestionOptions = {}
 
     switch (options.difficulty) {
       case 1:
@@ -74,8 +74,8 @@ export default class MissingAnglesQ extends Question {
         questionOptions.maxN = 4
         break
       case 5:
-        subtype='algebra'
-        questionOptions.expressionTypes = ['add','multiply']
+        subtype = 'algebra'
+        questionOptions.expressionTypes = ['add', 'multiply']
         questionOptions.includeConstants = ['multiply']
         questionOptions.ensureX = true
         questionOptions.minN = 2
@@ -89,27 +89,26 @@ export default class MissingAnglesQ extends Question {
         break
       case 7:
         subtype = 'worded'
-        questionOptions.types= [randElem(['add', 'multiply'])]
+        questionOptions.types = [randElem(['add', 'multiply'])]
         questionOptions.minN = questionOptions.maxN = 2
         break
       case 8:
         subtype = 'worded'
-        questionOptions.types = ['add','multiply']
+        questionOptions.types = ['add', 'multiply']
         questionOptions.minN = questionOptions.maxN = 3
         break
       case 9:
         subtype = 'worded'
-        questionOptions.types = ['multiply','ratio']
+        questionOptions.types = ['multiply', 'ratio']
         questionOptions.minN = questionOptions.maxN = 3
         break
       case 10:
         subtype = 'worded'
-        questionOptions.types = ['multiply','add','ratio','percent']
+        questionOptions.types = ['multiply', 'add', 'ratio', 'percent']
         questionOptions.minN = questionOptions.maxN = 3
         break
       default:
         throw new Error(`Can't generate difficulty ${options.difficulty}`)
-
     }
 
     return this.randomFromTypeWithOptions(type, subtype, questionOptions)
@@ -136,25 +135,25 @@ export default class MissingAnglesQ extends Question {
             question = MissingAnglesWordedQ.random(questionOptions, viewOptions)
             break
           default:
-            throw new Error (`unexpected subtype ${subtype}`)
+            throw new Error(`unexpected subtype ${subtype}`)
         }
         break
       }
       case 'triangle': {
-        questionOptions.repeated = (subtype === "repeated")
+        questionOptions.repeated = (subtype === 'repeated')
         switch (subtype) {
           case 'simple':
           case 'repeated':
             question = MissingAnglesTriangleQ.random(questionOptions, viewOptions)
             break
           case 'algebra':
-            question = MissingAnglesTriangleAlgebraQ.random(questionOptions,viewOptions)
+            question = MissingAnglesTriangleAlgebraQ.random(questionOptions, viewOptions)
             break
           case 'worded':
-            question = MissingAnglesTriangleWordedQ.random(questionOptions,viewOptions)
+            question = MissingAnglesTriangleWordedQ.random(questionOptions, viewOptions)
             break
           default:
-            throw new Error (`unexpected subtype ${subtype}`)
+            throw new Error(`unexpected subtype ${subtype}`)
         }
         break
       }
@@ -171,7 +170,7 @@ export default class MissingAnglesQ extends Question {
   hideAnswer () : void { this.question.hideAnswer() }
   toggleAnswer () : void { this.question.toggleAnswer() }
 
-  static get optionsSpec(): OptionsSpec {
+  static get optionsSpec (): OptionsSpec {
     return [
       {
         type: 'heading',
@@ -210,7 +209,7 @@ export default class MissingAnglesQ extends Question {
     ]
   }
 
-  static get commandWord(): string {
+  static get commandWord (): string {
     return 'Find the missing value'
   }
 }

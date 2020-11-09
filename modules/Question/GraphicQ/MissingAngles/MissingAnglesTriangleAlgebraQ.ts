@@ -1,16 +1,16 @@
-import { GraphicQ } from "../GraphicQ";
-import ViewOptions from "../ViewOptions";
-import { AlgebraOptions } from "./AlgebraOptions";
-import MissingAnglesAlgebraData from "./MissingAnglesAlgebraData";
-import MissingAnglesTriangleAlgebraView from "./MissingAnglesTriangleAlgebraView";
-import MissingAnglesTriangleView from "./MissingAnglesTriangleView";
+import { GraphicQ } from '../GraphicQ'
+import ViewOptions from '../ViewOptions'
+import { AlgebraOptions } from './AlgebraOptions'
+import MissingAnglesAlgebraData from './MissingAnglesAlgebraData'
+import MissingAnglesTriangleAlgebraView from './MissingAnglesTriangleAlgebraView'
+import MissingAnglesTriangleView from './MissingAnglesTriangleView'
 
 export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
   data: MissingAnglesAlgebraData
   view: MissingAnglesTriangleView
 
   constructor (data: MissingAnglesAlgebraData, view: MissingAnglesTriangleView) {
-    super ()
+    super()
     this.data = data
     this.view = view
   }
@@ -20,15 +20,15 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
       angleSum: 180,
       minN: 3,
       maxN: 3,
-      repeated: false,
+      repeated: false
     }
-    Object.assign(options,optionsOverride)
+    Object.assign(options, optionsOverride)
 
     const data = MissingAnglesAlgebraData.random(options)
     const view = new MissingAnglesTriangleAlgebraView(data, viewOptions)
-    
-    return new this(data,view)
+
+    return new this(data, view)
   }
 
-  static get commandWord() { return 'Find the missing value'}
+  static get commandWord () { return 'Find the missing value' }
 }

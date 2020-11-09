@@ -10,9 +10,9 @@
  */
 
 import { randBetween } from 'Utilities'
-import { GraphicQData} from '../GraphicQ'
+import { GraphicQData } from '../GraphicQ'
 import { MissingAnglesData } from './MissingAnglesData'
-import {MissingAngleOptions as Options} from './NumberOptions' 
+import { MissingAngleOptions as Options } from './NumberOptions'
 
 export class MissingAnglesNumberData implements MissingAnglesData {
   angles : number[] // list of angles
@@ -54,7 +54,6 @@ export class MissingAnglesNumberData implements MissingAnglesData {
   }
 
   static randomSimple (options: Options): MissingAnglesNumberData {
-
     if (!options.angleSum) { throw new Error('No angle sum given') }
 
     const angleSum = options.angleSum
@@ -152,7 +151,7 @@ export class MissingAnglesNumberData implements MissingAnglesData {
     return new this(angleSum, angles, missing)
   }
 
-  initLabels() : void {
+  initLabels () : void {
     const n = this.angles.length
     for (let i = 0; i < n; i++) {
       if (!this.missing[i]) {

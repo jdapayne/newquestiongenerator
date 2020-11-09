@@ -1,9 +1,9 @@
-import LinExpr from "LinExpr";
-import { randBetween, randElem, randMultBetween, shuffle, weakIncludes } from "Utilities";
-import { AlgebraOptions } from "./AlgebraOptions";
-import { MissingAnglesData } from "./MissingAnglesData";
-import { MissingAngleOptions } from "./NumberOptions";
-import { solveAngles } from "./solveAngles";
+import LinExpr from 'LinExpr'
+import { randBetween, randElem, randMultBetween, shuffle, weakIncludes } from 'Utilities'
+import { AlgebraOptions } from './AlgebraOptions'
+import { MissingAnglesData } from './MissingAnglesData'
+import { MissingAngleOptions } from './NumberOptions'
+import { solveAngles } from './solveAngles'
 
 type Options = AlgebraOptions
 
@@ -14,192 +14,192 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
     angleSum: number
     angleLabels: string[]
     x: number //
-    
-    constructor(angles: number[], missing: boolean[], angleSum: number, angleLabels: string[], x: number) {
-        this.angles = angles
-        this.angleSum = angleSum
-        this.angleLabels = angleLabels
-        this.x = x
-        this.missing = missing
+
+    constructor (angles: number[], missing: boolean[], angleSum: number, angleLabels: string[], x: number) {
+      this.angles = angles
+      this.angleSum = angleSum
+      this.angleLabels = angleLabels
+      this.x = x
+      this.missing = missing
     }
 
     static random (options: Options) : MissingAnglesAlgebraData {
-        const defaults : Partial<Options> = {
-            expressionTypes: ['add','multiply', 'mixed'],
-            ensureX: true,
-            includeConstants: true,
-            minCoefficient: 1,
-            maxCoefficient: 4,
-            angleSum: 180,
-            minAngle: 20,
-            minN: 2,
-            maxN: 4,
-            minXValue: 15,
-        }
-        options = Object.assign({},defaults, options)
+      const defaults : Partial<Options> = {
+        expressionTypes: ['add', 'multiply', 'mixed'],
+        ensureX: true,
+        includeConstants: true,
+        minCoefficient: 1,
+        maxCoefficient: 4,
+        angleSum: 180,
+        minAngle: 20,
+        minN: 2,
+        maxN: 4,
+        minXValue: 15
+      }
+      options = Object.assign({}, defaults, options)
 
-        //assign calculated defaults:
-        options.maxConstant = options.maxConstant || options.angleSum/2
-        options.maxXValue = options.maxXValue || options.angleSum/4
+      // assign calculated defaults:
+      options.maxConstant = options.maxConstant || options.angleSum / 2
+      options.maxXValue = options.maxXValue || options.angleSum / 4
 
-        // Randomise/set up main features
-        let n : number = randBetween(options.minN, options.maxN)
+      // Randomise/set up main features
+      const n : number = randBetween(options.minN, options.maxN)
 
-        const type : ExpressionType = randElem(options.expressionTypes);
+      const type : ExpressionType = randElem(options.expressionTypes)
 
-        // Generate expressions/angles
-        let expressions : LinExpr[]
-        switch(type) {
-            case 'mixed':
-                expressions = makeMixedExpressions(n,options)
-                break
-            case 'multiply': 
-                expressions = makeMultiplicationExpressions(n,options)
-                break
-            case 'add': 
-            default:
-                expressions = makeAddExpressions(n,options)
-                break
-        }
-        expressions = shuffle(expressions);
+      // Generate expressions/angles
+      let expressions : LinExpr[]
+      switch (type) {
+        case 'mixed':
+          expressions = makeMixedExpressions(n, options)
+          break
+        case 'multiply':
+          expressions = makeMultiplicationExpressions(n, options)
+          break
+        case 'add':
+        default:
+          expressions = makeAddExpressions(n, options)
+          break
+      }
+      expressions = shuffle(expressions)
 
-        // Solve for x and angles
-        const {x , angles } : {x:number, angles: number[]} = solveAngles(expressions,options.angleSum)
+      // Solve for x and angles
+      const { x, angles } : {x:number, angles: number[]} = solveAngles(expressions, options.angleSum)
 
-        // labels are just expressions as strings
-        const labels = expressions.map( e => `${e.toStringP()}^\\circ`) 
+      // labels are just expressions as strings
+      const labels = expressions.map(e => `${e.toStringP()}^\\circ`)
 
-        // missing values are the ones which aren't constant
-        const missing = expressions.map( e => !e.isConstant())
+      // missing values are the ones which aren't constant
+      const missing = expressions.map(e => !e.isConstant())
 
-        return new MissingAnglesAlgebraData (angles,missing,options.angleSum,labels,x)
+      return new MissingAnglesAlgebraData(angles, missing, options.angleSum, labels, x)
     }
 
-    initLabels() : void {} // makes typescript shut up
+    initLabels () : void {} // makes typescript shut up
 }
 
-function makeMixedExpressions(n: number, options: Options) : LinExpr[] {
-    let expressions: LinExpr[] = []
-    const x = randBetween(options.minXValue, options.maxXValue);
-    let left = options.angleSum;
-    let allconstant = true;
-    for (let i = 0; i < n - 1; i++) {
-        let a = randBetween(1, options.maxCoefficient);
-        left -= a * x;
-        let maxb = Math.min(left - options.minAngle * (n - i - 1), options.maxConstant);
-        let minb = options.minAngle - a * x;
-        let b = randBetween(minb, maxb);
-        if (a !== 0) { allconstant = false };
-        left -= b;
-        expressions.push(new LinExpr(a, b));
-    }
-    let last_minX_coeff = allconstant ? 1 : options.minCoefficient;
-    let a = randBetween(last_minX_coeff, options.maxCoefficient);
-    let b = left - a * x;
-    expressions.push(new LinExpr(a, b));
+function makeMixedExpressions (n: number, options: Options) : LinExpr[] {
+  const expressions: LinExpr[] = []
+  const x = randBetween(options.minXValue, options.maxXValue)
+  let left = options.angleSum
+  let allconstant = true
+  for (let i = 0; i < n - 1; i++) {
+    const a = randBetween(1, options.maxCoefficient)
+    left -= a * x
+    const maxb = Math.min(left - options.minAngle * (n - i - 1), options.maxConstant)
+    const minb = options.minAngle - a * x
+    const b = randBetween(minb, maxb)
+    if (a !== 0) { allconstant = false }
+    left -= b
+    expressions.push(new LinExpr(a, b))
+  }
+  const last_minX_coeff = allconstant ? 1 : options.minCoefficient
+  const a = randBetween(last_minX_coeff, options.maxCoefficient)
+  const b = left - a * x
+  expressions.push(new LinExpr(a, b))
 
-    return expressions
+  return expressions
 }
 
-function makeAddExpressions(n: number, options: Options) : LinExpr[] {
-    let expressions: LinExpr[] = []
-    let angles: number[] = []
-    const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'add'));
-    if (n === 2 && options.ensureX && constants) n = 3;
+function makeAddExpressions (n: number, options: Options) : LinExpr[] {
+  const expressions: LinExpr[] = []
+  const angles: number[] = []
+  const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'add'))
+  if (n === 2 && options.ensureX && constants) n = 3
 
-    const x = randBetween(options.minXValue, options.maxXValue);
-    let left = options.angleSum;
-    let anglesLeft = n;
+  const x = randBetween(options.minXValue, options.maxXValue)
+  let left = options.angleSum
+  let anglesLeft = n
 
-    // first do the expressions ensured by ensure_x and constants
-    if (options.ensureX) {
-        anglesLeft--;
-        expressions.push(new LinExpr(1, 0));
-        angles.push(x);
-        left -= x;
-    }
+  // first do the expressions ensured by ensure_x and constants
+  if (options.ensureX) {
+    anglesLeft--
+    expressions.push(new LinExpr(1, 0))
+    angles.push(x)
+    left -= x
+  }
 
-    if (constants) {
-        anglesLeft--;
-        let c = randBetween(
-            options.minAngle,
-            left - options.minAngle * anglesLeft
-        );
-        expressions.push(new LinExpr(0, c));
-        angles.push(c);
-        left -= c;
-    }
+  if (constants) {
+    anglesLeft--
+    const c = randBetween(
+      options.minAngle,
+      left - options.minAngle * anglesLeft
+    )
+    expressions.push(new LinExpr(0, c))
+    angles.push(c)
+    left -= c
+  }
 
-    // middle angles
-    while (anglesLeft > 1) {
-        // add 'x+b' as an expression. Make sure b gives space
-        anglesLeft--;
-        left -= x;
-        let maxb = Math.min(
-            left - options.minAngle * anglesLeft,
-            options.maxConstant
-        );
-        let minb = Math.max(
-            options.minAngle - x,
-            -options.maxConstant
-        );
-        let b = randBetween(minb, maxb);
-        expressions.push(new LinExpr(1, b));
-        angles.push(x + b);
-        left -= b;
-    }
+  // middle angles
+  while (anglesLeft > 1) {
+    // add 'x+b' as an expression. Make sure b gives space
+    anglesLeft--
+    left -= x
+    const maxb = Math.min(
+      left - options.minAngle * anglesLeft,
+      options.maxConstant
+    )
+    const minb = Math.max(
+      options.minAngle - x,
+      -options.maxConstant
+    )
+    const b = randBetween(minb, maxb)
+    expressions.push(new LinExpr(1, b))
+    angles.push(x + b)
+    left -= b
+  }
 
-    // last angle
-    expressions.push(new LinExpr(1, left - x));
-    angles.push(left);
+  // last angle
+  expressions.push(new LinExpr(1, left - x))
+  angles.push(left)
 
-    return expressions
+  return expressions
 }
 
-function makeMultiplicationExpressions(n: number, options: Options) : LinExpr[] {
-    let expressions : LinExpr[] = []
+function makeMultiplicationExpressions (n: number, options: Options) : LinExpr[] {
+  const expressions : LinExpr[] = []
 
-    // choose a total of coefficients
-    // pick x based on that
-    const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'mult'));
-    if (n === 2 && options.ensureX && constants) n = 3;
+  // choose a total of coefficients
+  // pick x based on that
+  const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'mult'))
+  if (n === 2 && options.ensureX && constants) n = 3
 
-    let anglesleft = n;
-    const totalCoeff = constants ?
-        randBetween(n, (options.angleSum - options.minAngle) / options.minAngle, Math.random) : // if it's too big, angles get too small
-        randElem([3, 4, 5, 6, 8, 9, 10].filter(x => x >= n), Math.random);
-    let coeffleft = totalCoeff;
-    let left = options.angleSum;
+  let anglesleft = n
+  const totalCoeff = constants
+    ? randBetween(n, (options.angleSum - options.minAngle) / options.minAngle, Math.random) // if it's too big, angles get too small
+    : randElem([3, 4, 5, 6, 8, 9, 10].filter(x => x >= n), Math.random)
+  let coeffleft = totalCoeff
+  let left = options.angleSum
 
-    // first 0/1/2
-    if (constants) {
-        // reduce to make what's left a multiple of total_coeff
-        anglesleft--;
-        let newleft = randMultBetween(totalCoeff * options.minAngle, options.angleSum - options.minAngle, totalCoeff);
-        let c = options.angleSum - newleft;
-        expressions.push(new LinExpr(0, c));
-        left -= newleft;
-    }
+  // first 0/1/2
+  if (constants) {
+    // reduce to make what's left a multiple of total_coeff
+    anglesleft--
+    const newleft = randMultBetween(totalCoeff * options.minAngle, options.angleSum - options.minAngle, totalCoeff)
+    const c = options.angleSum - newleft
+    expressions.push(new LinExpr(0, c))
+    left -= newleft
+  }
 
-    let x = left / totalCoeff;
+  const x = left / totalCoeff
 
-    if (options.ensureX) {
-        anglesleft--;
-        expressions.push(new LinExpr(1, 0));
-        coeffleft -= 1;
-    }
+  if (options.ensureX) {
+    anglesleft--
+    expressions.push(new LinExpr(1, 0))
+    coeffleft -= 1
+  }
 
-    //middle
-    while (anglesleft > 1) {
-        anglesleft--;
-        let mina = 1;
-        let maxa = coeffleft - anglesleft; // leave enough for others TODO: add max_coeff
-        let a = randBetween(mina, maxa);
-        expressions.push(new LinExpr(a, 0));
-        coeffleft -= a;
-    }
+  // middle
+  while (anglesleft > 1) {
+    anglesleft--
+    const mina = 1
+    const maxa = coeffleft - anglesleft // leave enough for others TODO: add max_coeff
+    const a = randBetween(mina, maxa)
+    expressions.push(new LinExpr(a, 0))
+    coeffleft -= a
+  }
 
-    //last
-    expressions.push(new LinExpr(coeffleft, 0));
-    return expressions
+  // last
+  expressions.push(new LinExpr(coeffleft, 0))
+  return expressions
 }

@@ -38,7 +38,7 @@ export abstract class GraphicQView {
   data: GraphicQData
   labels: Label[]
 
-  constructor ( data : GraphicQData, viewOptions : ViewOptions) {
+  constructor (data : GraphicQData, viewOptions : ViewOptions) {
     const defaults : ViewOptions = {
       width: 250,
       height: 250
@@ -164,7 +164,7 @@ export abstract class GraphicQView {
    * @param width The width of the bounding rectangle to scale to
    * @param height The height of the bounding rectangle to scale to
    * @param margin Margin to leave outside the rectangle
-   * @returns 
+   * @returns
    */
   scaleToFit (width : number, height: number, margin : number) : number {
     let topLeft : Point = Point.min(this.allpoints)

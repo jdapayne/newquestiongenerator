@@ -1,4 +1,4 @@
-import ViewOptions from "../ViewOptions";
+import ViewOptions from '../ViewOptions'
 
 export interface MissingAnglesViewOptions extends ViewOptions {
   minViewAngle?: number

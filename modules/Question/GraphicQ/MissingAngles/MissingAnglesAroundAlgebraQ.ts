@@ -22,7 +22,7 @@ export default class MissingAnglesAroundAlgebraQ extends GraphicQ {
       minAngle: 10,
       minN: 2,
       maxN: 4,
-      repeated: false,
+      repeated: false
     }
     options = Object.assign({}, defaults, options)
 
