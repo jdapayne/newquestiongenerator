@@ -1,12 +1,11 @@
-interface Option {
+export interface Option {
   title: string,
   id: string,
   type: string,
   disabledIf?: string, // 'id' or '!id' where [id] is of a boolean option
-  style?: 'emph' | 'normal'
 }
 
-interface SelectOption extends Option{
+export interface SelectOption extends Option{
   type: 'select-exclusive' | 'select-inclusive',
   vertical?: boolean,
   selectOptions: {
@@ -15,12 +14,12 @@ interface SelectOption extends Option{
   }[],
 }
 
-interface SelectInclusiveOption extends SelectOption {
+export interface SelectInclusiveOption extends SelectOption {
   type: 'select-inclusive',
   default: string[]
 }
 
-interface SelectExclusiveOption extends SelectOption {
+export interface SelectExclusiveOption extends SelectOption {
   type: 'select-exclusive',
   default: string
 }
@@ -48,6 +47,8 @@ interface OptionHeading {
   type: 'heading',
   title: string
 }
+
+export type RealOption = SelectExclusiveOption | SelectInclusiveOption | IntegerOption | BooleanOption
 
 export type OptionsSpec = (
   SelectInclusiveOption |

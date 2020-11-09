@@ -1,11 +1,36 @@
+import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption} from 'OptionsSpec'
 import { createElem } from 'Utilities'
+import * as Mustache from 'mustache'
+
+type Options = (OptionsSpec[0] & {element?: HTMLElement})[] // like OptionsSpec but with optional element for each option
 
 export default class OptionsSet {
-  constructor (optionSpec, template) {
-    this.optionSpec = optionSpec
+  optionsSpec : Options
+  options : Record<string, string | number | boolean | string[]>
+  template? : string
+  globalId: string
+  static idCounter: number = 0 // increment each time to create unique ids to use in ids/names of elements
+
+  static getId(): string {
+    if (OptionsSet.idCounter >= 26 ** 2) throw new Error('Too many options objects!')
+    const id = String.fromCharCode(~~(OptionsSet.idCounter / 26) + 97) +
+      String.fromCharCode(OptionsSet.idCounter % 26 + 97)
+
+    OptionsSet.idCounter += 1
+
+    return id
+  }
+
+  /**
+   * Create a new options spec
+   * @param optionsSpec Specification of options
+   * @param template A template for displaying options, using {{mustache}} syntax
+   */
+  constructor (optionsSpec : OptionsSpec, template? : string) {
+    this.optionsSpec = optionsSpec as Options
 
     this.options = {}
-    this.optionSpec.forEach(option => {
+    this.optionsSpec.forEach(option => {
       if (option.type !== 'heading' && option.type !== 'column-break') {
         this.options[option.id] = option.default
       }
@@ -21,46 +46,51 @@ export default class OptionsSet {
    * Given an option, find its UI element and update the state from that
    * @param {*} option An element of this.optionSpec or an id
    */
-  updateStateFromUI (option) {
+  updateStateFromUI (option : Options[0] | string) {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
-      option = this.optionsSpec.find(x => x.id === option)
+      option = this.optionsSpec.find(x => ((x as OptionI).id === option))
       if (!option) throw new Error(`no option with id '${option}'`)
     }
-    if (!option.element) throw new Error(`option ${option.id} doesn't have a UI element`)
+    if (!option.element) throw new Error(`option ${(option as OptionI).id} doesn't have a UI element`)
 
     switch (option.type) {
       case 'int': {
-        const input = option.element.getElementsByTagName('input')[0]
+        const input : HTMLInputElement = option.element.getElementsByTagName('input')[0]
         this.options[option.id] = Number(input.value)
         break
       }
       case 'bool': {
-        const input = option.element.getElementsByTagName('input')[0]
+        const input : HTMLInputElement = option.element.getElementsByTagName('input')[0]
         this.options[option.id] = input.checked
         break
       }
       case 'select-exclusive': {
-        this.options[option.id] = option.element.querySelector('input:checked').value
+        this.options[option.id] = (option.element.querySelector('input:checked') as HTMLInputElement).value
         break
       }
       case 'select-inclusive': {
         this.options[option.id] =
-          Array.from(option.element.querySelectorAll('input:checked'), x => x.value)
+          Array.from(option.element.querySelectorAll('input:checked'), (x : HTMLInputElement) => x.value)
         break
       }
       default:
-        throw new Error(`option with id ${option.id} has unrecognised option type ${option.type}`)
+        throw new Error(`option with id ${(option as OptionI).id} has unrecognised option type ${option.type}`)
     }
     // console.log(this.options)
   }
 
+  /**
+   * Given a string, return the element of this.options with that id
+   * @param id The id
+   */
+
   updateStateFromUIAll () {
-    this.optionSpec.forEach(option => this.updateStateFromUI(option))
+    this.optionsSpec.forEach(option => this.updateStateFromUI(option))
   }
 
   disableOrEnableAll () {
-    this.optionSpec.forEach(option => this.disableOrEnable(option))
+    this.optionsSpec.forEach(option => this.disableOrEnable(option))
   }
 
   /**
@@ -77,7 +107,7 @@ export default class OptionsSet {
    */
   disableOrEnable (option) {
     if (typeof (option) === 'string') {
-      option = this.optionsSpec.find(x => x.id === option)
+      option = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
       if (!option) throw new Error(`no option with id '${option}'`)
     }
 
@@ -105,12 +135,14 @@ export default class OptionsSet {
     const list = createElem('ul', 'options-list')
     let column = createElem('div', 'options-column', list)
 
-    this.optionSpec.forEach(option => {
+    this.optionsSpec.forEach(option => {
       if (option.type === 'column-break') { // start new column
         column = createElem('div', 'options-column', list)
       } else { // make list item
         const li = createElem('li', undefined, column)
-        li.dataset.optionId = option.id
+        if (isRealOption(option)) {
+          li.dataset.optionId = option.id
+        }
 
         switch (option.type) {
           case 'heading':
@@ -127,7 +159,6 @@ export default class OptionsSet {
         li.addEventListener('change', e => { this.updateStateFromUI(option); this.disableOrEnableAll() })
         option.element = li
 
-        if (option.style === 'emph') { li.classList.add('emphasise') }
       }
     })
     element.append(list)
@@ -135,8 +166,21 @@ export default class OptionsSet {
     this.disableOrEnableAll()
   }
 
-  renderListOption (option, li) {
-    li.append(option.title + ': ')
+  renderWithTemplate(element : HTMLElement) {
+    // create appropriate object for mustache
+    let options: Record<string,OptionI>
+    this.optionsSpec.forEach( option => {
+      if (isRealOption(option)) {
+        options[option.id] = option
+      }
+    })
+
+    let htmlString = Mustache.render(this.template, options)
+
+  }
+
+  renderListOption (option: SelectExclusiveOption | SelectInclusiveOption , li : HTMLElement) {
+    li.insertAdjacentHTML('beforeend',option.title + ': ')
 
     const sublist = createElem('ul', 'options-sublist', li)
     if (option.vertical) sublist.classList.add('options-sublist-vertical')
@@ -160,7 +204,7 @@ export default class OptionsSet {
 
       input.classList.add('option')
 
-      label.append(selectOption.title)
+      label.insertAdjacentHTML('beforeend',selectOption.title)
     })
   }
 }
@@ -171,7 +215,7 @@ export default class OptionsSet {
  * @param {HTMLElement} li The element to render into
  */
 function renderHeading (title, li) {
-  li.append(title)
+  li.innerHTML = title
   li.classList.add('options-heading')
 }
 
@@ -183,9 +227,9 @@ function renderHeading (title, li) {
 function renderSingleOption (option, li) {
   const label = createElem('label', undefined, li)
 
-  if (!option.swapLabel && option.title !== '') label.append(option.title + ': ')
+  if (!option.swapLabel && option.title !== '') label.insertAdjacentHTML('beforeend',`${option.title}: `)
 
-  const input = createElem('input', 'option', label)
+  const input : HTMLInputElement = createElem('input', 'option', label) as HTMLInputElement
   switch (option.type) {
     case 'int':
       input.type = 'number'
@@ -201,22 +245,17 @@ function renderSingleOption (option, li) {
       throw new Error(`unknown option type ${option.type}`)
   }
 
-  if (option.swapLabel && option.title !== '') label.append(' ' + option.title)
+  if (option.swapLabel && option.title !== '') label.insertAdjacentHTML('beforeend',` ${option.title}`)
 }
 
-OptionsSet.idCounter = 0 // increment each time to create unique ids to use in ids/names of elements
-
-OptionsSet.getId = function () {
-  if (OptionsSet.idCounter >= 26 ** 2) throw new Error('Too many options objects!')
-  const id = String.fromCharCode(~~(OptionsSet.idCounter / 26) + 97) +
-    String.fromCharCode(OptionsSet.idCounter % 26 + 97)
-
-  OptionsSet.idCounter += 1
-
-  return id
+/** Determines if an option in OptionsSpec is a real option as opposed to
+ * a heading or column break
+ */
+function isRealOption(option : OptionsSpec[0]) : option is RealOption{
+  return (option as OptionI).id !== undefined
 }
 
-OptionsSet.demoSpec = [
+const demoSpec : OptionsSpec = [
   {
     title: 'Difficulty',
     id: 'difficulty',
@@ -267,3 +306,7 @@ OptionsSet.demoSpec = [
     swapLabel: true // put control before label
   }
 ]
+
+const demoTemplate : string = `
+<li>{{type}}</li>
+<li>`

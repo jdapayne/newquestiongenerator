@@ -197,10 +197,9 @@ export default class MissingAnglesQ extends Question {
       },
       {
         type: 'bool',
-        title: 'Use custom settings (disables difficulty)',
+        title: '<b>Use custom settings (disables difficulty)</b>',
         default: false,
-        id: 'custom',
-        style: 'emph'
+        id: 'custom'
       },
       {
         type: 'bool',
