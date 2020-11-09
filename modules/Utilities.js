@@ -214,8 +214,8 @@ export function mIf (p, q) { // material conditional
 /**
  * Creates a new HTML element, sets classes and appends
  * @param {string} tagName Tag name of element
- * @param {string|undefined} className A class or classes to assign to the element
- * @param {HTMLElement} parent A parent element to append the element to
+ * @param {string|undefined} [className] A class or classes to assign to the element
+ * @param {HTMLElement} [parent] A parent element to append the element to
  * @returns {HTMLElement}
  */
 export function createElem (tagName, className, parent) {

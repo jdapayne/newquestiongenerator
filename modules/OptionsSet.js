@@ -17,6 +17,10 @@ export default class OptionsSet {
     this.globalId = OptionsSet.getId()
   }
 
+  /**
+   * Given an option, find its UI element and update the state from that
+   * @param {*} option An element of this.optionSpec or an id
+   */
   updateStateFromUI(option) {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
@@ -51,6 +55,52 @@ export default class OptionsSet {
     // console.log(this.options)
   }
 
+  updateStateFromUIAll() {
+    this.optionSpec.forEach( options => this.updateStateFromUI(option))
+  }
+
+  disableOrEnableAll() {
+    this.optionSpec.forEach( option => this.disableOrEnable(option))
+  }
+
+  /**
+   * Given an option, find its UI element and update it according to the options ID
+   * @param {*} option An element of this.optionsSpec or an option id
+   */
+  updateUIFromState(option) {
+  }
+
+  /**
+   * Given an option, enable or disable the UI element depending on the value of option.disableIf and the
+   * state of the corresponding boolean option
+   * @param {*} option An element of this.optionsSpec or an option id
+   */
+  disableOrEnable(option) {
+    if (typeof (option) === 'string') {
+      option = this.optionsSpec.find(x => x.id === option)
+      if (!option) throw new Error(`no option with id '${option}'`)
+    }
+
+    if (!option.disabledIf) return
+
+    //Inverse everything if begining with !
+    let disablerId = option.disabledIf
+    let enable = false // disable iff disabler is true
+    if (disablerId.startsWith('!')) {
+      enable = true // endable iff disabler is true
+      disablerId = disablerId.slice(1)
+    }
+
+    //Endable or disable
+    if (this.options[disablerId] === enable) { //enable
+      option.element.classList.remove('disabled')
+      ;[...option.element.getElementsByTagName('input')].forEach( e=> e.disabled=false)
+    } else { //disable
+      option.element.classList.add('disabled')
+      ;[...option.element.getElementsByTagName('input')].forEach( e=> e.disabled=true)
+    }
+  }
+
   renderIn(element) {
     const list = createElem('ul', 'options-list')
     let column = createElem('div', 'options-column', list)
@@ -74,11 +124,15 @@ export default class OptionsSet {
           case 'select-exclusive':
             this.renderListOption(option, li)
         }
-        li.addEventListener('change', e => this.updateStateFromUI(option))
+        li.addEventListener('change', e => {this.updateStateFromUI(option); this.disableOrEnableAll()})
         option.element = li
+
+        if (option.style === 'emph') {li.classList.add('emphasise')}
       }
     })
     element.append(list)
+
+    this.disableOrEnableAll()
   }
 
   renderListOption(option, li) {

@@ -1,12 +1,18 @@
-interface SelectOption {
-  title: string
+interface Option {
+  title: string,
   id: string,
+  type: string,
+  disabledIf?: string, // 'id' or '!id' where [id] is of a boolean option
+  style?: 'emph' | 'normal'
+}
+
+interface SelectOption extends Option{
   type: 'select-exclusive' | 'select-inclusive',
   vertical?: boolean,
   selectOptions: {
     title: string,
     id: string
-  }[]
+  }[],
 }
 
 interface SelectInclusiveOption extends SelectOption {
@@ -19,21 +25,19 @@ interface SelectExclusiveOption extends SelectOption {
   default: string
 }
 
-interface IntegerOption {
-  title: string,
-  id: string,
+interface IntegerOption extends Option{
   type: 'int', 
   min?: number,
   max?: number,
-  default: number
+  default: number,
 }
 
-interface BooleanOption {
+interface BooleanOption extends Option{
   title: string,
   id: string,
   type: 'bool',
   default: boolean,
-  swapLabel?: boolean
+  swapLabel?: boolean,
 }
 
 type ColumnBreak = {
@@ -45,7 +49,7 @@ interface OptionHeading {
   title: string
 }
 
-type OptionsSpec = (
+export type OptionsSpec = (
   SelectInclusiveOption |
   SelectExclusiveOption |
   IntegerOption |

@@ -5,6 +5,7 @@
  * This class deals with translating difficulty into question types
 */
 
+import { OptionsSpec } from 'OptionsSpec'
 import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
 import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
 import Question from 'Question/Question'
@@ -170,8 +171,13 @@ export default class MissingAnglesQ extends Question {
   hideAnswer () : void { this.question.hideAnswer() }
   toggleAnswer () : void { this.question.toggleAnswer() }
 
-  static get optionsSpec () : OptionsSpec {
+  static get optionsSpec(): OptionsSpec {
     return [
+      {
+        type: 'heading',
+        title: ''
+      },
+
       {
         title: 'Types',
         id: 'types',
@@ -188,13 +194,23 @@ export default class MissingAnglesQ extends Question {
         type: 'column-break'
       },
       {
-        type: 'heading',
-        title: 'Customise (disables difficulty setting)'
+        type: 'bool',
+        title: 'Use custom settings (disables difficulty)',
+        default: false,
+        id: 'custom',
+        style: 'emph'
+      },
+      {
+        type: 'bool',
+        title: 'Simple',
+        id: 'simple',
+        default: true,
+        disabledIf: '!custom'
       }
     ]
   }
 
-  static get commandWord () : string {
+  static get commandWord(): string {
     return 'Find the missing value'
   }
 }

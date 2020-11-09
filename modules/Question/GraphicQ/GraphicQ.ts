@@ -55,7 +55,7 @@ export abstract class GraphicQView {
 
     // DOM elements
     this.DOM = createElem('div', 'question-div')
-    this.canvas = createElem('canvas', 'question-canvas', this.DOM)
+    this.canvas = createElem('canvas', 'question-canvas', this.DOM) as HTMLCanvasElement
     this.canvas.width = this.width
     this.canvas.height = this.height
   }
