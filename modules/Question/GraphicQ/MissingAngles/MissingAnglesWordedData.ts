@@ -19,7 +19,7 @@ export default class MissingAnglesWordedData extends MissingAnglesAlgebraData {
     this.instructions = instructions
   }
 
-  static random (options : WordedOptions) {
+  static random (options : WordedOptions) : MissingAnglesWordedData {
     const defaults : WordedOptions = {
       minN: 2,
       maxN: 2,
@@ -39,8 +39,6 @@ export default class MissingAnglesWordedData extends MissingAnglesAlgebraData {
     }
     let expressions: LinExpr[] = []
     let instructions: string[] = []
-    let angles: number[]
-    let x: number
 
     expressions.push(new LinExpr(1, 0))
 
@@ -105,10 +103,10 @@ export default class MissingAnglesWordedData extends MissingAnglesAlgebraData {
 
       attemptcount++
     }
-    console.log('Attempts: ' + attemptcount);
+    console.log('Attempts: ' + attemptcount)
 
-    ({ x, angles } = solveAngles(expressions, options.angleSum))
-    const missing = angles.map(x => true)
+    const angles = solveAngles(expressions, options.angleSum).angles
+    const missing = angles.map(() => true)
 
     return new this(angles, missing, options.angleSum, angleLabels, instructions)
   }

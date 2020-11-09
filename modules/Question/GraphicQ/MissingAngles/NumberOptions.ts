@@ -1,5 +1,3 @@
-import ViewOptions from '../ViewOptions'
-
 export interface MissingAngleOptions {
   angleSum?: number
   minAngle?: number

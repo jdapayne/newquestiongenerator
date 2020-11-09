@@ -8,8 +8,7 @@
 
 import Point from 'Point'
 import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
-import { roundDP, sinDeg, sortTogether } from 'Utilities'
-import ViewOptions from '../ViewOptions'
+import { roundDP } from 'Utilities'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
@@ -56,9 +55,11 @@ export default class MissingAnglesAroundView extends GraphicQView {
 
       // Positioning
       const theta = this.viewAngles[i]
+      /* could be used for more advanced positioning
       const midAngle = totalangle + theta / 2
       const minDistance = 0.3 // as a fraction of radius
       const labelLength = Math.max(textq.length, texta.length) - '^\\circ'.length // ° takes up very little space
+      */
 
       /* Explanation: Further out if:
       *   More vertical (sin(midAngle))
@@ -74,7 +75,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
 
       const distance = 0.4 + 6 / theta
 
-      label.pos = Point.fromPolarDeg(radius * distance, totalangle + theta / 2).translate(this.O.x, this.O.y),
+      label.pos = Point.fromPolarDeg(radius * distance, totalangle + theta / 2).translate(this.O.x, this.O.y)
       label.textq = textq
       label.styleq = 'normal'
 
@@ -100,7 +101,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
     })
   }
 
-  render () {
+  render () : void {
     const ctx = this.canvas.getContext('2d')
 
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) // clear
@@ -136,7 +137,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
     this.renderLabels(false)
   }
 
-  get allpoints () {
+  get allpoints () : Point[] {
     let allpoints = [this.A, this.O]
     allpoints = allpoints.concat(this.C)
     this.labels.forEach(function (l) {

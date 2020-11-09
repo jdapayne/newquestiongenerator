@@ -56,7 +56,7 @@ export default class OptionsSet {
   }
 
   updateStateFromUIAll () {
-    this.optionSpec.forEach(options => this.updateStateFromUI(option))
+    this.optionSpec.forEach(option => this.updateStateFromUI(option))
   }
 
   disableOrEnableAll () {
@@ -94,10 +94,10 @@ export default class OptionsSet {
     // Endable or disable
     if (this.options[disablerId] === enable) { // enable
       option.element.classList.remove('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach(e => e.disabled = false)
+      ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = false })
     } else { // disable
       option.element.classList.add('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach(e => e.disabled = true)
+      ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = true })
     }
   }
 

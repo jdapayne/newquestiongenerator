@@ -10,7 +10,7 @@ export function solveAngles (expressions: LinExpr[], angleSum: number): { x: num
   expressions.forEach(function (expr) {
     const angle = expr.eval(x)
     if (angle <= 0) {
-      throw 'negative angle'
+      throw new Error('negative angle')
     } else {
       angles.push(expr.eval(x))
     }

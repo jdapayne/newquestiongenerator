@@ -2,7 +2,6 @@ import LinExpr from 'LinExpr'
 import { randBetween, randElem, randMultBetween, shuffle, weakIncludes } from 'Utilities'
 import { AlgebraOptions } from './AlgebraOptions'
 import { MissingAnglesData } from './MissingAnglesData'
-import { MissingAngleOptions } from './NumberOptions'
 import { solveAngles } from './solveAngles'
 
 type Options = AlgebraOptions
@@ -75,7 +74,8 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       return new MissingAnglesAlgebraData(angles, missing, options.angleSum, labels, x)
     }
 
-    initLabels () : void {} // makes typescript shut up
+    // makes typescript shut up, makes eslint noisy
+    initLabels () : void {}  // eslint-disable-line
 }
 
 function makeMixedExpressions (n: number, options: Options) : LinExpr[] {
@@ -93,8 +93,8 @@ function makeMixedExpressions (n: number, options: Options) : LinExpr[] {
     left -= b
     expressions.push(new LinExpr(a, b))
   }
-  const last_minX_coeff = allconstant ? 1 : options.minCoefficient
-  const a = randBetween(last_minX_coeff, options.maxCoefficient)
+  const lastMinXCoeff = allconstant ? 1 : options.minCoefficient
+  const a = randBetween(lastMinXCoeff, options.maxCoefficient)
   const b = left - a * x
   expressions.push(new LinExpr(a, b))
 
@@ -159,17 +159,16 @@ function makeAddExpressions (n: number, options: Options) : LinExpr[] {
 function makeMultiplicationExpressions (n: number, options: Options) : LinExpr[] {
   const expressions : LinExpr[] = []
 
+  const constants : boolean = (options.includeConstants === true || weakIncludes(options.includeConstants, 'mult'))
+  if (n === 2 && options.ensureX && constants) n = 3 // need at least 3 angles for this to make sense
+
   // choose a total of coefficients
   // pick x based on that
-  const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'mult'))
-  if (n === 2 && options.ensureX && constants) n = 3
-
   let anglesleft = n
   const totalCoeff = constants
     ? randBetween(n, (options.angleSum - options.minAngle) / options.minAngle, Math.random) // if it's too big, angles get too small
     : randElem([3, 4, 5, 6, 8, 9, 10].filter(x => x >= n), Math.random)
   let coeffleft = totalCoeff
-  let left = options.angleSum
 
   // first 0/1/2
   if (constants) {
@@ -178,10 +177,10 @@ function makeMultiplicationExpressions (n: number, options: Options) : LinExpr[]
     const newleft = randMultBetween(totalCoeff * options.minAngle, options.angleSum - options.minAngle, totalCoeff)
     const c = options.angleSum - newleft
     expressions.push(new LinExpr(0, c))
-    left -= newleft
   }
 
-  const x = left / totalCoeff
+  // Don't use x here, but:
+  // x = left / totalCoeff
 
   if (options.ensureX) {
     anglesleft--

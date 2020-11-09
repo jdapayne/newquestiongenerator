@@ -1,7 +1,6 @@
 import Point from 'Point'
 import { Label } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
-import MissingAnglesTriangleData from './MissingAnglesTriangleData'
 import MissingAnglesTriangleView from './MissingAnglesTriangleView'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 

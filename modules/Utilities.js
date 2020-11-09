@@ -158,6 +158,12 @@ export function shuffle (array) {
   return array
 }
 
+/**
+ * Returns true if a is an array containing e, false otherwise (including if a is not an array)
+ * @param {*} a  An array
+ * @param {*} e An element to check if is in the array
+ * @returns {boolean}
+ */
 export function weakIncludes (a, e) {
   return (Array.isArray(a) && a.includes(e))
 }

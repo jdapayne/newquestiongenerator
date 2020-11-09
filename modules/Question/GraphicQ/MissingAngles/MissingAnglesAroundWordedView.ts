@@ -1,11 +1,12 @@
 import Point from 'Point'
 import { Label } from '../GraphicQ'
 import MissingAnglesAroundView from './MissingAnglesAroundView'
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 
 export default class MissingAnglesAroundWordedView extends MissingAnglesAroundView {
   data: MissingAnglesWordedData
-  constructor (data, options) {
+  constructor (data: MissingAnglesWordedData, options: MissingAnglesViewOptions) {
     super(data, options) // does most of the set up
     super.translate(0, -15)
     const instructionLabel : Label = {

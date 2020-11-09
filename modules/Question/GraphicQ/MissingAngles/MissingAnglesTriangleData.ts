@@ -1,7 +1,6 @@
 /* Extends MissingAnglesNumberData in order to do isosceles triangles, which generate a bit differently */
 
-import { firstUniqueIndex, sortTogether } from 'Utilities'
-import { GraphicQData } from '../GraphicQ'
+import { firstUniqueIndex } from 'Utilities'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
 import { MissingAngleOptions } from './NumberOptions'
 
@@ -14,7 +13,7 @@ export default class MissingAnglesTriangleData extends MissingAnglesNumberData {
       this.apex = apex
     }
 
-    static randomRepeated (options: Options) {
+    static randomRepeated (options: Options) : MissingAnglesTriangleData {
       options.nMissing = 2
       options.givenAngle = options.givenAngle || Math.random() < 0.5 ? 'apex' : 'base'
 

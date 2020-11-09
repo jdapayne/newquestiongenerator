@@ -1,5 +1,5 @@
 import Point from 'Point'
-import { GraphicQData, GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
+import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
 import { sinDeg, dashedLine, roundDP } from 'Utilities'
 import ViewOptions from '../ViewOptions'
 import MissingAnglesTriangleData from './MissingAnglesTriangleData'
@@ -21,8 +21,6 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     super(data, options) // sets this.width this.height, this.data initialises this.labels, creates dom elements
     const width = this.width
     const height = this.height
-
-    const displayAngles : number[] = []
 
     // generate points (with longest side 1
     this.A = new Point(0, 0)
@@ -75,7 +73,7 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     this.translate(width / 2 - center.x, height / 2 - center.y) // centre
   }
 
-  render () {
+  render () : void {
     const ctx = this.canvas.getContext('2d')
     const vertices = [this.A, this.B, this.C]
     const apex = this.data.apex // hmmm
@@ -101,7 +99,7 @@ export default class MissingAnglesTriangleView extends GraphicQView {
     this.renderLabels(false)
   }
 
-  get allpoints () {
+  get allpoints () : Point[] {
     const allpoints = [this.A, this.B, this.C]
     this.labels.forEach(l => { allpoints.push(l.pos) })
     return allpoints

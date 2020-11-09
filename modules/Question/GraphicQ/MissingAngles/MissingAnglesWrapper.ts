@@ -6,21 +6,24 @@
 */
 
 import { OptionsSpec } from 'OptionsSpec'
+import { randElem } from 'Utilities'
+
+import Question from 'Question/Question'
+import { GraphicQ } from '../GraphicQ'
+
 import MissingAnglesAroundQ from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundQ'
 import MissingAnglesTriangleQ from 'Question/GraphicQ/MissingAngles/MissingAnglesTriangleQ'
-import Question from 'Question/Question'
-import { randElem } from 'Utilities'
-import { GraphicQ } from '../GraphicQ'
-import ViewOptions from '../ViewOptions'
-import { AlgebraOptions } from './AlgebraOptions'
+import { MissingAngleOptions } from './NumberOptions'
+
 import MissingAnglesAroundAlgebraQ from './MissingAnglesAroundAlgebraQ'
 import MissingAnglesTriangleAlgebraQ from './MissingAnglesTriangleAlgebraQ'
+import { AlgebraOptions } from './AlgebraOptions'
+
 import MissingAnglesTriangleWordedQ from './MissingAnglesTriangleWordedQ'
-import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
-import MissingAnglesWordedData from './MissingAnglesWordedData'
 import MissingAnglesWordedQ from './MissingAnglesWordedQ'
-import { MissingAngleOptions } from './NumberOptions'
 import { WordedOptions } from './WordedOptions'
+
+import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'

@@ -15,7 +15,7 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: AlgebraOptions, viewOptions: ViewOptions) {
+  static random (options: AlgebraOptions, viewOptions: ViewOptions) : MissingAnglesTriangleAlgebraQ {
     const optionsOverride : AlgebraOptions = {
       angleSum: 180,
       minN: 3,
@@ -30,5 +30,5 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
     return new this(data, view)
   }
 
-  static get commandWord () { return 'Find the missing value' }
+  static get commandWord () : string { return 'Find the missing value' }
 }

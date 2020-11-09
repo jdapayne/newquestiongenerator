@@ -5,12 +5,12 @@ import ViewOptions from './ViewOptions'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
 
 /* GraphicQData can all be very different, so interface is empty
- * Here for code documentation rather than type safety (which isn't provided)
+ * Here for code documentation rather than type safety (which isn't provided) */
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable */
 export interface GraphicQData {
 }
-/* eslint-enable @typescript-eslint/no-empty-interface */
+/* eslint-enable */
 
 /* Not worth the hassly trying to get interfaces for static methods
  *
@@ -99,7 +99,6 @@ export abstract class GraphicQView {
 
       if (nudge) {
         const lwidth = label.offsetWidth
-        const lheight = label.offsetHeight
         if (l.pos.x < this.canvas.width / 2 - 5 && l.pos.x + lwidth / 2 > this.canvas.width / 2) {
           label.style.left = (this.canvas.width / 2 - lwidth - 3) + 'px'
           console.log(`nudged '${l.text}'`)

@@ -1,4 +1,5 @@
 import { GraphicQ } from '../GraphicQ'
+import ViewOptions from '../ViewOptions'
 import MissingAnglesTriangleWordedView from './MissingAnglesTriangleWordedView'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 import { WordedOptions } from './WordedOptions'
@@ -6,13 +7,13 @@ import { WordedOptions } from './WordedOptions'
 export default class MissingAnglesTriangleWordedQ extends GraphicQ {
   data: MissingAnglesWordedData
   view: MissingAnglesTriangleWordedView
-  constructor (data, view) {
+  constructor (data: MissingAnglesWordedData, view: MissingAnglesTriangleWordedView) {
     super()
     this.data = data
     this.view = view
   }
 
-  static random (options, viewOptions) {
+  static random (options: WordedOptions, viewOptions: ViewOptions) : MissingAnglesTriangleWordedQ {
     const optionsOverride : WordedOptions = {
       angleSum: 180,
       minN: 3,
@@ -27,5 +28,5 @@ export default class MissingAnglesTriangleWordedQ extends GraphicQ {
     return new this(data, view)
   }
 
-  static get commandWord () { return 'Find the missing value' }
+  static get commandWord () : string { return 'Find the missing value' }
 }
