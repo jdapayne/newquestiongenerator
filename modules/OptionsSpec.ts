@@ -24,7 +24,17 @@ export interface SelectExclusiveOption extends SelectOption {
   default: string
 }
 
-interface IntegerOption extends Option{
+export interface RangeOption extends Option{
+  type: 'range',
+  idLB: string,
+  idUB: string,
+  defaultLB: number,
+  defaultUB: number,
+  min: number,
+  max: number
+}
+
+export interface IntegerOption extends Option{
   type: 'int',
   min?: number,
   max?: number,
@@ -32,11 +42,14 @@ interface IntegerOption extends Option{
 }
 
 interface BooleanOption extends Option{
-  title: string,
-  id: string,
   type: 'bool',
   default: boolean,
   swapLabel?: boolean,
+}
+
+interface SubOptions extends Option{
+  type: 'suboptions',
+  optionsSpec: OptionsSpec
 }
 
 type ColumnBreak = {
@@ -56,5 +69,7 @@ export type OptionsSpec = (
   IntegerOption |
   BooleanOption |
   ColumnBreak |
-  OptionHeading
+  OptionHeading |
+  SubOptions |
+  RangeOption
 )[]

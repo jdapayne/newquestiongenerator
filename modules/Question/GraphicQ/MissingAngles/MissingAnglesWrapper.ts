@@ -202,9 +202,27 @@ export default class MissingAnglesQ extends Question {
         id: 'custom'
       },
       {
+        type: 'range',
+        id: 'n-angles',
+        idLB: 'minN',
+        idUB: 'maxN',
+        defaultLB: 2,
+        defaultUB: 4,
+        min: 2,
+        max: 8,
+        title: 'Number of angles'
+      },
+      {
         type: 'bool',
         title: 'Simple',
         id: 'simple',
+        default: true,
+        disabledIf: '!custom'
+      },
+      {
+        type: 'bool',
+        title: 'Repeated/Isosceles',
+        id: 'repeated',
         default: true,
         disabledIf: '!custom'
       }

@@ -256,8 +256,15 @@ p.question {
     margin: 0;
     display: flex;
     flex-flow: row;
-    height: 100%;
     align-content: flex-start;
+}
+
+.options-list.suboptions {
+  padding-left: 1em;
+  margin-left: 2em;
+  border-left: thin solid darkgray;
+  font-size: 95%;
+  margin-top: 0.7em
 }
 
 .options-column > li {
@@ -266,7 +273,7 @@ p.question {
     align-items: baseline;
 }
 
-.options-list >li:first-child {
+.options-column >li:first-child {
   margin-top: 0;
 }
 

@@ -1,4 +1,4 @@
-import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption} from 'OptionsSpec'
+import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption} from 'OptionsSpec'
 import { createElem } from 'Utilities'
 import * as Mustache from 'mustache'
 
@@ -6,7 +6,7 @@ type Options = (OptionsSpec[0] & {element?: HTMLElement})[] // like OptionsSpec 
 
 export default class OptionsSet {
   optionsSpec : Options
-  options : Record<string, string | number | boolean | string[]>
+  options : Record<string, string | number | boolean | string[] | OptionsSet>
   template? : string
   globalId: string
   static idCounter: number = 0 // increment each time to create unique ids to use in ids/names of elements
@@ -31,7 +31,7 @@ export default class OptionsSet {
 
     this.options = {}
     this.optionsSpec.forEach(option => {
-      if (option.type !== 'heading' && option.type !== 'column-break') {
+      if (isRealOption(option)) {
         this.options[option.id] = option.default
       }
     })
@@ -74,10 +74,18 @@ export default class OptionsSet {
           Array.from(option.element.querySelectorAll('input:checked'), (x : HTMLInputElement) => x.value)
         break
       }
+      case 'range': {
+        const inputLB : HTMLInputElement = option.element.getElementsByTagName('input')[0]
+        const inputUB : HTMLInputElement = option.element.getElementsByTagName('input')[1]
+        this.options[option.idLB] = inputLB.value
+        this.options[option.idUB] = inputUB.value
+        break
+      }
+
       default:
         throw new Error(`option with id ${(option as OptionI).id} has unrecognised option type ${option.type}`)
     }
-    // console.log(this.options)
+    console.log(this.options)
   }
 
   /**
@@ -86,7 +94,11 @@ export default class OptionsSet {
    */
 
   updateStateFromUIAll () {
-    this.optionsSpec.forEach(option => this.updateStateFromUI(option))
+    this.optionsSpec.forEach(option => {
+      if (isRealOption(option)) { 
+        this.updateStateFromUI(option)
+      }
+    })
   }
 
   disableOrEnableAll () {
@@ -131,14 +143,19 @@ export default class OptionsSet {
     }
   }
 
-  renderIn (element) {
+  renderIn (element, ulExtraClass? : string) {
     const list = createElem('ul', 'options-list')
+    if (ulExtraClass) list.classList.add(ulExtraClass)
     let column = createElem('div', 'options-column', list)
 
     this.optionsSpec.forEach(option => {
       if (option.type === 'column-break') { // start new column
         column = createElem('div', 'options-column', list)
-      } else { // make list item
+      } else if (option.type === 'suboptions') {
+        this.options[option.id] = new OptionsSet(option.optionsSpec)
+        ;(this.options[option.id] as OptionsSet).renderIn(column,"suboptions")
+      }
+      else { // make list item
         const li = createElem('li', undefined, column)
         if (isRealOption(option)) {
           li.dataset.optionId = option.id
@@ -155,6 +172,10 @@ export default class OptionsSet {
           case 'select-inclusive':
           case 'select-exclusive':
             this.renderListOption(option, li)
+            break
+          case 'range':
+            renderRangeOption(option, li)
+            break
         }
         li.addEventListener('change', e => { this.updateStateFromUI(option); this.disableOrEnableAll() })
         option.element = li
@@ -163,6 +184,7 @@ export default class OptionsSet {
     })
     element.append(list)
 
+    this.updateStateFromUIAll()
     this.disableOrEnableAll()
   }
 
@@ -175,8 +197,7 @@ export default class OptionsSet {
       }
     })
 
-    let htmlString = Mustache.render(this.template, options)
-
+    let htmlString = this.template
   }
 
   renderListOption (option: SelectExclusiveOption | SelectInclusiveOption , li : HTMLElement) {
@@ -248,6 +269,23 @@ function renderSingleOption (option, li) {
   if (option.swapLabel && option.title !== '') label.insertAdjacentHTML('beforeend',` ${option.title}`)
 }
 
+function renderRangeOption(option: RangeOption, li) {
+  const label = createElem('label',undefined, li)
+  const inputLB = createElem('input', 'option', label) as HTMLInputElement
+  inputLB.type = 'number'
+  inputLB.min = option.min.toString()
+  inputLB.max = option.max.toString()
+  inputLB.value = option.defaultLB.toString()
+
+  label.insertAdjacentHTML('beforeend',` &leq; ${option.title} &leq; `)
+
+  const inputUB = createElem('input', 'option', label) as HTMLInputElement
+  inputUB.type = 'number'
+  inputUB.min = option.min.toString()
+  inputUB.max = option.max.toString()
+  inputUB.value = option.defaultUB.toString()
+}
+
 /** Determines if an option in OptionsSpec is a real option as opposed to
  * a heading or column break
  */
@@ -304,9 +342,46 @@ const demoSpec : OptionsSpec = [
     type: 'bool',
     default: true,
     swapLabel: true // put control before label
+  },
+  {
+    title: 'Options for rectangles',
+    id: 'rectangle-options',
+    type: 'suboptions',
+    optionsSpec: [
+      {
+        title: 'Minimum x',
+        id: 'minX',
+        type: 'int',
+        min: 0,
+        max: 10,
+        default: 2
+      },
+      {
+        title: 'Maximum x',
+        id: 'maxX',
+        type: 'int',
+        min: 0,
+        max: 10,
+        default: 4
+      }
+    ]
   }
 ]
 
-const demoTemplate : string = `
-<li>{{type}}</li>
-<li>`
+const demoTemplate : string =
+"<li>{{difficulty.rendered}}</li>\n" +      // Inserts full 'diffiulty' option as before
+"<li><b>{{type.title}}</b> \n" +            // just the title
+"<li>{{type.input}} \n" +                   // the input element
+"{{type.selectOptionsRenderedAll}}</li>" +  // The options, redered usually
+"<li><ul>{{# type.selectOptions}}" +       // Individual select options, rendered
+  "<li> {{rendered}} </li>" +               // The usual rendered option
+"{{/ type.selectOptions}}</ul>"
+
+const exampleTemplate : string =  // Another example, with fewer comments
+`<div class = "options-column">
+  <ul class="options-list">
+    <li> <b>Some options </b> </li>
+    <li> {{difficulty.rendered}} </li>
+    <li style="display:block"> {{simple.title}} {{simple.input}}
+      {{#simpleMinX}}
+` 

@@ -6,6 +6,7 @@
  *
  */
 
+import { OptionsSpec } from 'OptionsSpec'
 import { GraphicQ } from 'Question/GraphicQ/GraphicQ'
 import MissingAnglesAroundView from 'Question/GraphicQ/MissingAngles/MissingAnglesAroundView'
 import { MissingAnglesNumberData } from 'Question/GraphicQ/MissingAngles/MissingAnglesNumberData'
