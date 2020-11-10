@@ -1,6 +1,5 @@
 import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption} from 'OptionsSpec'
 import { createElem } from 'Utilities'
-import * as Mustache from 'mustache'
 
 type Options = (OptionsSpec[0] & {element?: HTMLElement})[] // like OptionsSpec but with optional element for each option
 
