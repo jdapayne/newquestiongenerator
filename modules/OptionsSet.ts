@@ -46,8 +46,11 @@ export default class OptionsSet {
 
     this.options = {}
     this.optionsSpec.forEach(option => {
-      if (isRealOption(option) && option.type !== 'suboptions') {
+      if (isRealOption(option) && option.type !== 'suboptions' && option.type !== 'range') {
         this.options[option.id] = option.default
+      } else if (option.type === 'range') {
+        this.options[option.idLB] = option.defaultLB
+        this.options[option.idUB] = option.defaultUB
       } else if (option.type === 'suboptions') { // Recursively build suboptions. Terminates as long as optionsSpec is not circular
         option.subOptionsSet = new OptionsSet(option.optionsSpec)
         this.options[option.id] = option.subOptionsSet.options 
@@ -95,8 +98,8 @@ export default class OptionsSet {
       case 'range': {
         const inputLB : HTMLInputElement = option.element.getElementsByTagName('input')[0]
         const inputUB : HTMLInputElement = option.element.getElementsByTagName('input')[1]
-        this.options[option.idLB] = inputLB.value
-        this.options[option.idUB] = inputUB.value
+        this.options[option.idLB] = Number(inputLB.value)
+        this.options[option.idUB] = Number(inputUB.value)
         break
       }
 

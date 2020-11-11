@@ -28,7 +28,22 @@ import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 type QuestionType = 'aosl' | 'aaap' | 'triangle'
 type QuestionSubType = 'simple' | 'repeated' | 'algebra' | 'worded'
 
-type QuestionOptions = MissingAngleOptions & AlgebraOptions & WordedOptions
+type QuestionOptions = MissingAngleOptions & AlgebraOptions & WordedOptions // options to pass to questions
+
+/** The options passed using optionsSpec */
+interface WrapperOptions {
+  difficulty: number,
+  types: QuestionType[],
+  custom: boolean,
+  minN: number,
+  maxN: number,
+  simple: boolean,
+  repeated: boolean,
+  algebra: boolean,
+  algebraOptions: AlgebraOptions
+  worded: boolean,
+  wordedOptions: WordedOptions
+}
 
 export default class MissingAnglesQ extends Question {
   question: GraphicQ
@@ -38,22 +53,43 @@ export default class MissingAnglesQ extends Question {
     this.question = question
   }
 
-  static random (
-    options: {
-      types: QuestionType[],
-      difficulty: number,
-      custom: boolean,
-      subtype?: QuestionSubType
-    }) : MissingAnglesQ {
+  static random ( options: WrapperOptions) : MissingAnglesQ {
     if (options.types.length === 0) {
       throw new Error('Types list must be non-empty')
     }
+    const type : QuestionType = randElem(options.types)
 
-    const type = randElem(options.types)
+    if (!options.custom) {
+      return MissingAnglesQ.randomFromDifficulty(type, options.difficulty)
+    } else {
+      // choose subtype
+      const availableSubtypes : QuestionSubType[] = ['simple','repeated','algebra','worded']
+      let subtypes : QuestionSubType[] = []
+      availableSubtypes.forEach(subtype => {
+        if (options[subtype]) {subtypes.push(subtype)}
+      })
+      const subtype : QuestionSubType = randElem(subtypes)
+
+      // build options object
+      let questionOptions : QuestionOptions
+      if (subtype === 'simple' || subtype === 'repeated') {
+        questionOptions = {}
+      } else if (subtype === 'algebra') {
+        questionOptions = options.algebraOptions
+      } else if (subtype === 'worded') {
+        questionOptions = options.wordedOptions
+      }
+      questionOptions.minN = options.minN
+      questionOptions.maxN = options.maxN
+
+      return MissingAnglesQ.randomFromTypeWithOptions(type,subtype,questionOptions)
+     }
+    }
+          
+  static randomFromDifficulty(type, difficulty) {
     let subtype : QuestionSubType
-    const questionOptions : QuestionOptions = {}
-
-    switch (options.difficulty) {
+    let questionOptions : QuestionOptions = {}
+    switch (difficulty) {
       case 1:
         subtype = 'simple'
         questionOptions.minN = 2
@@ -111,11 +147,12 @@ export default class MissingAnglesQ extends Question {
         questionOptions.minN = questionOptions.maxN = 3
         break
       default:
-        throw new Error(`Can't generate difficulty ${options.difficulty}`)
+        throw new Error(`Can't generate difficulty ${difficulty}`)
     }
 
     return this.randomFromTypeWithOptions(type, subtype, questionOptions)
   }
+  
 
   static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: QuestionOptions, viewOptions?: MissingAnglesViewOptions) : MissingAnglesQ {
     let question: GraphicQ
@@ -128,6 +165,7 @@ export default class MissingAnglesQ extends Question {
         switch (subtype) {
           case 'simple':
           case 'repeated':
+            question
             questionOptions.repeated = subtype === 'repeated'
             question = MissingAnglesAroundQ.random(questionOptions, viewOptions)
             break
@@ -230,16 +268,16 @@ export default class MissingAnglesQ extends Question {
       {
         type: 'bool',
         title: 'Algebraic',
-        id: 'algebraic',
+        id: 'algebra',
         default: true,
         enabledIf: 'custom'
       },
       {
         type: 'suboptions',
         title: '',
-        id: 'algebraic-options',
+        id: 'algebraOptions',
         optionsSpec: MissingAnglesAroundAlgebraQ.optionsSpec,
-        enabledIf: 'custom&algebraic'
+        enabledIf: 'custom&algebra'
       },
       {
         type: 'bool',
@@ -251,7 +289,7 @@ export default class MissingAnglesQ extends Question {
       {
         type: 'suboptions',
         title: '',
-        id: 'worded-options',
+        id: 'wordedOptions',
         optionsSpec: MissingAnglesWordedQ.optionsSpec,
         enabledIf: 'custom&worded'
       }

@@ -37,6 +37,13 @@ export function randMultBetween (min, max, n) {
   return randBetween(min / n, max / n) * n
 }
 
+/**
+ * Returns a random element of an array
+ * @template T
+ * @param {T[]} array An array of objects
+ * @param {()=>number} [dist] A distribution function for weighting, returning a number between 0 and 1. Default is Math.random
+ * @returns {T}
+ */
 export function randElem (array, dist) {
   if ([...array].length === 0) throw new Error('empty array')
   if (!dist) dist = Math.random

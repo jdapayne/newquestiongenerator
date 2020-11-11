@@ -61,7 +61,7 @@ interface OptionHeading {
   title: string
 }
 
-export type RealOption = SelectExclusiveOption | SelectInclusiveOption | IntegerOption | BooleanOption | SubOptions
+export type RealOption = SelectExclusiveOption | SelectInclusiveOption | IntegerOption | BooleanOption | SubOptions | RangeOption
 
 export type OptionsSpec = (
   SelectInclusiveOption |
