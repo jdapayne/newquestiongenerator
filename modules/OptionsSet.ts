@@ -1,11 +1,27 @@
 import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption} from 'OptionsSpec'
 import { createElem } from 'Utilities'
 
-type Options = (OptionsSpec[0] & {element?: HTMLElement})[] // like OptionsSpec but with optional element for each option
+/**  Records typse of option availabilty, and link to UI and further options sets */
+type Optionspec2 = (OptionsSpec[0] & { // Start with standard options spec - taken from question generator classes
+  element?: HTMLElement,               // most will also have links to a UI element
+  subOptionsSet?: OptionsSet           // for option.type="suboptions", hold link to the OptionsSet for that
+})[]
 
+/**
+ * A simple object representing options to send to a question generator 
+ * NB. This is a very 'loose' type 
+ */
+interface Options {
+  [key: string]:  string | number | boolean | string[] | Options
+}
+
+/**
+ * Represents a set of options, with link to UI elements. Stores internally the options
+ * in a simple object suitable for passing to question generators
+ */
 export default class OptionsSet {
-  optionsSpec : Options
-  options : Record<string, string | number | boolean | string[] | OptionsSet>
+  optionsSpec : Optionspec2
+  options : Options
   template? : string
   globalId: string
   static idCounter: number = 0 // increment each time to create unique ids to use in ids/names of elements
@@ -26,12 +42,15 @@ export default class OptionsSet {
    * @param template A template for displaying options, using {{mustache}} syntax
    */
   constructor (optionsSpec : OptionsSpec, template? : string) {
-    this.optionsSpec = optionsSpec as Options
+    this.optionsSpec = optionsSpec as Optionspec2
 
     this.options = {}
     this.optionsSpec.forEach(option => {
       if (isRealOption(option) && option.type !== 'suboptions') {
         this.options[option.id] = option.default
+      } else if (option.type === 'suboptions') { // Recursively build suboptions. Terminates as long as optionsSpec is not circular
+        option.subOptionsSet = new OptionsSet(option.optionsSpec)
+        this.options[option.id] = option.subOptionsSet.options 
       }
     })
 
@@ -45,7 +64,7 @@ export default class OptionsSet {
    * Given an option, find its UI element and update the state from that
    * @param {*} option An element of this.optionSpec or an id
    */
-  updateStateFromUI (option : Options[0] | string) {
+  updateStateFromUI (option : Optionspec2[0] | string) {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
       option = this.optionsSpec.find(x => ((x as OptionI).id === option))
@@ -116,7 +135,7 @@ export default class OptionsSet {
    * options in option.enabledIf are true
    * @param option An element of this.optionsSpec or an option id
    */
-  disableOrEnable(option : string | Options[0]) {
+  disableOrEnable(option : string | Optionspec2[0]) {
     if (typeof (option) === 'string') {
       option = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
       if (!option) throw new Error(`no option with id '${option}'`)
@@ -165,8 +184,7 @@ export default class OptionsSet {
       if (option.type === 'column-break') { // start new column
         column = createElem('div', 'options-column', list)
       } else if (option.type === 'suboptions') {
-        this.options[option.id] = new OptionsSet(option.optionsSpec)
-        const subOptionsElement = (this.options[option.id] as OptionsSet).renderIn(column,"suboptions")
+        const subOptionsElement = option.subOptionsSet.renderIn(column,"suboptions")
         option.element = subOptionsElement
       }
       else { // make list item
