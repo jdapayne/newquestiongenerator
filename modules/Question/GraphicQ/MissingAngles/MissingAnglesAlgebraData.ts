@@ -1,4 +1,5 @@
 import LinExpr from 'LinExpr'
+import { OptionsSpec } from 'OptionsSpec'
 import { randBetween, randElem, randMultBetween, shuffle, weakIncludes } from 'Utilities'
 import { AlgebraOptions } from './AlgebraOptions'
 import { MissingAnglesData } from './MissingAnglesData'

@@ -30,7 +30,7 @@ export default class OptionsSet {
 
     this.options = {}
     this.optionsSpec.forEach(option => {
-      if (isRealOption(option)) {
+      if (isRealOption(option) && option.type !== 'suboptions') {
         this.options[option.id] = option.default
       }
     })
@@ -112,37 +112,51 @@ export default class OptionsSet {
   }
 
   /**
-   * Given an option, enable or disable the UI element depending on the value of option.disableIf and the
-   * state of the corresponding boolean option
-   * @param {*} option An element of this.optionsSpec or an option id
+   * Given an option, enable the UI elements if and only if all the boolean
+   * options in option.enabledIf are true
+   * @param option An element of this.optionsSpec or an option id
    */
-  disableOrEnable (option) {
+  disableOrEnable(option : string | Options[0]) {
     if (typeof (option) === 'string') {
       option = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
       if (!option) throw new Error(`no option with id '${option}'`)
     }
 
-    if (!option.disabledIf) return
+    if (!(isRealOption(option) && option.enabledIf)) return
 
-    // Inverse everything if begining with !
-    let disablerId = option.disabledIf
-    let enable = false // disable iff disabler is true
-    if (disablerId.startsWith('!')) {
-      enable = true // endable iff disabler is true
-      disablerId = disablerId.slice(1)
+    const enablerList = option.enabledIf.split("&") //
+    let enable = true // will disable if just one of the elements of enablerList is false
+
+    for (let i = 0; i < enablerList.length; i++) {
+      let enablerId = enablerList[i]
+      let negate = false // if it starts with !, negative output
+      if (enablerId.startsWith('!')) {
+        negate = true 
+        enablerId = enablerId.slice(1)
+      }
+
+      if (typeof this.options[enablerId] !== 'boolean') {
+        throw new Error (`Invalid 'enabledIf': ${enablerId} is not a boolean option`)
+      }
+
+      const enablerValue : boolean = this.options[enablerId] as boolean //!== negate // !== equivalent to XOR
+
+      if (!enablerValue) {
+        enable = false
+        break
+      }
     }
 
-    // Endable or disable
-    if (this.options[disablerId] === enable) { // enable
+    if (enable) {
       option.element.classList.remove('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = false })
-    } else { // disable
+        ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = false })
+    } else {
       option.element.classList.add('disabled')
-      ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = true })
+        ;[...option.element.getElementsByTagName('input')].forEach(e => { e.disabled = true })
     }
   }
 
-  renderIn (element, ulExtraClass? : string) {
+  renderIn (element, ulExtraClass? : string) : HTMLElement{
     const list = createElem('ul', 'options-list')
     if (ulExtraClass) list.classList.add(ulExtraClass)
     let column = createElem('div', 'options-column', list)
@@ -152,7 +166,8 @@ export default class OptionsSet {
         column = createElem('div', 'options-column', list)
       } else if (option.type === 'suboptions') {
         this.options[option.id] = new OptionsSet(option.optionsSpec)
-        ;(this.options[option.id] as OptionsSet).renderIn(column,"suboptions")
+        const subOptionsElement = (this.options[option.id] as OptionsSet).renderIn(column,"suboptions")
+        option.element = subOptionsElement
       }
       else { // make list item
         const li = createElem('li', undefined, column)
@@ -183,8 +198,9 @@ export default class OptionsSet {
     })
     element.append(list)
 
-    this.updateStateFromUIAll()
     this.disableOrEnableAll()
+
+    return list
   }
 
   renderWithTemplate(element : HTMLElement) {

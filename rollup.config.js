@@ -30,10 +30,9 @@ export default {
       dir: 'dist',
       format: 'iife',
       sourcemap: 'inline'
-    }
-    /* {
+    }/*,
+    {
       dir: 'dist',
-      file: 'bundle.min.js',
       format: 'iife',
       plugins: [terser()]
     }*/

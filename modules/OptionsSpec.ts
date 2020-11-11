@@ -2,7 +2,7 @@ export interface Option {
   title: string,
   id: string,
   type: string,
-  disabledIf?: string, // 'id' or '!id' where [id] is of a boolean option
+  enabledIf?: string, // 'id' or '!id' where [id] is of a boolean option
 }
 
 export interface SelectOption extends Option{
@@ -61,7 +61,7 @@ interface OptionHeading {
   title: string
 }
 
-export type RealOption = SelectExclusiveOption | SelectInclusiveOption | IntegerOption | BooleanOption
+export type RealOption = SelectExclusiveOption | SelectInclusiveOption | IntegerOption | BooleanOption | SubOptions
 
 export type OptionsSpec = (
   SelectInclusiveOption |

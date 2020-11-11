@@ -197,7 +197,7 @@ export default class MissingAnglesQ extends Question {
       },
       {
         type: 'bool',
-        title: '<b>Use custom settings (disables difficulty)</b>',
+        title: '<b>Custom settings (disables difficulty)</b>',
         default: false,
         id: 'custom'
       },
@@ -210,21 +210,50 @@ export default class MissingAnglesQ extends Question {
         defaultUB: 4,
         min: 2,
         max: 8,
-        title: 'Number of angles'
+        title: 'Number of angles',
+        enabledIf: 'custom'
       },
       {
         type: 'bool',
         title: 'Simple',
         id: 'simple',
         default: true,
-        disabledIf: '!custom'
+        enabledIf: 'custom'
       },
       {
         type: 'bool',
         title: 'Repeated/Isosceles',
         id: 'repeated',
         default: true,
-        disabledIf: '!custom'
+        enabledIf: 'custom'
+      },
+      {
+        type: 'bool',
+        title: 'Algebraic',
+        id: 'algebraic',
+        default: true,
+        enabledIf: 'custom'
+      },
+      {
+        type: 'suboptions',
+        title: '',
+        id: 'algebraic-options',
+        optionsSpec: MissingAnglesAroundAlgebraQ.optionsSpec,
+        enabledIf: 'custom&algebraic'
+      },
+      {
+        type: 'bool',
+        title: 'Worded',
+        id: 'worded',
+        default: true,
+        enabledIf: 'custom'
+      },
+      {
+        type: 'suboptions',
+        title: '',
+        id: 'worded-options',
+        optionsSpec: MissingAnglesWordedQ.optionsSpec,
+        enabledIf: 'custom&worded'
       }
     ]
   }

@@ -296,7 +296,8 @@ p.question {
 }
 
 .options-list ul li {
-    padding-top: 0.1em
+    padding-top: 0.1em;
+    padding-right: 0.6em
 }
 
 .options-sublist {
@@ -312,8 +313,8 @@ p.question {
   display:block
 }
 
-.emphasise {
-  font-weight: bold;
+.disabled {
+  color: gray;
 }
 
 label {

@@ -1,3 +1,4 @@
+import { OptionsSpec } from 'OptionsSpec'
 import { GraphicQ } from '../GraphicQ'
 import MissingAnglesAroundWordedView from './MissingAnglesAroundWordedView'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
@@ -31,4 +32,22 @@ export default class MissingAnglesWordedQ extends GraphicQ {
 
     return new this(data, view)
   }
+
+  static get optionsSpec(): OptionsSpec {
+    return [
+      {
+        type: 'select-inclusive',
+        title: 'Question types',
+        id: 'types',
+        selectOptions: [
+          { title: 'More than/less than', id: 'add' },
+          { title: 'Multiples', id: 'multiply' },
+          { title: 'Percentage change', id: 'percent' },
+          { title: 'Ratios', id: 'ratio' }
+        ],
+        default: ['add', 'multiply']
+      }
+    ]
+  }
+
 }
