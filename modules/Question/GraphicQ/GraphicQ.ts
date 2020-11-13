@@ -1,5 +1,5 @@
 import Question from 'Question/Question'
-import { createElem } from 'Utilities'
+import { createElem } from 'utilities'
 import Point from 'Point'
 import ViewOptions from './ViewOptions'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
@@ -40,8 +40,8 @@ export abstract class GraphicQView {
 
   constructor (data : GraphicQData, viewOptions : ViewOptions) {
     const defaults : ViewOptions = {
-      width: 250,
-      height: 250
+      width: 300,
+      height: 300
     }
 
     viewOptions = Object.assign({}, defaults, viewOptions)

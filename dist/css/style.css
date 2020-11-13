@@ -25,7 +25,7 @@ body {
 /* {{{ Questions styling */
 
 .question-displaybox {
-  --column-width: 250px; /* will be updated by js */
+  --column-width: 300px; /* will be updated by js */
   display:grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
@@ -215,7 +215,10 @@ p.question {
 }
 .label.extra-answer {
   color: red;
-  transform: translateY(-50%);
+  transform: translateY(-100%);
+  font-size: small;
+  display: block;
+  text-align: left;
 }
 .label.extra-info {
   transform: translateY(-100%);

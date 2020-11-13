@@ -5,6 +5,7 @@ import TestQ from 'Question/TextQ/TestQ'
 import AddAZero from 'Question/TextQ/AddAZero'
 import EquationOfLine from 'Question/TextQ/EquationOfLine'
 import MissingAnglesQ from 'Question/GraphicQ/MissingAngles/MissingAnglesWrapper'
+import AreaPerimeterQ from 'Question/GraphicQ/AreaPerimeter/AreaWrapper'
 
 import OptionsSet from 'OptionsSet'
 
@@ -28,6 +29,11 @@ const topicList = [
     id: 'missing-angles',
     title: 'Missing angles',
     class: MissingAnglesQ
+  },
+  {
+    id: 'area-perimter',
+    title: 'Area and perimeter of shapes',
+    class: AreaPerimeterQ
   },
   {
     id: 'equation-of-line',
