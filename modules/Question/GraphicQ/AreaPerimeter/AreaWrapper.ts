@@ -89,4 +89,8 @@ export default class AreaPerimeterQ extends Question {
     ]
   }
 
+  static get commandWord() : string {
+    return 'Find the missing value'
+  }
+
 }
