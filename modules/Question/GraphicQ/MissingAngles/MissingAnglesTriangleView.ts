@@ -1,6 +1,6 @@
 import Point from 'Point'
 import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
-import { sinDeg, dashedLine, roundDP } from 'Utilities'
+import { sinDeg, dashedLine, roundDP } from 'utilities'
 import ViewOptions from '../ViewOptions'
 import MissingAnglesTriangleData from './MissingAnglesTriangleData'
 

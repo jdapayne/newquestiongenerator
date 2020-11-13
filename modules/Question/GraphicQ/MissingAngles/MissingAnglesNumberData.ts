@@ -9,7 +9,7 @@
  *
  */
 
-import { randBetween } from 'Utilities'
+import { randBetween } from 'utilities'
 import { GraphicQData } from '../GraphicQ'
 import { MissingAnglesData } from './MissingAnglesData'
 import { MissingAngleOptions as Options } from './NumberOptions'

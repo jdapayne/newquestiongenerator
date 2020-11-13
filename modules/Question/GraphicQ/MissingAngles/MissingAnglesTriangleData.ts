@@ -1,6 +1,6 @@
 /* Extends MissingAnglesNumberData in order to do isosceles triangles, which generate a bit differently */
 
-import { firstUniqueIndex } from 'Utilities'
+import { firstUniqueIndex } from 'utilities'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
 import { MissingAngleOptions } from './NumberOptions'
 

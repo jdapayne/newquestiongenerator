@@ -6,7 +6,7 @@
 */
 
 import { OptionsSpec } from 'OptionsSpec'
-import { randElem } from 'Utilities'
+import { randElem } from 'utilities'
 
 import Question from 'Question/Question'
 import { GraphicQ } from '../GraphicQ'

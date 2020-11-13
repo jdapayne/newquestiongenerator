@@ -1,5 +1,5 @@
 import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption} from 'OptionsSpec'
-import { createElem } from 'Utilities'
+import { createElem } from 'utilities'
 
 /**  Records typse of option availabilty, and link to UI and further options sets */
 type Optionspec2 = (OptionsSpec[0] & { // Start with standard options spec - taken from question generator classes

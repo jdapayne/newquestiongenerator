@@ -1,4 +1,4 @@
-import { randBetween } from 'Utilities'
+import { randBetween } from 'utilities'
 import TextQ from 'Question/TextQ/TextQ'
 import Fraction from 'vendor/fraction'
 

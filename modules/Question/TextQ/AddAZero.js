@@ -1,5 +1,5 @@
 import TextQ from 'Question/TextQ/TextQ'
-import { randBetween } from 'Utilities'
+import { randBetween } from 'utilities'
 
 export default class AddAZero extends TextQ {
   constructor (options) {

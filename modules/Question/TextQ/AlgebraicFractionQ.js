@@ -1,4 +1,4 @@
-import { randBetween, gcd } from 'Utilities'
+import { randBetween, gcd } from 'utilities'
 import TextQ from 'Question/TextQ/TextQ'
 
 /* Main question class. This will be spun off into different file and generalised */

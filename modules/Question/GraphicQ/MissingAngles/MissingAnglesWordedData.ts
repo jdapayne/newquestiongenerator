@@ -1,5 +1,5 @@
 import LinExpr from 'LinExpr'
-import { randBetween, randElem, randMultBetween } from 'Utilities'
+import { randBetween, randElem, randMultBetween } from 'utilities'
 import MissingAnglesAlgebraData from './MissingAnglesAlgebraData'
 import { solveAngles } from './solveAngles'
 import { WordedOptions } from './WordedOptions'

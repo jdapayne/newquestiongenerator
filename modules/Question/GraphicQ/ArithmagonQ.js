@@ -2,7 +2,7 @@ import { GraphicQ, GraphicQView } from 'Question/GraphicQ/GraphicQ'
 import Point from 'Point'
 import Fraction from 'vendor/fraction'
 import Polynomial from 'Polynomial'
-import { randElem, randBetween, randBetweenFilter, gcd } from 'Utilities'
+import { randElem, randBetween, randBetweenFilter, gcd } from 'utilities'
 
 export default class ArithmagonQ extends GraphicQ {
   constructor (options) {

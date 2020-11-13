@@ -8,7 +8,7 @@
 
 import Point from 'Point'
 import { GraphicQView, Label } from 'Question/GraphicQ/GraphicQ'
-import { roundDP } from 'Utilities'
+import { roundDP } from 'utilities'
 import { MissingAnglesNumberData } from './MissingAnglesNumberData'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 

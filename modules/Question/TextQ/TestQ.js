@@ -1,5 +1,5 @@
 import TextQ from 'Question/TextQ/TextQ'
-import { randElem } from 'Utilities'
+import { randElem } from 'utilities'
 
 export default class TestQ extends TextQ {
   constructor (options) {
