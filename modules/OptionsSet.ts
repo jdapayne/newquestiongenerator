@@ -1,4 +1,4 @@
-import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption} from 'OptionsSpec'
+import { OptionsSpec , Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption, IntegerOption, BooleanOption} from 'OptionsSpec'
 import { createElem } from 'utilities'
 
 /**  Records typse of option availabilty, and link to UI and further options sets */
@@ -70,8 +70,12 @@ export default class OptionsSet {
   updateStateFromUI (option : Optionspec2[0] | string) {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
-      option = this.optionsSpec.find(x => ((x as OptionI).id === option))
-      if (!option) throw new Error(`no option with id '${option}'`)
+      const optionsSpec : Optionspec2[0] | undefined = this.optionsSpec.find(x => ((x as OptionI).id === option))
+      if (optionsSpec !== undefined) {
+        option = optionsSpec
+      } else {
+        throw new Error(`no option with id '${option}'`)
+      }
     }
     if (!option.element) throw new Error(`option ${(option as OptionI).id} doesn't have a UI element`)
 
@@ -92,7 +96,7 @@ export default class OptionsSet {
       }
       case 'select-inclusive': {
         this.options[option.id] =
-          Array.from(option.element.querySelectorAll('input:checked'), (x : HTMLInputElement) => x.value)
+          (Array.from(option.element.querySelectorAll('input:checked')) as HTMLInputElement[]).map(x  => x.value)
         break
       }
       case 'range': {
@@ -130,7 +134,7 @@ export default class OptionsSet {
    * Given an option, find its UI element and update it according to the options ID
    * @param {*} option An element of this.optionsSpec or an option id
    */
-  updateUIFromState (option) {
+  updateUIFromState (option : string | Optionspec2) {
   }
 
   /**
@@ -140,11 +144,12 @@ export default class OptionsSet {
    */
   disableOrEnable(option : string | Optionspec2[0]) {
     if (typeof (option) === 'string') {
-      option = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
-      if (!option) throw new Error(`no option with id '${option}'`)
+      const tempOption : Optionspec2[0] | undefined = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
+      if (tempOption !== undefined) {option = tempOption}
+      else {throw new Error(`no option with id '${option}'`)}
     }
 
-    if (!(isRealOption(option) && option.enabledIf)) return
+    if (!isRealOption(option) || !option.enabledIf || option.element === undefined) return
 
     const enablerList = option.enabledIf.split("&") //
     let enable = true // will disable if just one of the elements of enablerList is false
@@ -187,7 +192,7 @@ export default class OptionsSet {
       if (option.type === 'column-break') { // start new column
         column = createElem('div', 'options-column', list)
       } else if (option.type === 'suboptions') {
-        const subOptionsElement = option.subOptionsSet.renderIn(column,"suboptions")
+        const subOptionsElement = option.subOptionsSet!.renderIn(column,"suboptions") // subOptionsSet set in constructor
         option.element = subOptionsElement
       }
       else { // make list item
@@ -243,8 +248,8 @@ export default class OptionsSet {
     if (option.vertical) sublist.classList.add('options-sublist-vertical')
 
     option.selectOptions.forEach(selectOption => {
-      const sublistLi = createElem('li', null, sublist)
-      const label = createElem('label', null, sublistLi)
+      const sublistLi = createElem('li', undefined, sublist)
+      const label = createElem('label', undefined, sublistLi)
 
       const input = document.createElement('input')
       input.type = option.type === 'select-exclusive' ? 'radio' : 'checkbox'
@@ -271,7 +276,7 @@ export default class OptionsSet {
  * @param {string} title The title of the heading
  * @param {HTMLElement} li The element to render into
  */
-function renderHeading (title, li) {
+function renderHeading (title: string, li: HTMLElement) {
   li.innerHTML = title
   li.classList.add('options-heading')
 }
@@ -281,7 +286,7 @@ function renderHeading (title, li) {
  * @param {*} option
  * @param {*} li
  */
-function renderSingleOption (option, li) {
+function renderSingleOption (option: IntegerOption | BooleanOption, li: HTMLElement) {
   const label = createElem('label', undefined, li)
 
   if (!option.swapLabel && option.title !== '') label.insertAdjacentHTML('beforeend',`${option.title}: `)
@@ -290,22 +295,22 @@ function renderSingleOption (option, li) {
   switch (option.type) {
     case 'int':
       input.type = 'number'
-      input.min = option.min
-      input.max = option.max
-      input.value = option.default
+      input.min = option.min.toString()
+      input.max = option.max.toString()
+      input.value = option.default.toString()
       break
     case 'bool':
       input.type = 'checkbox'
       input.checked = option.default
       break
     default:
-      throw new Error(`unknown option type ${option.type}`)
+      throw new Error(`Typescript is pretty sure I can't get here`)
   }
 
   if (option.swapLabel && option.title !== '') label.insertAdjacentHTML('beforeend',` ${option.title}`)
 }
 
-function renderRangeOption(option: RangeOption, li) {
+function renderRangeOption(option: RangeOption, li: HTMLElement) {
   const label = createElem('label',undefined, li)
   const inputLB = createElem('input', 'option', label) as HTMLInputElement
   inputLB.type = 'number'

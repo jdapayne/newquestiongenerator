@@ -39,12 +39,9 @@ export abstract class GraphicQView {
   labels: Label[]
 
   constructor (data : GraphicQData, viewOptions : ViewOptions) {
-    const defaults : ViewOptions = {
-      width: 300,
-      height: 300
-    }
 
-    viewOptions = Object.assign({}, defaults, viewOptions)
+    viewOptions.width = viewOptions.width ?? 300
+    viewOptions.height = viewOptions.height ?? 300
 
     this.width = viewOptions.width
     this.height = viewOptions.height // only things I need from the options, generally?
@@ -185,7 +182,7 @@ export abstract class GraphicQView {
 
 export abstract class GraphicQ extends Question {
   data: GraphicQData
-  view: GraphicQView
+  view: GraphicQView 
 
   constructor () { // eslint-disable-line @typescript-eslint/no-unused-vars
     super() // this.answered = false

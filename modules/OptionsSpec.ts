@@ -36,12 +36,13 @@ export interface RangeOption extends Option{
 
 export interface IntegerOption extends Option{
   type: 'int',
-  min?: number,
-  max?: number,
+  min: number,
+  max: number,
   default: number,
+  swapLabel?: boolean
 }
 
-interface BooleanOption extends Option{
+export interface BooleanOption extends Option{
   type: 'bool',
   default: boolean,
   swapLabel?: boolean,

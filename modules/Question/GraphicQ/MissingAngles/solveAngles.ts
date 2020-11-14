@@ -6,7 +6,7 @@ export function solveAngles (expressions: LinExpr[], angleSum: number): { x: num
   const expressionSum = expressions.reduce((exp1, exp2) => exp1.add(exp2))
   const x = LinExpr.solve(expressionSum, new LinExpr(0, angleSum))
 
-  const angles = []
+  const angles : number[] = []
   expressions.forEach(function (expr) {
     const angle = expr.eval(x)
     if (angle <= 0) {

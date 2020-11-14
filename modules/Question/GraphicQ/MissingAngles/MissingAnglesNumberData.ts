@@ -34,15 +34,6 @@ export class MissingAnglesNumberData implements MissingAnglesData {
   }
 
   static random (options: Options) : MissingAnglesNumberData {
-    const defaults : Partial<Options> = {
-      /* angleSum: 180 */ // must be set by caller
-      minAngle: 15,
-      minN: 2,
-      maxN: 4
-    }
-
-    options = Object.assign({}, defaults, options)
-
     let question : MissingAnglesNumberData
     if (options.repeated) {
       question = this.randomRepeated(options)
@@ -54,8 +45,6 @@ export class MissingAnglesNumberData implements MissingAnglesData {
   }
 
   static randomSimple (options: Options): MissingAnglesNumberData {
-    if (!options.angleSum) { throw new Error('No angle sum given') }
-
     const angleSum = options.angleSum
     const n = randBetween(options.minN, options.maxN)
     const minAngle = options.minAngle
@@ -74,7 +63,7 @@ export class MissingAnglesNumberData implements MissingAnglesData {
     angles[n - 1] = left
 
     // pick one to be missing
-    const missing = []
+    const missing: boolean[] = []
     missing.length = n
     missing.fill(false)
     missing[randBetween(0, n - 1)] = true
@@ -94,11 +83,11 @@ export class MissingAnglesNumberData implements MissingAnglesData {
 
     // All missing - do as a separate case
     if (n === m) {
-      const angles = []
+      const angles: number[] = []
       angles.length = n
       angles.fill(angleSum / n)
 
-      const missing = []
+      const missing: boolean[] = []
       missing.length = n
       missing.fill(true)
 

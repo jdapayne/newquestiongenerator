@@ -4,12 +4,12 @@
 export default class Point {
   x: number
   y: number
-  constructor (x, y) {
+  constructor (x: number, y: number) {
     this.x = x
     this.y = y
   }
 
-  rotate (angle) {
+  rotate (angle: number) {
     var newx, newy
     newx = Math.cos(angle) * this.x - Math.sin(angle) * this.y
     newy = Math.sin(angle) * this.x + Math.cos(angle) * this.y
@@ -18,13 +18,13 @@ export default class Point {
     return this
   }
 
-  scale (sf) {
+  scale (sf: number) {
     this.x = this.x * sf
     this.y = this.y * sf
     return this
   }
 
-  translate (x, y) {
+  translate (x: number, y: number) {
     this.x += x
     this.y += y
     return this
@@ -34,25 +34,25 @@ export default class Point {
     return new Point(this.x, this.y)
   }
 
-  equals (that) {
+  equals (that: Point) {
     return (this.x === that.x && this.y === that.y)
   }
 
-  moveToward (that, d) {
+  moveToward (that: Point, d: number) {
     // moves [d] in the direction of [that::Point]
     const uvec = Point.unitVector(this, that)
     this.translate(uvec.x * d, uvec.y * d)
     return this
   }
 
-  static fromPolar (r, theta) {
+  static fromPolar (r: number, theta: number) {
     return new Point(
       Math.cos(theta) * r,
       Math.sin(theta) * r
     )
   }
 
-  static fromPolarDeg (r, theta) {
+  static fromPolarDeg (r: number, theta: number) {
     theta = theta * Math.PI / 180
     return Point.fromPolar(r, theta)
   }
@@ -69,7 +69,7 @@ export default class Point {
     return new Point(sumx / n, sumy / n)
   }
 
-  static inCenter (A, B, C) {
+  static inCenter (A: Point, B: Point, C: Point) {
     // incenter of a triangle given vertex points A, B and C
     const a = Point.distance(B, C)
     const b = Point.distance(A, C)

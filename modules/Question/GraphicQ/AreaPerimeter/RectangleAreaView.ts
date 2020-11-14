@@ -5,7 +5,7 @@ import ViewOptions from "../ViewOptions";
 import RectangleAreaData, { Value } from "./RectangleAreaData";
 
 export default class RectangleAreaView extends GraphicQView {
-  data: RectangleAreaData
+  data!: RectangleAreaData // assigned in super
   A: Point
   B: Point
   C: Point
@@ -18,7 +18,7 @@ export default class RectangleAreaView extends GraphicQView {
      *  Creates DOM elements, including canvas
      *  Creates empty this.labels list
      */
-    super(data,viewOptions) 
+    super(data,viewOptions)  // initialises this.data
     this.A = A
     this.B = B
     this.C = C
@@ -128,6 +128,7 @@ export default class RectangleAreaView extends GraphicQView {
 
   render(): void {
     const ctx = this.canvas.getContext("2d");
+    if (ctx === null) {throw new Error('Could not get context')}
     ctx.clearRect(0,0,this.canvas.width,this.canvas.height); // clear
     ctx.setLineDash([]);
 

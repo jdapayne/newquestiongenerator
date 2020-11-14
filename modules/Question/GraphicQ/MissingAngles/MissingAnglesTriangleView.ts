@@ -9,13 +9,13 @@ export default class MissingAnglesTriangleView extends GraphicQView {
   B : Point
   C : Point
   rotation: number
-  // Inherited members:
-  labels: Label[]
-  canvas: HTMLCanvasElement
-  DOM: HTMLElement
-  width: number
-  height: number
-  data: MissingAnglesTriangleData
+  // Inherited members. All initialised in call to super()
+  labels!: Label[]
+  canvas!: HTMLCanvasElement
+  DOM!: HTMLElement
+  width!: number
+  height!: number
+  data!: MissingAnglesTriangleData
 
   constructor (data: MissingAnglesTriangleData, options: ViewOptions) {
     super(data, options) // sets this.width this.height, this.data initialises this.labels, creates dom elements
@@ -75,6 +75,8 @@ export default class MissingAnglesTriangleView extends GraphicQView {
 
   render () : void {
     const ctx = this.canvas.getContext('2d')
+    if (ctx === null) throw new Error("Could not get canvas context")
+
     const vertices = [this.A, this.B, this.C]
     const apex = this.data.apex // hmmm
 

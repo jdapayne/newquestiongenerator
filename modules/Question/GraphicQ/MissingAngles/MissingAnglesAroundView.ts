@@ -18,7 +18,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
   A: Point
   C: Point[]
   viewAngles: number[] // 'fudged' versions of data.angles for display
-  data: MissingAnglesNumberData
+  data!: MissingAnglesNumberData // initialised in super call
   rotation: number
 
   constructor (data : MissingAnglesNumberData, options : MissingAnglesViewOptions) {
@@ -103,6 +103,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
 
   render () : void {
     const ctx = this.canvas.getContext('2d')
+    if (ctx === null) {throw new Error("Could not get canvas context")}
 
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) // clear
 

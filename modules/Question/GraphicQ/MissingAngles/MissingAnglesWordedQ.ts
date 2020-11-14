@@ -15,7 +15,7 @@ export default class MissingAnglesWordedQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: WordedOptions, viewOptions: MissingAnglesViewOptions) : MissingAnglesWordedQ {
+  static random (options: Partial<WordedOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesWordedQ {
     const defaults : WordedOptions = {
       angleSum: 180,
       minAngle: 10,

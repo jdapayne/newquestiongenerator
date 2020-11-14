@@ -9,7 +9,7 @@ export default class Rectangle {
      *   mixUnits
      * }
      */
-    }
+    
     this.shape="rectangle";
     // members: b, h, area, perimeter, show_opposites
     if (!options) options = {};

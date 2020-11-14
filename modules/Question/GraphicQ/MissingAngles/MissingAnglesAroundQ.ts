@@ -23,17 +23,18 @@ export default class MissingAnglesAroundQ extends GraphicQ {
     this.view = view
   }
 
-  static random (options: MissingAngleOptions, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundQ {
+  static random (options: Partial<MissingAngleOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundQ {
     const defaults : MissingAngleOptions = {
       angleSum: 180,
-      minAngle: 10,
+      minAngle: 15,
       minN: 2,
       maxN: 4,
-      repeated: false
+      repeated: false,
+      nMissing: 3
     }
-    options = Object.assign({}, defaults, options)
+    const settings: MissingAngleOptions = Object.assign({}, defaults, options)
 
-    const data = MissingAnglesNumberData.random(options)
+    const data = MissingAnglesNumberData.random(settings)
     const view = new MissingAnglesAroundView(data, viewOptions) // TODO eliminate public constructors
 
     return new MissingAnglesAroundQ(data, view)

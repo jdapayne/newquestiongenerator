@@ -8,9 +8,9 @@ import { WrapperOptions, Shape, QuestionTypeSimple, QuestionOptions } from "./ty
 
 export default class AreaPerimeterQ extends Question {
   question: GraphicQ // make more precise with union of actual types
-  DOM: HTMLElement
-  answered: boolean
-  constructor(question) {
+  // DOM: HTMLElement  // in base class
+  // answered: boolean // in base class
+  constructor(question: GraphicQ) {
     super()
     this.question = question
     this.DOM = question.DOM

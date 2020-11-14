@@ -39,13 +39,13 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       options = Object.assign({}, defaults, options)
 
       // assign calculated defaults:
-      options.maxConstant = options.maxConstant || options.angleSum / 2
-      options.maxXValue = options.maxXValue || options.angleSum / 4
+      options.maxConstant = options.maxConstant || options.angleSum! / 2  //guaranteed non-null from above
+      options.maxXValue = options.maxXValue || options.angleSum! / 4
 
       // Randomise/set up main features
       const n : number = randBetween(options.minN, options.maxN)
 
-      const type : ExpressionType = randElem(options.expressionTypes)
+      const type : ExpressionType = randElem(options.expressionTypes!) // guaranteed non-null from defaul assignment
 
       // Generate expressions/angles
       let expressions : LinExpr[]
@@ -64,7 +64,7 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       expressions = shuffle(expressions)
 
       // Solve for x and angles
-      const { x, angles } : {x:number, angles: number[]} = solveAngles(expressions, options.angleSum)
+      const { x, angles } : {x:number, angles: number[]} = solveAngles(expressions, options.angleSum!) // non-null from default assignement
 
       // labels are just expressions as strings
       const labels = expressions.map(e => `${e.toStringP()}^\\circ`)
@@ -72,14 +72,20 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       // missing values are the ones which aren't constant
       const missing = expressions.map(e => !e.isConstant())
 
-      return new MissingAnglesAlgebraData(angles, missing, options.angleSum, labels, x)
+      return new MissingAnglesAlgebraData(angles, missing, options.angleSum!, labels, x)
     }
 
     // makes typescript shut up, makes eslint noisy
     initLabels () : void {}  // eslint-disable-line
 }
 
-function makeMixedExpressions (n: number, options: Options) : LinExpr[] {
+function makeMixedExpressions (n: number,
+  options: Required<Pick<Options, "minXValue"|
+                                  "maxXValue"|
+                                  "maxCoefficient"|
+                                  "angleSum"|
+                                  "minAngle"|
+                                  "maxConstant">>) : LinExpr[] {
   const expressions: LinExpr[] = []
   const x = randBetween(options.minXValue, options.maxXValue)
   let left = options.angleSum
