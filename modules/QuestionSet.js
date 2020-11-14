@@ -1,7 +1,7 @@
 import RSlider from 'vendor/rslider'
 import OptionsSet from 'OptionsSet'
 import * as TopicChooser from 'TopicChooser'
-import Modal from 'vendor/Tingle'
+import Modal from 'vendor/tingle'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'utilities'
 
 window.SHOW_DIFFICULTY = false // for debugging questions
@@ -326,6 +326,13 @@ export default class QuestionSet {
         this.answerButton.innerHTML = 'Hide answers'
       })
     }
+  }
+
+  /**
+   * Scans for widest question and then sets the grid width to that
+   */
+  adjustGridWidth () {
+
   }
 
   showQuestionActions (event, questionIndex) {
