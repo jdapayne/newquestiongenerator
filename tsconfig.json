@@ -5,8 +5,8 @@
     "allowJs": true,
     "target": "ES6",
     "outDir": "dist",
-    "lib": ["ES6","DOM","ES2016.Array.Include","DOM.Iterable"]
+    "lib": ["ES6","DOM","ES2016.Array.Include","DOM.Iterable"],
+    "moduleResolution": "node"
   },
     "exclude": ["node_modules", "dist"]
 }
-

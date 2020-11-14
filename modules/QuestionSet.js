@@ -1,7 +1,7 @@
 import RSlider from 'vendor/rslider'
 import OptionsSet from 'OptionsSet'
 import * as TopicChooser from 'TopicChooser'
-import Modal from 'vendor/tingle'
+import {modal as TModal} from 'tingle.js'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'utilities'
 
 window.SHOW_DIFFICULTY = false // for debugging questions
@@ -96,7 +96,7 @@ export default class QuestionSet {
     this.topicsOptions = new OptionsSet(optionsSpec)
 
     // Build a modal dialog to put them in
-    this.topicsModal = new Modal({
+    this.topicsModal = new TModal({
       footer: true,
       stickyFooter: false,
       closeMethods: ['overlay', 'escape'],
@@ -137,7 +137,7 @@ export default class QuestionSet {
     this.optionsSets[topicId] = optionsSet
 
     // Make a modal dialog for it
-    const modal = new Modal({
+    const modal = new TModal({
       footer: true,
       stickyFooter: false,
       closeMethods: ['overlay', 'escape'],

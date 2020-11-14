@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "@rollup/plugin-typescript": "^6.1.0",
+    "@types/tingle.js": "^0.13.1",
     "fraction.js": "^4.0.12",
     "jsx-transform": "^2.4.1",
     "moustache": "0.0.4",
