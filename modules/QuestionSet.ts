@@ -3,24 +3,60 @@ import OptionsSet from 'OptionsSet'
 import * as TopicChooser from 'TopicChooser'
 import {modal as TModal} from 'tingle.js'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'utilities'
+import Question from 'Question/Question'
 
+declare global {
+  interface Window {
+    SHOW_DIFFICULTY: boolean
+  }
+}
 window.SHOW_DIFFICULTY = false // for debugging questions
 
-/* TODO list:
- * Additional question block - probably in main.js
- * Zoom/scale buttons
- *    Need to change css grid spacing with JS on generation
- * Display options
+/* ts conversino todo list
  */
+
+/* Types */
+interface QuestionInfo {
+  container?: HTMLElement,
+  question?: Question,
+  topicId?: string,
+
+}
 
 // Make an overlay to capture any clicks outside boxes, if necessary
 createElem('div', 'overlay hidden', document.body).addEventListener('click', hideAllActions)
 
 export default class QuestionSet {
+  // The main question
+  qNumber: number
+  answered: boolean
+  commandWord: string
+  useCommandWord: boolean
+
+  // questions and their options
+  n: number                 // Number of questions
+  questions: QuestionInfo[] // list of questions and the DOM element they're rendered in
+  topicsOptions: OptionsSet // OptionsSet object for choosing topics
+  topicsModal: TModal        // A modal dialog for displaying topicsOptions
+  topics: string[]          // List of selected topic Ids
+  optionsSets: Record<string, OptionsSet> // map from topic ids to their options set
+
+  // UI elements
+  topicChooserButton: HTMLElement // The button to open the topic chooser
+  difficultySliderElement: HTMLInputElement
+  difficultySlider: RSlider
+  generateButton: HTMLButtonElement
+  answerButton: HTMLElement
+
+  // DOM elements
+  headerBox: HTMLElement
+  outerBox: HTMLElement
+  displayBox: HTMLElement
+
   constructor (qNumber) {
     this.questions = [] // list of questions and the DOM element they're rendered in
     this.topics = [] // list of topics which have been selected for this set
-    this.optionsSets = [] // list of OptionsSet objects carrying options for topics with options
+    this.optionsSets = {} // list of OptionsSet objects carrying options for topics with options
     this.qNumber = qNumber || 1 // Question number (passed in by caller, which will keep count)
     this.answered = false // Whether answered or not
     this.commandWord = '' // Something like 'simplify'
@@ -49,11 +85,11 @@ export default class QuestionSet {
     const difficultySpan = createElem('span', null, this.headerBox)
     difficultySpan.append('Difficulty: ')
     const difficultySliderOuter = createElem('span', 'slider-outer', difficultySpan)
-    this.difficultySliderElement = createElem('input', null, difficultySliderOuter)
+    this.difficultySliderElement = createElem('input', null, difficultySliderOuter) as HTMLInputElement
 
     const nSpan = createElem('span', null, this.headerBox)
     nSpan.append('Number of questions: ')
-    const nQuestionsInput = createElem('input', 'n-questions', nSpan)
+    const nQuestionsInput = createElem('input', 'n-questions', nSpan) as HTMLInputElement
     nQuestionsInput.type = 'number'
     nQuestionsInput.min = '1'
     nQuestionsInput.value = '8'
@@ -61,7 +97,7 @@ export default class QuestionSet {
       this.n = parseInt(nQuestionsInput.value)
     })
 
-    this.generateButton = createElem('button', 'generate-button button', this.headerBox)
+    this.generateButton = createElem('button', 'generate-button button', this.headerBox) as HTMLButtonElement
     this.generateButton.disabled = true
     this.generateButton.innerHTML = 'Generate!'
     this.generateButton.addEventListener('click', () => this.generateAll())
@@ -114,11 +150,11 @@ export default class QuestionSet {
       })
 
     // render options into modal
-    this.topicsOptions.renderIn(this.topicsModal.modalBoxContent)
+    this.topicsOptions.renderIn(this.topicsModal.getContent())
 
     // Add further options buttons
     // This feels a bit iffy - depends too much on implementation of OptionsSet
-    const lis = Array.from(this.topicsModal.modalBoxContent.getElementsByTagName('li'))
+    const lis = Array.from(this.topicsModal.getContent().getElementsByTagName('li'))
     lis.forEach(li => {
       const topicId = li.dataset.optionId
       if (TopicChooser.hasOptions(topicId)) {
@@ -151,7 +187,7 @@ export default class QuestionSet {
         modal.close()
       })
 
-    optionsSet.renderIn(modal.modalBoxContent)
+    optionsSet.renderIn(modal.getContent())
 
     // link the modal to the button
     optionsButton.addEventListener('click', () => {
@@ -231,7 +267,7 @@ export default class QuestionSet {
     for (let i = 0; i < this.n; i++) {
       // Make question container DOM element
       const container = createElem('div', 'question-container', this.displayBox)
-      container.dataset.question_index = i // not sure this is actually needed
+      container.dataset.question_index = i+"" // not sure this is actually needed
 
       // Add container link to object in questions list
       if (!this.questions[i]) this.questions[i] = {}
@@ -245,7 +281,7 @@ export default class QuestionSet {
     }
   }
 
-  generate (i, difficulty, topicId) {
+  generate (i, difficulty, topicId?) {
     // TODO get options properly
     topicId = topicId || randElem(this.topics)
 
@@ -340,7 +376,7 @@ export default class QuestionSet {
     hideAllActions()
 
     const container = this.questions[questionIndex].container
-    const actions = container.querySelector('.question-actions')
+    const actions = container.querySelector('.question-actions') as HTMLElement
 
     // Unhide the overlay
     document.querySelector('.overlay').classList.remove('hidden')
@@ -370,7 +406,7 @@ function questionLetter (i) {
   return letter
 }
 
-function hideAllActions (e) {
+function hideAllActions () {
   // hide all question actions
   document.querySelectorAll('.question-actions').forEach(el => {
     el.classList.add('hidden')

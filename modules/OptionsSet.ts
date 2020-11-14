@@ -178,7 +178,7 @@ export default class OptionsSet {
     }
   }
 
-  renderIn (element, ulExtraClass? : string) : HTMLElement{
+  renderIn (element: HTMLElement, ulExtraClass? : string) : HTMLElement{
     const list = createElem('ul', 'options-list')
     if (ulExtraClass) list.classList.add(ulExtraClass)
     let column = createElem('div', 'options-column', list)
