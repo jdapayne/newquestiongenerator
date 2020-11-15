@@ -6,9 +6,9 @@ import { randElem, randBetween, randBetweenFilter, gcd } from 'utilities'
 
 export default class ArithmagonQ extends GraphicQ {
   constructor (options) {
-    super(options) // processes options into this.settings
-    this.data = new ArithmagonQData(this.settings)
-    this.view = new ArithmagonQView(this.data, this.settings)
+    const data = new ArithmagonQData(options)
+    const view = new ArithmagonQView(data, options)
+    super(data,view)
   }
 
   static get commandWord () { return 'Complete the arithmagon:' }

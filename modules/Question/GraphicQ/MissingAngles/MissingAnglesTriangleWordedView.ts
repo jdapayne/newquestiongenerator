@@ -5,7 +5,7 @@ import MissingAnglesTriangleView from './MissingAnglesTriangleView'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 
 export default class MissingAnglesTriangleWordedView extends MissingAnglesTriangleView {
-  data: MissingAnglesWordedData
+  data!: MissingAnglesWordedData // initialised in super
   constructor (data: MissingAnglesWordedData, options: ViewOptions) {
     super(data, options)
     super.scaleToFit(this.width, this.height, 40)

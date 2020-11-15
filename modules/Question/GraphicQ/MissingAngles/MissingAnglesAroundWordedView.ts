@@ -5,7 +5,7 @@ import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 import MissingAnglesWordedData from './MissingAnglesWordedData'
 
 export default class MissingAnglesAroundWordedView extends MissingAnglesAroundView {
-  data: MissingAnglesWordedData
+  data!: MissingAnglesWordedData // initialised in call to super
   constructor (data: MissingAnglesWordedData, options: MissingAnglesViewOptions) {
     super(data, options) // does most of the set up
     super.translate(0, -15)

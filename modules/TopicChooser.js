@@ -71,8 +71,18 @@ function getTitle (id) {
   return topicList.find(t => (t.id === id)).title
 }
 
+/**
+ * Gets command word from a topic id
+ * @param {string} id The topic id
+ * @returns {string} Command word. Returns "" if no topic with id
+ */
 function getCommandWord (id) {
-  return getClass(id).commandWord
+  const topicClass  = getClass(id)
+  if (topicClass === null) {
+    return ""
+  } else {
+    return getClass(id).commandWord
+  }
 }
 
 function getTopics () {

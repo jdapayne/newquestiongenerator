@@ -8,26 +8,30 @@ import MissingAnglesAroundAlgebraView from './MissingAnglesAroundAlgebraView'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 export default class MissingAnglesAroundAlgebraQ extends GraphicQ {
-  data: MissingAnglesAlgebraData
-  view: MissingAnglesAroundAlgebraView
+  data!: MissingAnglesAlgebraData       // initialised in super()
+  view!: MissingAnglesAroundAlgebraView
 
   constructor (data: MissingAnglesAlgebraData, view: MissingAnglesAroundAlgebraView) { // effectively private
-    super() // bubbles to Q
-    this.data = data
-    this.view = view
+    super(data, view) // bubbles to Q
   }
 
-  static random (options: AlgebraOptions, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundAlgebraQ {
+  static random (options: Partial<AlgebraOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundAlgebraQ {
     const defaults : AlgebraOptions = {
       angleSum: 180,
-      minAngle: 10,
+      minAngle: 15,
       minN: 2,
       maxN: 4,
-      repeated: false
+      repeated: false,
+      expressionTypes: ['add', 'multiply', 'mixed'],
+      ensureX: true,
+      includeConstants: true,
+      minCoefficient: 1,
+      maxCoefficient: 4,
+      minXValue: 15
     }
-    options = Object.assign({}, defaults, options)
+    const settings: AlgebraOptions = Object.assign({}, defaults, options)
 
-    const data = MissingAnglesAlgebraData.random(options)
+    const data = MissingAnglesAlgebraData.random(settings)
     const view = new MissingAnglesAroundAlgebraView(data, viewOptions) // TODO eliminate public constructors
 
     return new MissingAnglesAroundAlgebraQ(data, view)

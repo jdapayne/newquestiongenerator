@@ -5,7 +5,7 @@ import MissingAnglesAlgebraData from './MissingAnglesAlgebraData'
 import MissingAnglesTriangleView from './MissingAnglesTriangleView'
 
 export default class MissingAnglesTriangleAlgebraView extends MissingAnglesTriangleView {
-  data: MissingAnglesAlgebraData
+  data!: MissingAnglesAlgebraData // initialised in super.super
   constructor (data: MissingAnglesAlgebraData, options: ViewOptions) {
     super(data, options)
 

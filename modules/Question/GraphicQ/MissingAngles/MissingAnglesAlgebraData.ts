@@ -5,8 +5,6 @@ import { AlgebraOptions } from './AlgebraOptions'
 import { MissingAnglesData } from './MissingAnglesData'
 import { solveAngles } from './solveAngles'
 
-type Options = AlgebraOptions
-
 export type ExpressionType = 'add' | 'multiply' | 'mixed'
 export default class MissingAnglesAlgebraData implements MissingAnglesData {
     angles: number[]
@@ -23,22 +21,8 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       this.missing = missing
     }
 
-    static random (options: Options) : MissingAnglesAlgebraData {
-      const defaults : Partial<Options> = {
-        expressionTypes: ['add', 'multiply', 'mixed'],
-        ensureX: true,
-        includeConstants: true,
-        minCoefficient: 1,
-        maxCoefficient: 4,
-        angleSum: 180,
-        minAngle: 20,
-        minN: 2,
-        maxN: 4,
-        minXValue: 15
-      }
-      options = Object.assign({}, defaults, options)
-
-      // assign calculated defaults:
+    static random (options: AlgebraOptions) : MissingAnglesAlgebraData {
+      // calculated defaults if necessary
       options.maxConstant = options.maxConstant || options.angleSum! / 2  //guaranteed non-null from above
       options.maxXValue = options.maxXValue || options.angleSum! / 4
 
@@ -51,14 +35,14 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
       let expressions : LinExpr[]
       switch (type) {
         case 'mixed':
-          expressions = makeMixedExpressions(n, options)
+          expressions = makeMixedExpressions(n, options as Required<AlgebraOptions>)
           break
         case 'multiply':
-          expressions = makeMultiplicationExpressions(n, options)
+          expressions = makeMultiplicationExpressions(n, options as Required<AlgebraOptions>)
           break
         case 'add':
         default:
-          expressions = makeAddExpressions(n, options)
+          expressions = makeAddExpressions(n, options as Required<AlgebraOptions>)
           break
       }
       expressions = shuffle(expressions)
@@ -79,13 +63,7 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
     initLabels () : void {}  // eslint-disable-line
 }
 
-function makeMixedExpressions (n: number,
-  options: Required<Pick<Options, "minXValue"|
-                                  "maxXValue"|
-                                  "maxCoefficient"|
-                                  "angleSum"|
-                                  "minAngle"|
-                                  "maxConstant">>) : LinExpr[] {
+function makeMixedExpressions (n: number, options: Required<AlgebraOptions>) : LinExpr[] {
   const expressions: LinExpr[] = []
   const x = randBetween(options.minXValue, options.maxXValue)
   let left = options.angleSum
@@ -108,7 +86,7 @@ function makeMixedExpressions (n: number,
   return expressions
 }
 
-function makeAddExpressions (n: number, options: Options) : LinExpr[] {
+function makeAddExpressions (n: number, options: Required<AlgebraOptions>) : LinExpr[] {
   const expressions: LinExpr[] = []
   const angles: number[] = []
   const constants = (options.includeConstants === true || weakIncludes(options.includeConstants, 'add'))
@@ -163,7 +141,7 @@ function makeAddExpressions (n: number, options: Options) : LinExpr[] {
   return expressions
 }
 
-function makeMultiplicationExpressions (n: number, options: Options) : LinExpr[] {
+function makeMultiplicationExpressions (n: number, options: AlgebraOptions) : LinExpr[] {
   const expressions : LinExpr[] = []
 
   const constants : boolean = (options.includeConstants === true || weakIncludes(options.includeConstants, 'mult'))

@@ -6,28 +6,29 @@ import MissingAnglesWordedData from './MissingAnglesWordedData'
 import { WordedOptions } from './WordedOptions'
 
 export default class MissingAnglesWordedQ extends GraphicQ {
-  data: MissingAnglesWordedData
-  view: MissingAnglesAroundWordedView
+  data!: MissingAnglesWordedData
+  view!: MissingAnglesAroundWordedView
 
   constructor (data: MissingAnglesWordedData, view: MissingAnglesAroundWordedView) {
-    super()
-    this.data = data
-    this.view = view
+    super(data,view)
   }
 
   static random (options: Partial<WordedOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesWordedQ {
     const defaults : WordedOptions = {
       angleSum: 180,
-      minAngle: 10,
+      minAngle: 15,
       minN: 2,
       maxN: 2,
-      repeated: false
+      repeated: false,
+      minAddend: -90,
+      maxAddend: 90,
+      minMultiplier: 1,
+      maxMultiplier: 5,
+      types: ['add', 'multiply', 'percent', 'ratio']
     }
-    options = Object.assign({}, defaults, options)
+    const settings = Object.assign({}, defaults, options)
 
-    viewOptions = viewOptions || {}
-
-    const data = MissingAnglesWordedData.random(options)
+    const data = MissingAnglesWordedData.random(settings)
     const view = new MissingAnglesAroundWordedView(data, viewOptions)
 
     return new this(data, view)

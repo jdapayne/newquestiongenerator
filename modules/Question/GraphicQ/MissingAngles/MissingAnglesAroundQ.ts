@@ -14,13 +14,11 @@ import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 import { MissingAngleOptions } from './NumberOptions'
 
 export default class MissingAnglesAroundQ extends GraphicQ {
-  data: MissingAnglesNumberData
-  view: MissingAnglesAroundView
+  data!: MissingAnglesNumberData // initialised in super()
+  view!: MissingAnglesAroundView
 
   constructor (data: MissingAnglesNumberData, view: MissingAnglesAroundView) { // effectively private
-    super() // bubbles to Q
-    this.data = data
-    this.view = view
+    super(data,view) // bubbles to Q
   }
 
   static random (options: Partial<MissingAngleOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundQ {

@@ -71,7 +71,7 @@ export default class MissingAnglesQ extends Question {
       const subtype : QuestionSubType = randElem(subtypes)
 
       // build options object
-      let questionOptions : QuestionOptions
+      let questionOptions : Partial<QuestionOptions> = {}
       if (subtype === 'simple' || subtype === 'repeated') {
         questionOptions = {}
       } else if (subtype === 'algebra') {
@@ -86,9 +86,9 @@ export default class MissingAnglesQ extends Question {
      }
     }
           
-  static randomFromDifficulty(type, difficulty) {
+  static randomFromDifficulty(type: QuestionType, difficulty: number) {
     let subtype : QuestionSubType
-    let questionOptions : QuestionOptions = {}
+    let questionOptions : Partial<QuestionOptions> = {}
     switch (difficulty) {
       case 1:
         subtype = 'simple'
@@ -154,7 +154,7 @@ export default class MissingAnglesQ extends Question {
   }
   
 
-  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: QuestionOptions, viewOptions?: MissingAnglesViewOptions) : MissingAnglesQ {
+  static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: Partial<QuestionOptions>, viewOptions?: MissingAnglesViewOptions) : MissingAnglesQ {
     let question: GraphicQ
     questionOptions = questionOptions || {}
     viewOptions = viewOptions || {}
@@ -165,7 +165,6 @@ export default class MissingAnglesQ extends Question {
         switch (subtype) {
           case 'simple':
           case 'repeated':
-            question
             questionOptions.repeated = subtype === 'repeated'
             question = MissingAnglesAroundQ.random(questionOptions, viewOptions)
             break

@@ -5,16 +5,17 @@ import MissingAnglesAroundView from './MissingAnglesAroundView'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 export default class MissingAnglesAroundAlgebraView extends MissingAnglesAroundView {
-    O : Point
-    A: Point
-    C: Point[]
-    labels: Label[]
-    canvas: HTMLCanvasElement
-    DOM: HTMLElement
-    rotation: number
-    width: number
-    height: number
-    data: MissingAnglesAlgebraData
+    // O : Point      Inherited from MissingAnglesAroundView
+    // A: Point         |
+    // C: Point[]       |
+    // rotation: number V
+
+    // labels: Label[]            Inherited from GraphicQView
+    // canvas: HTMLCanvasElement      |
+    // DOM: HTMLElement               |
+    // width: number                  |
+    // height: number                 V
+    data!: MissingAnglesAlgebraData // initialised by super()
 
     constructor (data: MissingAnglesAlgebraData, options: MissingAnglesViewOptions) {
       super(data, options) // super constructor does real work

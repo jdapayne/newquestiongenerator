@@ -1,36 +1,29 @@
 import LinExpr from 'LinExpr'
 import { randBetween, randElem, randMultBetween } from 'utilities'
+import { GraphicQData } from '../GraphicQ'
 import MissingAnglesAlgebraData from './MissingAnglesAlgebraData'
 import { solveAngles } from './solveAngles'
 import { WordedOptions } from './WordedOptions'
 
 export type WordedType = 'add' | 'multiply' | 'ratio' | 'percent'
 
-export default class MissingAnglesWordedData extends MissingAnglesAlgebraData {
-  angles: number[] // Inherited
-  missing: boolean[] //    |
-  angleSum: number //    |
-  angleLabels: string[] //    v
+export default class MissingAnglesWordedData implements GraphicQData {
+  angles: number[]
+  missing: boolean[]
+  angleSum: number
+  angleLabels: string[]
   instructions: string[] // The 'instructions' given
-  x: number // unused but inherited
 
   constructor (angles: number[], missing: boolean[], angleSum: number, angleLabels: string[], instructions: string[]) {
-    super(angles, missing, angleSum, angleLabels, null)
+    this.angles = angles
+    this.missing = missing
+    this.angleSum = angleSum
+    this.angleLabels = angleLabels
+    this.instructions = instructions
     this.instructions = instructions
   }
 
   static random (options : WordedOptions) : MissingAnglesWordedData {
-    const defaults : WordedOptions = {
-      minN: 2,
-      maxN: 2,
-      minAngle: 10,
-      minAddend: -90,
-      maxAddend: 90,
-      minMultiplier: 1,
-      maxMultiplier: 5,
-      types: ['add', 'multiply', 'percent', 'ratio']
-    }
-    options = Object.assign({}, defaults, options)
 
     const n = randBetween(options.minN, options.maxN)
     const angleLabels: string[] = []
@@ -110,7 +103,11 @@ export default class MissingAnglesWordedData extends MissingAnglesAlgebraData {
 
     return new this(angles, missing, options.angleSum, angleLabels, instructions)
   }
+
+  // makes typescript shut up, makes eslint noisy
+  initLabels(): void { }  // eslint-disable-line
 }
+
 
 /**
  * Generates worded version of an operatio

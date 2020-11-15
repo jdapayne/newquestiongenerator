@@ -8,13 +8,11 @@ import { QuestionOptions } from "./types";
 // Triangle needs no further options -- needs passing in 
 
 export default class RectangleAreaQ extends GraphicQ {
-  data: RectangleAreaData
-  view: RectangleAreaView
+  data!: RectangleAreaData // initialised in super()
+  view!: RectangleAreaView
 
   constructor(data: RectangleAreaData,view: RectangleAreaView) {
-    super();
-    this.data = data
-    this.view = view
+    super(data,view);
   }
 
   static random(options: QuestionOptions, viewOptions: ViewOptions) {

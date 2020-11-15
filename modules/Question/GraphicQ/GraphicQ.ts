@@ -184,9 +184,11 @@ export abstract class GraphicQ extends Question {
   data: GraphicQData
   view: GraphicQView 
 
-  constructor () { // eslint-disable-line @typescript-eslint/no-unused-vars
+  constructor (data: GraphicQData, view: GraphicQView) { // eslint-disable-line @typescript-eslint/no-unused-vars
     super() // this.answered = false
-    delete (this.DOM) // going to override getDOM using the view's DOM
+    this.data = data
+    this.view = view
+    this.DOM = this.view.DOM
 
     /* These are guaranteed to be overridden, so no point initializing here
      *

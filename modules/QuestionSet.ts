@@ -4,6 +4,7 @@ import * as TopicChooser from 'TopicChooser'
 import {modal as TModal} from 'tingle.js'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'utilities'
 import Question from 'Question/Question'
+import { OptionsSpec } from 'OptionsSpec'
 
 declare global {
   interface Window {
@@ -12,15 +13,11 @@ declare global {
 }
 window.SHOW_DIFFICULTY = false // for debugging questions
 
-/* ts conversino todo list
- */
-
 /* Types */
 interface QuestionInfo {
-  container?: HTMLElement,
+  container: HTMLElement,
   question?: Question,
   topicId?: string,
-
 }
 
 // Make an overlay to capture any clicks outside boxes, if necessary
@@ -36,24 +33,24 @@ export default class QuestionSet {
   // questions and their options
   n: number                 // Number of questions
   questions: QuestionInfo[] // list of questions and the DOM element they're rendered in
-  topicsOptions: OptionsSet // OptionsSet object for choosing topics
-  topicsModal: TModal        // A modal dialog for displaying topicsOptions
+  topicsOptions!: OptionsSet // OptionsSet object for choosing topics
+  topicsModal!: TModal        // A modal dialog for displaying topicsOptions
   topics: string[]          // List of selected topic Ids
   optionsSets: Record<string, OptionsSet> // map from topic ids to their options set
 
   // UI elements
-  topicChooserButton: HTMLElement // The button to open the topic chooser
-  difficultySliderElement: HTMLInputElement
-  difficultySlider: RSlider
-  generateButton: HTMLButtonElement
-  answerButton: HTMLElement
+  topicChooserButton!: HTMLElement // The button to open the topic chooser
+  difficultySliderElement!: HTMLInputElement
+  difficultySlider!: RSlider
+  generateButton!: HTMLButtonElement
+  answerButton!: HTMLElement
 
-  // DOM elements
-  headerBox: HTMLElement
-  outerBox: HTMLElement
-  displayBox: HTMLElement
+  // DOM elements - initialised in _build(), called from constructor
+  headerBox!: HTMLElement
+  outerBox!: HTMLElement
+  displayBox!: HTMLElement
 
-  constructor (qNumber) {
+  constructor (qNumber: number) {
     this.questions = [] // list of questions and the DOM element they're rendered in
     this.topics = [] // list of topics which have been selected for this set
     this.optionsSets = {} // list of OptionsSet objects carrying options for topics with options
@@ -77,17 +74,17 @@ export default class QuestionSet {
   }
 
   _buildOptionsBox () {
-    const topicSpan = createElem('span', null, this.headerBox)
+    const topicSpan = createElem('span', undefined, this.headerBox)
     this.topicChooserButton = createElem('span', 'topic-chooser button', topicSpan)
     this.topicChooserButton.innerHTML = 'Choose topic'
     this.topicChooserButton.addEventListener('click', () => this.chooseTopics())
 
-    const difficultySpan = createElem('span', null, this.headerBox)
+    const difficultySpan = createElem('span', undefined, this.headerBox)
     difficultySpan.append('Difficulty: ')
     const difficultySliderOuter = createElem('span', 'slider-outer', difficultySpan)
-    this.difficultySliderElement = createElem('input', null, difficultySliderOuter) as HTMLInputElement
+    this.difficultySliderElement = createElem('input', undefined, difficultySliderOuter) as HTMLInputElement
 
-    const nSpan = createElem('span', null, this.headerBox)
+    const nSpan = createElem('span', undefined, this.headerBox)
     nSpan.append('Number of questions: ')
     const nQuestionsInput = createElem('input', 'n-questions', nSpan) as HTMLInputElement
     nQuestionsInput.type = 'number'
@@ -119,7 +116,7 @@ export default class QuestionSet {
   _buildTopicChooser () {
     // build an OptionsSet object for the topics
     const topics = TopicChooser.getTopics()
-    const optionsSpec = []
+    const optionsSpec: OptionsSpec = []
     topics.forEach(topic => {
       optionsSpec.push({
         title: topic.title,
@@ -157,14 +154,14 @@ export default class QuestionSet {
     const lis = Array.from(this.topicsModal.getContent().getElementsByTagName('li'))
     lis.forEach(li => {
       const topicId = li.dataset.optionId
-      if (TopicChooser.hasOptions(topicId)) {
+      if (topicId !== undefined && TopicChooser.hasOptions(topicId)) {
         const optionsButton = createElem('div', 'icon-button extra-options-button', li)
-        this._buildTopicOptions(li.dataset.optionId, optionsButton)
+        this._buildTopicOptions(topicId, optionsButton)
       }
     })
   }
 
-  _buildTopicOptions (topicId, optionsButton) {
+  _buildTopicOptions (topicId: string, optionsButton: HTMLElement) {
     // Build the UI and OptionsSet object linked to topicId. Pass in a button which should launch it
 
     // Make the OptionsSet object and store a reference to it
@@ -227,12 +224,13 @@ export default class QuestionSet {
 
   setCommandWord () {
     // first set to first topic command word
-    let commandWord = TopicChooser.getClass(this.topics[0]).commandWord
+    let commandWord = TopicChooser.getCommandWord(this.topics[0])
+
     let useCommandWord = true // true if shared command word
 
     // cycle through rest of topics, reset command word if they don't match
     for (let i = 1; i < this.topics.length; i++) {
-      if (TopicChooser.getClass(this.topics[i]).commandWord !== commandWord) {
+      if (TopicChooser.getCommandWord(this.topics[i]) !== commandWord) {
         commandWord = ''
         useCommandWord = false
         break
@@ -270,8 +268,7 @@ export default class QuestionSet {
       container.dataset.question_index = i+"" // not sure this is actually needed
 
       // Add container link to object in questions list
-      if (!this.questions[i]) this.questions[i] = {}
-      this.questions[i].container = container
+      if (!this.questions[i]) this.questions[i] = {container: container}
 
       // choose a difficulty and generate
       const difficulty = mindiff + Math.floor(i * (maxdiff - mindiff + 1) / this.n)
@@ -281,7 +278,7 @@ export default class QuestionSet {
     }
   }
 
-  generate (i, difficulty, topicId?) {
+  generate (i: number, difficulty: number, topicId?: string) {
     // TODO get options properly
     topicId = topicId || randElem(this.topics)
 
@@ -343,7 +340,7 @@ export default class QuestionSet {
     container.addEventListener('click', e => {
       if (!hasAncestorClass(e.target, 'question-actions')) {
         // only do this if it didn't originate in action button
-        this.showQuestionActions(e, i)
+        this.showQuestionActions(i)
       }
     })
   }
@@ -351,13 +348,13 @@ export default class QuestionSet {
   toggleAnswers () {
     if (this.answered) {
       this.questions.forEach(q => {
-        q.question.hideAnswer()
+        if (q.question) q.question.hideAnswer()
         this.answered = false
         this.answerButton.innerHTML = 'Show answers'
       })
     } else {
       this.questions.forEach(q => {
-        q.question.showAnswer()
+        if (q.question) q.question.showAnswer()
         this.answered = true
         this.answerButton.innerHTML = 'Hide answers'
       })
@@ -371,7 +368,7 @@ export default class QuestionSet {
 
   }
 
-  showQuestionActions (event, questionIndex) {
+  showQuestionActions (questionIndex: number) {
     // first hide any other actions
     hideAllActions()
 
@@ -379,24 +376,25 @@ export default class QuestionSet {
     const actions = container.querySelector('.question-actions') as HTMLElement
 
     // Unhide the overlay
-    document.querySelector('.overlay').classList.remove('hidden')
+    const overlay = document.querySelector('.overlay')
+    if (overlay !== null) overlay.classList.remove('hidden')
     actions.classList.remove('hidden')
     actions.style.left = (container.offsetWidth / 2 - actions.offsetWidth / 2) + 'px'
     actions.style.top = (container.offsetHeight / 2 - actions.offsetHeight / 2) + 'px'
   }
 
-  appendTo (elem) {
+  appendTo (elem: HTMLElement) {
     elem.appendChild(this.outerBox)
     this._initSlider() // has to be in document's DOM to work properly
   }
 
-  appendBefore (parent, elem) {
+  appendBefore (parent: HTMLElement, elem: HTMLElement) {
     parent.insertBefore(this.outerBox, elem)
     this._initSlider() // has to be in document's DOM to work properly
   }
 }
 
-function questionLetter (i) {
+function questionLetter (i: number) {
   // return a question number. e.g. qNumber(0)="a".
   // After letters, we get on to greek
   var letter =
@@ -411,5 +409,7 @@ function hideAllActions () {
   document.querySelectorAll('.question-actions').forEach(el => {
     el.classList.add('hidden')
   })
-  document.querySelector('.overlay').classList.add('hidden')
+  const overlay = document.querySelector('.overlay')
+  if (overlay !== null) {overlay.classList.add('hidden')}
+  else throw new Error('Could not find overlay when hiding actions')
 }
