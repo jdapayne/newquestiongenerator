@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@types/mustache": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
@@ -42,5 +43,6 @@
     "lint-quiet-fix": "eslint --fix --quiet modules"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }
