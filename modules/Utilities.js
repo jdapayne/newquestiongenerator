@@ -29,6 +29,13 @@ export function randBetweenFilter (n, m, filter) {
   return arr[i]
 }
 
+/**
+ * Returns a multiple of n between min and max 
+ * @param {number} min Minimum value
+ * @param {number} max Maximum value
+ * @param {number} n Choose a multiple of this value
+ * @returns {number} A multipleof n between min and max
+ */
 export function randMultBetween (min, max, n) {
   // return a random multiple of n between n and m (inclusive if possible)
   min = Math.ceil(min / n) * n
@@ -50,6 +57,30 @@ export function randElem (array, dist) {
   const n = array.length || array.size
   const i = randBetween(0, n - 1, dist)
   return [...array][i]
+}
+
+/**
+ * Selects an element
+ * @template T
+ * @param {T[]} array An array of elements
+ * @param {number[]} probabilities An array of probbilities
+ * @returns {T} 
+ */
+export function randElemWithProbabilities (array, probabilities) {
+  //validate
+  if (array.length !== probabilities.length) throw new Error('Array lengths do not match')
+
+  let r = Math.random()
+  let cumulativeProb = 0
+  for (let i = 0; i < array.length; i++) {
+    cumulativeProb += probabilities[i]
+    if (r<cumulativeProb) return array[i]
+  }
+
+  // shouldn't get here if probabilities sum to 1, but could be a rounding error
+  console.warn(`Probabilities don't sum to 1? Total was ${cumulativeProb}`)
+  return(array[array.length-1])
+
 }
 
 /* Maths */
