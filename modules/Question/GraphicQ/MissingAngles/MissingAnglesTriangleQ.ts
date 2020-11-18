@@ -11,7 +11,7 @@ export default class MissingAnglesTriangleQ extends GraphicQ {
   data!: MissingAnglesTriangleData
   view!: MissingAnglesTriangleView
   constructor (data: MissingAnglesNumberData, view: MissingAnglesTriangleView) {
-    super(data,view) // this should be all that's required when refactored
+    super(data, view) // this should be all that's required when refactored
   }
 
   static random (options: Partial<MissingAngleOptions>, viewOptions: ViewOptions) {
@@ -30,7 +30,7 @@ export default class MissingAnglesTriangleQ extends GraphicQ {
       nMissing: 1
     }
 
-    const settings = Object.assign({},defaults,options,optionsOverride)
+    const settings = Object.assign({}, defaults, options, optionsOverride)
 
     const data = MissingAnglesTriangleData.random(settings)
     const view = new MissingAnglesTriangleView(data, viewOptions)

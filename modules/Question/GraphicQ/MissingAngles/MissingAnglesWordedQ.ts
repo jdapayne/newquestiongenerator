@@ -10,7 +10,7 @@ export default class MissingAnglesWordedQ extends GraphicQ {
   view!: MissingAnglesAroundWordedView
 
   constructor (data: MissingAnglesWordedData, view: MissingAnglesAroundWordedView) {
-    super(data,view)
+    super(data, view)
   }
 
   static random (options: Partial<WordedOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesWordedQ {
@@ -34,7 +34,7 @@ export default class MissingAnglesWordedQ extends GraphicQ {
     return new this(data, view)
   }
 
-  static get optionsSpec(): OptionsSpec {
+  static get optionsSpec (): OptionsSpec {
     return [
       {
         type: 'select-inclusive',
@@ -50,5 +50,4 @@ export default class MissingAnglesWordedQ extends GraphicQ {
       }
     ]
   }
-
 }

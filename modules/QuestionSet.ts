@@ -1,7 +1,7 @@
 import RSlider from 'vendor/rslider'
 import OptionsSet from 'OptionsSet'
 import * as TopicChooser from 'TopicChooser'
-import {modal as TModal} from 'tingle.js'
+import { modal as TModal } from 'tingle.js'
 import { randElem, createElem, hasAncestorClass, boolObjectToArray } from 'utilities'
 import Question from 'Question/Question'
 import { OptionsSpec } from 'OptionsSpec'
@@ -31,11 +31,11 @@ export default class QuestionSet {
   useCommandWord: boolean
 
   // questions and their options
-  n: number                 // Number of questions
+  n: number // Number of questions
   questions: QuestionInfo[] // list of questions and the DOM element they're rendered in
   topicsOptions!: OptionsSet // OptionsSet object for choosing topics
-  topicsModal!: TModal        // A modal dialog for displaying topicsOptions
-  topics: string[]          // List of selected topic Ids
+  topicsModal!: TModal // A modal dialog for displaying topicsOptions
+  topics: string[] // List of selected topic Ids
   optionsSets: Record<string, OptionsSet> // map from topic ids to their options set
 
   // UI elements
@@ -265,10 +265,10 @@ export default class QuestionSet {
     for (let i = 0; i < this.n; i++) {
       // Make question container DOM element
       const container = createElem('div', 'question-container', this.displayBox)
-      container.dataset.question_index = i+"" // not sure this is actually needed
+      container.dataset.question_index = i + '' // not sure this is actually needed
 
       // Add container link to object in questions list
-      if (!this.questions[i]) this.questions[i] = {container: container}
+      if (!this.questions[i]) this.questions[i] = { container: container }
 
       // choose a difficulty and generate
       const difficulty = mindiff + Math.floor(i * (maxdiff - mindiff + 1) / this.n)
@@ -397,7 +397,7 @@ export default class QuestionSet {
 function questionLetter (i: number) {
   // return a question number. e.g. qNumber(0)="a".
   // After letters, we get on to greek
-  var letter =
+  const letter =
         i < 26 ? String.fromCharCode(0x61 + i)
           : i < 52 ? String.fromCharCode(0x41 + i - 26)
             : String.fromCharCode(0x3B1 + i - 52)
@@ -410,6 +410,5 @@ function hideAllActions () {
     el.classList.add('hidden')
   })
   const overlay = document.querySelector('.overlay')
-  if (overlay !== null) {overlay.classList.add('hidden')}
-  else throw new Error('Could not find overlay when hiding actions')
+  if (overlay !== null) { overlay.classList.add('hidden') } else throw new Error('Could not find overlay when hiding actions')
 }

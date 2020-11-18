@@ -77,9 +77,9 @@ function getTitle (id) {
  * @returns {string} Command word. Returns "" if no topic with id
  */
 function getCommandWord (id) {
-  const topicClass  = getClass(id)
+  const topicClass = getClass(id)
   if (topicClass === null) {
-    return ""
+    return ''
   } else {
     return getClass(id).commandWord
   }

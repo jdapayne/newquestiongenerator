@@ -1,10 +1,10 @@
-import TriangleAreaData from "../Question/GraphicQ/AreaPerimeter/TriangleAreaData.js";
+import TriangleAreaData from '../Question/GraphicQ/AreaPerimeter/TriangleAreaData.js'
 import * as AreaTypes from 'Question/GraphicQ/AreaPerimeter/types'
 
 const options: AreaTypes.QuestionOptions = {
   questionType: 'area',
   maxLength: 100,
-  noDistractors: false,
+  noDistractors: false
 }
 
 const types : AreaTypes.QuestionType[] = [
@@ -14,18 +14,18 @@ const types : AreaTypes.QuestionType[] = [
   'pythagorasIsoscelesArea',
   'pythagorasPerimeter',
   'reverseArea',
-  'reversePerimeter',
+  'reversePerimeter'
 ]
 
-const button = document.getElementById("button")
-button?.addEventListener("click",printNewTriangle)
+const button = document.getElementById('button')
+button?.addEventListener('click', printNewTriangle)
 
 let i = 0
 
-async function printNewTriangle() {
+async function printNewTriangle () {
   options.questionType = types[i]
   console.log(`${i}. Type: ${types[i]}`)
   const triangleData : TriangleAreaData = await TriangleAreaData.random(options)
   console.log(triangleData)
-  i = (i+1)%7
+  i = (i + 1) % 7
 }

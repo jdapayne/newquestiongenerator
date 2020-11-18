@@ -1,7 +1,7 @@
 import { MissingAngleOptions } from './NumberOptions'
 import { WordedType } from './MissingAnglesWordedData'
 
-export interface WordedOptions extends Omit<MissingAngleOptions, "nMissing"> {
+export interface WordedOptions extends Omit<MissingAngleOptions, 'nMissing'> {
   minAddend: number;
   maxAddend: number;
   minMultiplier: number;

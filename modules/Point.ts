@@ -10,7 +10,7 @@ export default class Point {
   }
 
   rotate (angle: number) {
-    var newx, newy
+    let newx, newy
     newx = Math.cos(angle) * this.x - Math.sin(angle) * this.y
     newy = Math.sin(angle) * this.x + Math.cos(angle) * this.y
     this.x = newx
@@ -133,7 +133,7 @@ export default class Point {
    * moved so that they are [distance] apart
    * @param p1 A point
    * @param p2 A point
-   * @param trigger Distance triggering repulsion 
+   * @param trigger Distance triggering repulsion
    * @param distance distance to repel to
    */
   static repel (p1: Point, p2: Point, trigger: number, distance: number) {
@@ -147,7 +147,7 @@ export default class Point {
   }
 
   /**
-   * Scale an center a set of points to a given width or height. N.B. This mutates the points in the array, so clone first if necessar 
+   * Scale an center a set of points to a given width or height. N.B. This mutates the points in the array, so clone first if necessar
    * @param points An array of points
    * @param width Width of bounding box to scale to
    * @param height Height of bounding box to scale to
@@ -155,19 +155,19 @@ export default class Point {
    * @param offset Offset from center of bounding box
    * @returns The scale factor that points were scaled by
    */
-  static scaleToFit(points: Point[], width: number, height: number, margin: number = 0, offset: [number,number] = [0,0]) {
+  static scaleToFit (points: Point[], width: number, height: number, margin = 0, offset: [number, number] = [0, 0]) {
     let topLeft : Point = Point.min(points)
     let bottomRight : Point = Point.max(points)
     const totalWidth : number = bottomRight.x - topLeft.x
     const totalHeight : number = bottomRight.y - topLeft.y
     const sf = Math.min((width - margin) / totalWidth, (height - margin) / totalHeight)
-    points.forEach(pt=>{pt.scale(sf)})
+    points.forEach(pt => { pt.scale(sf) })
 
     // centre
     topLeft = Point.min(points)
     bottomRight = Point.max(points)
     const center = Point.mean(topLeft, bottomRight).translate(...offset)
-    points.forEach(pt=>{pt.translate(width / 2 - center.x, height / 2 - center.y)}) // centre
+    points.forEach(pt => { pt.translate(width / 2 - center.x, height / 2 - center.y) }) // centre
 
     return sf
   }

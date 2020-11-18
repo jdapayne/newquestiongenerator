@@ -103,7 +103,7 @@ export default class MissingAnglesAroundView extends GraphicQView {
 
   render () : void {
     const ctx = this.canvas.getContext('2d')
-    if (ctx === null) {throw new Error("Could not get canvas context")}
+    if (ctx === null) { throw new Error('Could not get canvas context') }
 
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) // clear
 
@@ -154,11 +154,10 @@ export default class MissingAnglesAroundView extends GraphicQView {
  * @param minAngle The smallest angle in the output
  */
 function fudgeAngles (angles: number[], minAngle: number) : number[] {
-
-  const angleSum = angles.reduce((a,c)=>a+c)
+  const angleSum = angles.reduce((a, c) => a + c)
   const mappedAngles = angles.map((x, i) => [x, i]) // remember original indices
-  const smallAngles = mappedAngles.filter(x => x[0] < minAngle)  // split out angles which are too small
-  const largeAngles = mappedAngles.filter(x => x[0] >= minAngle) 
+  const smallAngles = mappedAngles.filter(x => x[0] < minAngle) // split out angles which are too small
+  const largeAngles = mappedAngles.filter(x => x[0] >= minAngle)
   const largeAngleSum = largeAngles.reduce((accumulator, currentValue) => accumulator + currentValue[0], 0)
 
   smallAngles.forEach(small => {
@@ -172,17 +171,17 @@ function fudgeAngles (angles: number[], minAngle: number) : number[] {
 
   // fix any rounding errors introduced
 
-  let newAngles =  smallAngles.concat(largeAngles) // combine together
+  const newAngles = smallAngles.concat(largeAngles) // combine together
     .sort((x, y) => x[1] - y[1]) // sort by previous index
     .map(x => x[0]) // strip out index
 
-  let newSum = newAngles.reduce((acc,curr) => acc + curr)
+  let newSum = newAngles.reduce((acc, curr) => acc + curr)
   if (newSum !== angleSum) {
     const difference = angleSum - newSum
     newAngles[newAngles.indexOf(Math.max(...newAngles))] += difference
   }
-  newSum = newAngles.reduce((acc,curr) => acc + curr)
-  if (newSum !== angleSum) throw new Error (`Didn't fix angles. New sum is ${newSum}, but should be ${angleSum}`)
+  newSum = newAngles.reduce((acc, curr) => acc + curr)
+  if (newSum !== angleSum) throw new Error(`Didn't fix angles. New sum is ${newSum}, but should be ${angleSum}`)
 
   return newAngles
 }

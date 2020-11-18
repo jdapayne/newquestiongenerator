@@ -75,7 +75,7 @@ export default class MissingAnglesTriangleView extends GraphicQView {
 
   render () : void {
     const ctx = this.canvas.getContext('2d')
-    if (ctx === null) throw new Error("Could not get canvas context")
+    if (ctx === null) throw new Error('Could not get canvas context')
 
     const vertices = [this.A, this.B, this.C]
     const apex = this.data.apex // hmmm

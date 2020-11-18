@@ -8,7 +8,7 @@ export default class ArithmagonQ extends GraphicQ {
   constructor (options) {
     const data = new ArithmagonQData(options)
     const view = new ArithmagonQView(data, options)
-    super(data,view)
+    super(data, view)
   }
 
   static get commandWord () { return 'Complete the arithmagon:' }

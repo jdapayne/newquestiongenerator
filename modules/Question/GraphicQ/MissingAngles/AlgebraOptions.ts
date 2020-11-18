@@ -1,7 +1,7 @@
 import { ExpressionType } from './MissingAnglesAlgebraData'
 import { MissingAngleOptions } from './NumberOptions'
 
-export interface AlgebraOptions extends Omit<MissingAngleOptions, "nMissing"> {
+export interface AlgebraOptions extends Omit<MissingAngleOptions, 'nMissing'> {
     expressionTypes: ExpressionType[]; // The type of expressions to appear
     includeConstants: boolean | ExpressionType[]; // Do we make sure to have constant angles?
     minCoefficient: number; // Smallest value for any coefficient

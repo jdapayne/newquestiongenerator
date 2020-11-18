@@ -30,7 +30,7 @@ export function randBetweenFilter (n, m, filter) {
 }
 
 /**
- * Returns a multiple of n between min and max 
+ * Returns a multiple of n between min and max
  * @param {number} min Minimum value
  * @param {number} max Maximum value
  * @param {number} n Choose a multiple of this value
@@ -64,23 +64,22 @@ export function randElem (array, dist) {
  * @template T
  * @param {T[]} array An array of elements
  * @param {number[]} probabilities An array of probbilities
- * @returns {T} 
+ * @returns {T}
  */
 export function randElemWithProbabilities (array, probabilities) {
-  //validate
+  // validate
   if (array.length !== probabilities.length) throw new Error('Array lengths do not match')
 
-  let r = Math.random()
+  const r = Math.random()
   let cumulativeProb = 0
   for (let i = 0; i < array.length; i++) {
     cumulativeProb += probabilities[i]
-    if (r<cumulativeProb) return array[i]
+    if (r < cumulativeProb) return array[i]
   }
 
   // shouldn't get here if probabilities sum to 1, but could be a rounding error
   console.warn(`Probabilities don't sum to 1? Total was ${cumulativeProb}`)
-  return(array[array.length-1])
-
+  return (array[array.length - 1])
 }
 
 /* Maths */

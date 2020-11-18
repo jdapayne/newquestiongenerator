@@ -40,7 +40,6 @@ export abstract class GraphicQView {
   rotation?: number
 
   constructor (data : GraphicQData, viewOptions : ViewOptions) {
-
     viewOptions.width = viewOptions.width ?? 300
     viewOptions.height = viewOptions.height ?? 300
 
@@ -183,7 +182,7 @@ export abstract class GraphicQView {
 
 export abstract class GraphicQ extends Question {
   data: GraphicQData
-  view: GraphicQView 
+  view: GraphicQView
 
   constructor (data: GraphicQData, view: GraphicQView) { // eslint-disable-line @typescript-eslint/no-unused-vars
     super() // this.answered = false

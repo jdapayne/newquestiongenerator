@@ -8,7 +8,7 @@ export default class MissingAnglesTriangleWordedQ extends GraphicQ {
   data!: MissingAnglesWordedData
   view!: MissingAnglesTriangleWordedView
   constructor (data: MissingAnglesWordedData, view: MissingAnglesTriangleWordedView) {
-    super(data,view)
+    super(data, view)
   }
 
   static random (options: Partial<WordedOptions>, viewOptions: ViewOptions) : MissingAnglesTriangleWordedQ {
@@ -30,7 +30,7 @@ export default class MissingAnglesTriangleWordedQ extends GraphicQ {
       maxMultiplier: 5,
       types: ['add', 'multiply', 'percent', 'ratio']
     }
-    const settings: WordedOptions = Object.assign({},defaults,options, optionsOverride)
+    const settings: WordedOptions = Object.assign({}, defaults, options, optionsOverride)
 
     const data = MissingAnglesWordedData.random(settings)
     const view = new MissingAnglesTriangleWordedView(data, viewOptions)

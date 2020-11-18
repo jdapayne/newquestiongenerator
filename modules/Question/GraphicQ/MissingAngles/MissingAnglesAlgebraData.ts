@@ -23,7 +23,7 @@ export default class MissingAnglesAlgebraData implements MissingAnglesData {
 
     static random (options: AlgebraOptions) : MissingAnglesAlgebraData {
       // calculated defaults if necessary
-      options.maxConstant = options.maxConstant || options.angleSum! / 2  //guaranteed non-null from above
+      options.maxConstant = options.maxConstant || options.angleSum! / 2 // guaranteed non-null from above
       options.maxXValue = options.maxXValue || options.angleSum! / 4
 
       // Randomise/set up main features

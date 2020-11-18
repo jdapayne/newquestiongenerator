@@ -53,7 +53,7 @@ export default class MissingAnglesQ extends Question {
     this.question = question
   }
 
-  static random ( options: WrapperOptions) : MissingAnglesQ {
+  static random (options: WrapperOptions) : MissingAnglesQ {
     if (options.types.length === 0) {
       throw new Error('Types list must be non-empty')
     }
@@ -63,10 +63,10 @@ export default class MissingAnglesQ extends Question {
       return MissingAnglesQ.randomFromDifficulty(type, options.difficulty)
     } else {
       // choose subtype
-      const availableSubtypes : QuestionSubType[] = ['simple','repeated','algebra','worded']
-      let subtypes : QuestionSubType[] = []
+      const availableSubtypes : QuestionSubType[] = ['simple', 'repeated', 'algebra', 'worded']
+      const subtypes : QuestionSubType[] = []
       availableSubtypes.forEach(subtype => {
-        if (options[subtype]) {subtypes.push(subtype)}
+        if (options[subtype]) { subtypes.push(subtype) }
       })
       const subtype : QuestionSubType = randElem(subtypes)
 
@@ -82,13 +82,13 @@ export default class MissingAnglesQ extends Question {
       questionOptions.minN = options.minN
       questionOptions.maxN = options.maxN
 
-      return MissingAnglesQ.randomFromTypeWithOptions(type,subtype,questionOptions)
-     }
+      return MissingAnglesQ.randomFromTypeWithOptions(type, subtype, questionOptions)
     }
-          
-  static randomFromDifficulty(type: QuestionType, difficulty: number) {
+  }
+
+  static randomFromDifficulty (type: QuestionType, difficulty: number) {
     let subtype : QuestionSubType
-    let questionOptions : Partial<QuestionOptions> = {}
+    const questionOptions : Partial<QuestionOptions> = {}
     switch (difficulty) {
       case 1:
         subtype = 'simple'
@@ -152,7 +152,6 @@ export default class MissingAnglesQ extends Question {
 
     return this.randomFromTypeWithOptions(type, subtype, questionOptions)
   }
-  
 
   static randomFromTypeWithOptions (type: QuestionType, subtype?: QuestionSubType, questionOptions?: Partial<QuestionOptions>, viewOptions?: MissingAnglesViewOptions) : MissingAnglesQ {
     let question: GraphicQ

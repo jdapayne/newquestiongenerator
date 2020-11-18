@@ -8,7 +8,7 @@ import MissingAnglesAroundAlgebraView from './MissingAnglesAroundAlgebraView'
 import { MissingAnglesViewOptions } from './MissingAnglesViewOptions'
 
 export default class MissingAnglesAroundAlgebraQ extends GraphicQ {
-  data!: MissingAnglesAlgebraData       // initialised in super()
+  data!: MissingAnglesAlgebraData // initialised in super()
   view!: MissingAnglesAroundAlgebraView
 
   constructor (data: MissingAnglesAlgebraData, view: MissingAnglesAroundAlgebraView) { // effectively private
@@ -46,11 +46,11 @@ export default class MissingAnglesAroundAlgebraQ extends GraphicQ {
         type: 'select-inclusive',
         title: 'Types of expression',
         selectOptions: [
-          {title: '<em>a</em>+<em>x</em>', id:'add'},
-          {title: '<em>ax</em>', id: 'multiply'},
-          {title: 'mixed', id: 'mixed'}
+          { title: '<em>a</em>+<em>x</em>', id: 'add' },
+          { title: '<em>ax</em>', id: 'multiply' },
+          { title: 'mixed', id: 'mixed' }
         ],
-        default: ['add','multiply','mixed']
+        default: ['add', 'multiply', 'mixed']
       },
       {
         id: 'ensureX',

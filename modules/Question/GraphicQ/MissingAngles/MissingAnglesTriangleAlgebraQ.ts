@@ -10,7 +10,7 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
   view!: MissingAnglesTriangleView
 
   constructor (data: MissingAnglesAlgebraData, view: MissingAnglesTriangleView) {
-    super(data,view)
+    super(data, view)
   }
 
   static random (options: Partial<AlgebraOptions>, viewOptions: ViewOptions) : MissingAnglesTriangleAlgebraQ {
@@ -33,7 +33,7 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
       maxCoefficient: 4,
       minXValue: 15
     }
-    const settings: AlgebraOptions = Object.assign({},defaults,options,optionsOverride)
+    const settings: AlgebraOptions = Object.assign({}, defaults, options, optionsOverride)
 
     const data = MissingAnglesAlgebraData.random(settings)
     const view = new MissingAnglesTriangleAlgebraView(data, viewOptions)

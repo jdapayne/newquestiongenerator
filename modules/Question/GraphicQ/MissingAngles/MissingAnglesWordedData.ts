@@ -24,7 +24,6 @@ export default class MissingAnglesWordedData implements GraphicQData {
   }
 
   static random (options : WordedOptions) : MissingAnglesWordedData {
-
     const n = randBetween(options.minN, options.maxN)
     const angleLabels: string[] = []
     for (let i = 0; i < n; i++) {
@@ -107,7 +106,6 @@ export default class MissingAnglesWordedData implements GraphicQData {
   // makes typescript shut up, makes eslint noisy
   initLabels(): void { }  // eslint-disable-line
 }
-
 
 /**
  * Generates worded version of an operatio
