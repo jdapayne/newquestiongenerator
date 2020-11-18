@@ -4,6 +4,7 @@ import { randElem } from "utilities";
 import { GraphicQ } from "../GraphicQ";
 import ViewOptions from "../ViewOptions";
 import RectangleAreaQ from "./RectangleAreaQ";
+import TriangleAreaQ from './TriangleAreaQ'
 import { WrapperOptions, Shape, QuestionTypeSimple, QuestionOptions } from "./types";
 
 export default class AreaPerimeterQ extends Question {
@@ -17,35 +18,10 @@ export default class AreaPerimeterQ extends Question {
   }
 
   static random(options: WrapperOptions) {
-    const questionOptions : QuestionOptions = {
-      noDistractors: false,
-      questionType: "area",
-      dp: 0,
-      maxLength: 20
-    }
-    const viewOptions: ViewOptions  = {
-      height: 300,
-      width: 300,
-    }
-    return RectangleAreaQ.random(questionOptions,viewOptions)
-    
-    /* More logic - to reinstate later
-    const shape = randElem(options.shapes)
-    let question : Question
     if (!options.custom) {
-      return this.randomFromDifficulty(options.difficulty, shape, options.questionTypesSimple)
-    } else {
-      const questionType = randElem(options.questionTypesCustom)
-      const questionOptions: QuestionOptions = {
-        questionType: questionType,
-        dp : 0,
-        noDistractors : true
-      }
-      const viewOptions: ViewOptions = {}
-      const question = RectangleAreaQ.random(questionOptions,viewOptions)
-      return new this(question)
-    }
-    */
+      const shape = randElem(options.shapes)
+      return this.randomFromDifficulty(options.difficulty,shape,options.questionTypesSimple)
+    } 
   }
 
   private static randomFromDifficulty(difficulty: number, shape: Shape, questionTypes: QuestionTypeSimple[]): AreaPerimeterQ {
@@ -55,7 +31,18 @@ export default class AreaPerimeterQ extends Question {
       noDistractors: true
     }
     const viewOptions: ViewOptions = {}
-    const question = RectangleAreaQ.random(questionOptions, viewOptions)
+
+    let question : GraphicQ
+    switch(shape) {
+      case 'rectangle':
+        question = RectangleAreaQ.random(questionOptions, viewOptions)
+        break
+      case 'triangle':
+      default:
+        question = TriangleAreaQ.random(questionOptions, viewOptions)
+        break
+    }
+
     return new this(question)
   }
 
@@ -71,7 +58,8 @@ export default class AreaPerimeterQ extends Question {
         id: 'shapes',
         type: 'select-inclusive',
         selectOptions: [
-          {id: 'rectangle', title: 'Rectangle'}
+          {id: 'rectangle', title: 'Rectangle'},
+          {id: 'triangle', title: 'Triangle'}
         ],
         default: ['rectangle'],
         title: 'Shapes'

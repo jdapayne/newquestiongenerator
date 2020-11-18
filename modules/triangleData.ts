@@ -11,7 +11,14 @@ export interface Triangle{
   h: number
 }
 
-const dataSources= {
+interface dataSource {
+  readonly length: number,
+  readonly path: string,
+  loaded: boolean,
+  data: Triangle[]
+}
+
+const dataSources : Record<indexVals,dataSource> = {
   "100": {
     length: 361,
     path: '/data/triangles0-100.json',
@@ -44,51 +51,42 @@ const dataSources= {
   },
 }
 
-function getTriangle(maxLength: number, callback: (t?: Triangle) => void) {
+/**
+ * Return a promise to a randomly chosen triangle (see triangleData.Triangle interface for format)
+ * @param maxLength Maxumum length of side
+ * @param filterPredicate Restrict to triangles with this property
+ */
+function getTriangle(maxLength: number, filterPredicate?: (t: Triangle) => boolean) : Promise<Triangle> {
   let triangle: Triangle
+  filterPredicate = filterPredicate ?? (t=>true) // default value for predicate is tautology
 
   // Choose multiple of 50 to select from - smooths out distribution.
   // (Otherwise it's biased towards higher lengths)
   if (maxLength > 500) maxLength = 500
-  const bin50 = randMultBetween(0, maxLength-1,50) + 50                        // e.g. if bin50 = 150, choose with a maxlength between 100 and 150
-  const bin100 = (Math.ceil(bin50 / 100) * 100).toString() as indexVals    // e.g. if bin50 = 150, bin100 = Math.ceil(1.5)*100 = 200 
-
+  const bin50 = randMultBetween(0, maxLength-1,50) + 50                 // e.g. if bin50 = 150, choose with a maxlength between 100 and 150
+  const bin100 = (Math.ceil(bin50 / 100) * 100).toString() as indexVals // e.g. if bin50 = 150, bin100 = Math.ceil(1.5)*100 = 200 
   const dataSource = dataSources[bin100]
 
-  if (dataSource.loaded) {
+  if (dataSource.loaded) { // Cached 
     console.log("Using cached data")
-    triangle = randElem(dataSource.data.filter(t => maxSide(t) < maxLength))
-    callback(triangle)
-    return
+    triangle = randElem(dataSource.data.filter(t => maxSide(t) < maxLength && filterPredicate!(t)))
+    return Promise.resolve(triangle)
   } else {
     console.log("Loading data with XHR")
-    const req = new XMLHttpRequest
-    req.onreadystatechange = () => {
-      if (req.readyState === XMLHttpRequest.DONE) {
-        if (req.status !== 200) {
-          throw new Error(`HTTP response ${req.status}`)
-        } else {
-          const data = JSON.parse(req.responseText)
-          if (!dataSource.loaded) { // cache if something hasn't beaten us to it
-            dataSource.loaded = true
-            dataSource.data = data
-          }
-          try {
-            triangle = randElem(data.filter((t: Triangle) => maxSide(t) < maxLength))
-          } catch (e) {
-            if (e instanceof Error) {
-              console.error(`Got error ${e.name} with XHR
-              bin50 was ${bin50}
-              bin100 was ${bin100}`)
-            }
-            else throw e
-          }
-          callback(triangle)
-        }
+    return fetch(`${pathRoot}${dataSource.path}`).then( response => {
+      if (!response.ok) {
+        return Promise.reject(response.statusText)
+      } else {
+        return response.json() as Promise<Triangle[]>
       }
-    }
-    req.open("GET", `${pathRoot}${dataSource.path}`)
-    req.send()
+    }).then( data => {
+        if (!dataSource.loaded) { // cache if something hasn't beaten us to it
+          dataSource.loaded = true
+          dataSource.data = data
+        }
+        triangle = randElem(data.filter((t: Triangle) => maxSide(t) < maxLength && filterPredicate!(t)))
+        return triangle
+    })
   }
 }
 

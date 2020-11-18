@@ -6,8 +6,9 @@ import { QuestionOptions } from "./types"
  */
 export interface Value {
   val: number,      // the numerical value
+  label?: string,   // the label to display. e.g. "3.4cm"
   show: boolean,    // whether that value is shown in the question or answer at all
-  missing: boolean  // whether the value is shown in the question
+  missing: boolean,  // whether the value is shown in the question
 }
 
 

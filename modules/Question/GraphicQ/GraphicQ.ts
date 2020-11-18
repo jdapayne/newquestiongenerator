@@ -37,6 +37,7 @@ export abstract class GraphicQView {
   height: number
   data: GraphicQData
   labels: Label[]
+  rotation?: number
 
   constructor (data : GraphicQData, viewOptions : ViewOptions) {
 
@@ -46,7 +47,7 @@ export abstract class GraphicQView {
     this.width = viewOptions.width
     this.height = viewOptions.height // only things I need from the options, generally?
     this.data = data
-    // this.rotation?
+    this.rotation = viewOptions.rotation
 
     this.labels = [] // labels on diagram
 

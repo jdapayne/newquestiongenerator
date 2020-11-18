@@ -7,16 +7,25 @@ for (let i=0; i<300; i++) {
   }) 
 }
 */
+const button = document.getElementById("button")
+button?.addEventListener("click",printNewTriangle)
 
-let i = 0
-function loop() {
-  TriangleData.getTriangle(500, t => {
-    //console.log(`${i}: b:${t.b}, s1:${t.s1}, s2:${t.s2}`)
-    if (i<20) {
-      i++
-      loop()
-    }
-  })
+async function printNewTriangle() {
+  const elem = document.createElement('div')
+  document.body.append(elem)
+  const loader = document.createElement('div')
+  loader.classList.add("loader")
+  elem.append(loader)
+  const triangle = await TriangleData.getTriangle(500)
+  const area = triangle.b*triangle.h/2
+  const perimeter = triangle.s1+triangle.s2+triangle.b
+  elem.innerHTML = `Sides: ${triangle?.s1}, ${triangle?.s2}, ${triangle?.b}, height: ${triangle?.h}. Area = ${area}. Perimeter = ${perimeter}`
 }
 
-loop()
+/* Using the callback verstion
+button?.addEventListener("click", () => {
+  TriangleData.getTriangle(500, t => {
+    document.body.insertAdjacentHTML("beforeend",`<p>Sides: ${t?.s1}, ${t?.s2}, ${t?.b}, height: ${t?.h}</p>`)
+  })
+})
+*/

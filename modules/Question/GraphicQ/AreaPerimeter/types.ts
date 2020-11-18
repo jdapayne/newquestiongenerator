@@ -1,7 +1,7 @@
 export type Shape = 'rectangle' | 'triangle' | 'parallelogram' | 'trapezium';
 
 export type QuestionTypeSimple = 'area' | 'perimeter';
-export type QuestionTypeCustom = 'reverseArea' | 'reversePerimeter' | 'pythagorasArea' | 'pythagorasIsoscelesArea';
+export type QuestionTypeCustom = 'reverseArea' | 'reversePerimeter' | 'pythagorasArea' | 'pythagorasPerimeter' | 'pythagorasIsoscelesArea';
 export type QuestionType = QuestionTypeSimple | QuestionTypeCustom;
 
 export interface QuestionOptions {

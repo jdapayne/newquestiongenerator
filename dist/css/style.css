@@ -113,6 +113,24 @@ body {
   background-image: url('../img/answer.png')
 }
 
+.loader {
+  width: 15px;
+  height: 15px;
+  border: 5px lightgrey solid;
+  border-radius: 50%;
+  border-top: 5px solid black;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  animation: spin 0.5s linear infinite;
+  transform: translate(-7px, -7px);
+}
+
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
 p.question {
   margin: 0
 }

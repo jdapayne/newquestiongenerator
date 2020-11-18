@@ -25,7 +25,7 @@ const typescriptOptions = {
 
 export default {
   input: 'main.js',
-  output: [
+  output: [ 
     {
       dir: 'dist',
       format: 'iife',

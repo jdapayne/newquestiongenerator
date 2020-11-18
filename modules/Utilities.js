@@ -110,12 +110,14 @@ export function cosDeg (x) {
   return Math.cos(x * Math.PI / 180)
 }
 
+/**
+ * Returns a string representing n/10^dp
+ * E.g. scaledStr(314,2) = "3.14"
+ * @param {number} n An integer representing the digits of a fixed point number
+ * @param {number} dp An integer for number of decimal places
+ * @returns {string}
+ */
 export function scaledStr (n, dp) {
-  // returns a string representing n/10^dp
-  // e.g. scaledStr(34,1)="3.4"
-  // scaledStr(314,2)="3.14"
-  // scaledStr(30,1)="3"
-  // Trying to avoid precision errors!
   if (dp === 0) return n
   const factor = Math.pow(10, dp)
   const intpart = Math.floor(n / factor)
