@@ -364,9 +364,11 @@ export default class QuestionSet {
   /**
    * Scans for widest question and then sets the grid width to that
    */
+  /* eslint-disable */
   adjustGridWidth () {
-
+    return
   }
+  /* eslint-enable */
 
   showQuestionActions (questionIndex: number) {
     // first hide any other actions

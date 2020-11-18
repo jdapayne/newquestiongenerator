@@ -85,7 +85,7 @@ export default class RectangleAreaView extends GraphicQView {
       })
     }
 
-    let n_info = 0
+    let nInfo = 0
     if (data.area.show) {
       const texta = data.area.val.toString() + '\\mathrm{cm}^2'
       const textq = data.area.missing ? '?' : texta
@@ -99,10 +99,10 @@ export default class RectangleAreaView extends GraphicQView {
           styleq: styleq,
           stylea: stylea,
           style: styleq,
-          pos: new Point(10, viewOptions.height - 10 - 15 * n_info)
+          pos: new Point(10, viewOptions.height - 10 - 15 * nInfo)
         }
       )
-      n_info++
+      nInfo++
     }
 
     if (data.perimeter.show) {
@@ -112,7 +112,7 @@ export default class RectangleAreaView extends GraphicQView {
       const stylea = data.perimeter.missing ? 'extra-answer' : 'extra-info'
       labels.push(
         {
-          pos: new Point(10, viewOptions.height - 10 - 20 * n_info),
+          pos: new Point(10, viewOptions.height - 10 - 20 * nInfo),
           texta: 'Perimeter = ' + texta,
           textq: 'Perimeter = ' + textq,
           text: 'Perimeter = ' + textq,

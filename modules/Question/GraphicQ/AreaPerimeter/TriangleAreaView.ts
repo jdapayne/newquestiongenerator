@@ -120,7 +120,8 @@ export default class TriangleAreaView extends GraphicQView {
     this.C = new Point((b * b + s1 * s1 - s2 * s2) / (2 * b), 0)
     this.ht = new Point(this.C.x, this.A.y)
 
-    this.overhangRight = false, this.overhangLeft = false
+    this.overhangRight = false
+    this.overhangLeft = false
     if (this.C.x > this.B.x) { this.overhangRight = true }
     if (this.C.x < this.A.x) { this.overhangLeft = true }
 
@@ -170,7 +171,7 @@ export default class TriangleAreaView extends GraphicQView {
     }
 
     // area and perimeter
-    let n_info = 0
+    let nInfo = 0
     if (this.data.area.show) {
       const texta : string = this.data.area.label ?? this.data.area.val.toString()
       const textq = this.data.area.missing ? '?' : texta
@@ -184,10 +185,10 @@ export default class TriangleAreaView extends GraphicQView {
           styleq: styleq,
           stylea: stylea,
           style: styleq,
-          pos: new Point(10, this.height - 10 - 15 * n_info)
+          pos: new Point(10, this.height - 10 - 15 * nInfo)
         }
       )
-      n_info++
+      nInfo++
     }
     if (this.data.perimeter.show) {
       const texta = this.data.perimeter.label ?? this.data.perimeter.val.toString()
@@ -196,7 +197,7 @@ export default class TriangleAreaView extends GraphicQView {
       const stylea = this.data.perimeter.missing ? 'extra-answer' : 'extra-info'
       this.labels.push(
         {
-          pos: new Point(10, this.height - 10 - 20 * n_info),
+          pos: new Point(10, this.height - 10 - 20 * nInfo),
           texta: 'Perimeter = ' + texta,
           textq: 'Perimeter = ' + textq,
           text: 'Perimeter = ' + textq,

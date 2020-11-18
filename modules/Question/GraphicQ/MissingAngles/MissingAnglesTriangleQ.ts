@@ -10,9 +10,6 @@ import { MissingAngleOptions } from './NumberOptions'
 export default class MissingAnglesTriangleQ extends GraphicQ {
   data!: MissingAnglesTriangleData
   view!: MissingAnglesTriangleView
-  constructor (data: MissingAnglesNumberData, view: MissingAnglesTriangleView) {
-    super(data, view) // this should be all that's required when refactored
-  }
 
   static random (options: Partial<MissingAngleOptions>, viewOptions: ViewOptions) {
     const optionsOverride : Partial<MissingAngleOptions> = {

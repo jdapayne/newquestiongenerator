@@ -7,9 +7,6 @@ import { WordedOptions } from './WordedOptions'
 export default class MissingAnglesTriangleWordedQ extends GraphicQ {
   data!: MissingAnglesWordedData
   view!: MissingAnglesTriangleWordedView
-  constructor (data: MissingAnglesWordedData, view: MissingAnglesTriangleWordedView) {
-    super(data, view)
-  }
 
   static random (options: Partial<WordedOptions>, viewOptions: ViewOptions) : MissingAnglesTriangleWordedQ {
     const optionsOverride : Partial<WordedOptions> = {

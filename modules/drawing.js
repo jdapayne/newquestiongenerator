@@ -6,7 +6,10 @@ export function dashedLine (ctx, x1, y1, x2, y2) {
   // Work if given two points instead:
   if (x1 instanceof Point && x2 instanceof Point) {
     const p1 = x1; const p2 = x2
-    x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y
+    x1 = p1.x
+    y1 = p1.y
+    x2 = p2.x
+    y2 = p2.y
   }
 
   const length = Math.hypot(x2 - x1, y2 - y1)

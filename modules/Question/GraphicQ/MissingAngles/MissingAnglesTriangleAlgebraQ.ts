@@ -9,10 +9,6 @@ export default class MissingAnglesTriangleAlgebraQ extends GraphicQ {
   data!: MissingAnglesAlgebraData
   view!: MissingAnglesTriangleView
 
-  constructor (data: MissingAnglesAlgebraData, view: MissingAnglesTriangleView) {
-    super(data, view)
-  }
-
   static random (options: Partial<AlgebraOptions>, viewOptions: ViewOptions) : MissingAnglesTriangleAlgebraQ {
     const optionsOverride : Partial<AlgebraOptions> = {
       angleSum: 180,

@@ -9,10 +9,6 @@ export default class MissingAnglesWordedQ extends GraphicQ {
   data!: MissingAnglesWordedData
   view!: MissingAnglesAroundWordedView
 
-  constructor (data: MissingAnglesWordedData, view: MissingAnglesAroundWordedView) {
-    super(data, view)
-  }
-
   static random (options: Partial<WordedOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesWordedQ {
     const defaults : WordedOptions = {
       angleSum: 180,

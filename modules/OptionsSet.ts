@@ -131,13 +131,6 @@ export default class OptionsSet {
   }
 
   /**
-   * Given an option, find its UI element and update it according to the options ID
-   * @param {*} option An element of this.optionsSpec or an option id
-   */
-  updateUIFromState (option : string | Optionspec2) {
-  }
-
-  /**
    * Given an option, enable the UI elements if and only if all the boolean
    * options in option.enabledIf are true
    * @param option An element of this.optionsSpec or an option id

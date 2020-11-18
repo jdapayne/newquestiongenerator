@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { randElem } from 'Utilities/Utilities'
 import triangle_data from './triangle_data.json'
 

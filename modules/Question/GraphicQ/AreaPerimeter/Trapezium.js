@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { randElem, randBetween, randPythagTriple, randPythagTripleWithLeg } from 'Utilities/Utilities'
 
 export default class Trapezium {

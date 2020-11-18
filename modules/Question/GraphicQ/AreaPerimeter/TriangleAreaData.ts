@@ -113,7 +113,7 @@ export default class TriangleAreaData {
         perimeterProperties.show = true
         perimeterProperties.missing = true
         break
-      case 'reverseArea':
+      case 'reverseArea': {
         areaProperties.show = true
         areaProperties.missing = false
         const coinToss = (Math.random() < 0.5) // 50/50 true/false
@@ -125,6 +125,7 @@ export default class TriangleAreaData {
           else height.missing = true
         }
         break
+      }
       case 'reversePerimeter': {
         perimeterProperties.show = true
         perimeterProperties.missing = false

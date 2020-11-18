@@ -10,9 +10,8 @@ export default class Point {
   }
 
   rotate (angle: number) {
-    let newx, newy
-    newx = Math.cos(angle) * this.x - Math.sin(angle) * this.y
-    newy = Math.sin(angle) * this.x + Math.cos(angle) * this.y
+    const newx = Math.cos(angle) * this.x - Math.sin(angle) * this.y
+    const newy = Math.sin(angle) * this.x + Math.cos(angle) * this.y
     this.x = newx
     this.y = newy
     return this

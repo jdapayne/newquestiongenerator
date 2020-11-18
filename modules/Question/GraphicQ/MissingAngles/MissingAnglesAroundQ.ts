@@ -17,10 +17,6 @@ export default class MissingAnglesAroundQ extends GraphicQ {
   data!: MissingAnglesNumberData // initialised in super()
   view!: MissingAnglesAroundView
 
-  constructor (data: MissingAnglesNumberData, view: MissingAnglesAroundView) { // effectively private
-    super(data, view) // bubbles to Q
-  }
-
   static random (options: Partial<MissingAngleOptions>, viewOptions: MissingAnglesViewOptions) : MissingAnglesAroundQ {
     const defaults : MissingAngleOptions = {
       angleSum: 180,

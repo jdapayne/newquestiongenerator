@@ -11,10 +11,6 @@ export default class RectangleAreaQ extends GraphicQ {
   data!: RectangleAreaData // initialised in super()
   view!: RectangleAreaView
 
-  constructor (data: RectangleAreaData, view: RectangleAreaView) {
-    super(data, view)
-  }
-
   static random (options: QuestionOptions, viewOptions: ViewOptions) {
     const data = RectangleAreaData.random(options)
     const view = RectangleAreaView.fromData(data, viewOptions)
