@@ -1,4 +1,4 @@
-import { OptionsSpec, Option as OptionI, SelectOption, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption, IntegerOption, BooleanOption } from 'OptionsSpec'
+import { OptionsSpec, Option as OptionI, SelectExclusiveOption, SelectInclusiveOption, RealOption, RangeOption, IntegerOption, BooleanOption } from 'OptionsSpec'
 import { createElem } from 'utilities'
 
 /**  Records typse of option availabilty, and link to UI and further options sets */
@@ -67,7 +67,7 @@ export default class OptionsSet {
    * Given an option, find its UI element and update the state from that
    * @param {*} option An element of this.optionSpec or an id
    */
-  updateStateFromUI (option : Optionspec2[0] | string) {
+  updateStateFromUI (option : Optionspec2[0] | string) : void {
     // input - either an element of this.optionsSpec or an option id
     if (typeof (option) === 'string') {
       const optionsSpec : Optionspec2[0] | undefined = this.optionsSpec.find(x => ((x as OptionI).id === option))
@@ -118,7 +118,7 @@ export default class OptionsSet {
    * @param id The id
    */
 
-  updateStateFromUIAll () {
+  updateStateFromUIAll (): void {
     this.optionsSpec.forEach(option => {
       if (isRealOption(option)) {
         this.updateStateFromUI(option)
@@ -126,7 +126,7 @@ export default class OptionsSet {
     })
   }
 
-  disableOrEnableAll () {
+  disableOrEnableAll (): void {
     this.optionsSpec.forEach(option => this.disableOrEnable(option))
   }
 
@@ -135,7 +135,7 @@ export default class OptionsSet {
    * options in option.enabledIf are true
    * @param option An element of this.optionsSpec or an option id
    */
-  disableOrEnable (option : string | Optionspec2[0]) {
+  disableOrEnable (option : string | Optionspec2[0]): void {
     if (typeof (option) === 'string') {
       const tempOption : Optionspec2[0] | undefined = this.optionsSpec.find(x => (isRealOption(x) && x.id === option))
       if (tempOption !== undefined) { option = tempOption } else { throw new Error(`no option with id '${option}'`) }
@@ -184,7 +184,9 @@ export default class OptionsSet {
       if (option.type === 'column-break') { // start new column
         column = createElem('div', 'options-column', list)
       } else if (option.type === 'suboptions') {
-        const subOptionsElement = option.subOptionsSet!.renderIn(column, 'suboptions') // subOptionsSet set in constructor
+        const subOptionsSet = option.subOptionsSet
+        if (subOptionsSet === undefined) throw new Error('This should not happen!')
+        const subOptionsElement = subOptionsSet.renderIn(column, 'suboptions')
         option.element = subOptionsElement
       } else { // make list item
         const li = createElem('li', undefined, column)
@@ -208,7 +210,9 @@ export default class OptionsSet {
             renderRangeOption(option, li)
             break
         }
-        li.addEventListener('change', e => { this.updateStateFromUI(option); this.disableOrEnableAll() })
+        li.addEventListener('change', () => {
+          this.updateStateFromUI(option)
+          this.disableOrEnableAll() })
         option.element = li
       }
     })
@@ -219,7 +223,8 @@ export default class OptionsSet {
     return list
   }
 
-  renderWithTemplate (element : HTMLElement) {
+  /* eslint-disable */
+  renderWithTemplate (element : HTMLElement): void {
     // create appropriate object for mustache
     let options: Record<string, OptionI>
     this.optionsSpec.forEach(option => {
@@ -230,8 +235,9 @@ export default class OptionsSet {
 
     const htmlString = this.template
   }
+  /* eslint-enable */
 
-  renderListOption (option: SelectExclusiveOption | SelectInclusiveOption, li : HTMLElement) {
+  renderListOption (option: SelectExclusiveOption | SelectInclusiveOption, li : HTMLElement): void {
     li.insertAdjacentHTML('beforeend', option.title + ': ')
 
     const sublist = createElem('ul', 'options-sublist', li)
