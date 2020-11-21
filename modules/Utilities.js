@@ -7,6 +7,13 @@ export function gaussian (n) {
   return rnum / n
 }
 
+/**
+ * return a random integer between n and m inclusive
+ * dist (optional) is a function returning a value in [0,1)
+ * @param {number} n The minimum value
+ * @param {number} m The maximum value
+ * @param {()=>number} [dist] A distribution returning a number from 0 to 1
+ */
 export function randBetween (n, m, dist) {
   // return a random integer between n and m inclusive
   // dist (optional) is a function returning a value in [0,1)

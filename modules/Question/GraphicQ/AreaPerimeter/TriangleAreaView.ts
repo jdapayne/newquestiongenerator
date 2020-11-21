@@ -1,11 +1,13 @@
 import { arrowLine, drawRightAngle } from 'drawing'
 import Point from 'Point'
 import { couldStartTrivia } from 'typescript'
-import { createElem } from 'utilities'
+import { createElem, randElem } from 'utilities'
 import { GraphicQView, Label } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
+import { colors } from './types'
 import { Value } from './RectangleAreaData'
 import TriangleAreaData from './TriangleAreaData'
+
 
 export default class TriangleAreaView extends GraphicQView {
   A?: Point // Generated lazily on render
@@ -50,7 +52,7 @@ export default class TriangleAreaView extends GraphicQView {
     ctx.lineTo(this.C.x, this.C.y)
     ctx.lineTo(this.A.x, this.A.y)
     ctx.stroke()
-    ctx.fillStyle = 'LightGrey'
+    ctx.fillStyle = randElem(colors)
     ctx.fill()
     ctx.closePath()
 
@@ -179,9 +181,9 @@ export default class TriangleAreaView extends GraphicQView {
       const stylea = this.data.area.missing ? 'extra-answer' : 'extra-info'
       this.labels.push(
         {
-          texta: 'Area = ' + texta,
-          textq: 'Area = ' + textq,
-          text: 'Area = ' + textq,
+          texta: '\\text{Area} = ' + texta,
+          textq: '\\text{Area} = ' + textq,
+          text: '\\text{Area} = ' + textq,
           styleq: styleq,
           stylea: stylea,
           style: styleq,
@@ -198,9 +200,9 @@ export default class TriangleAreaView extends GraphicQView {
       this.labels.push(
         {
           pos: new Point(10, this.height - 10 - 20 * nInfo),
-          texta: 'Perimeter = ' + texta,
-          textq: 'Perimeter = ' + textq,
-          text: 'Perimeter = ' + textq,
+          texta: '\\text{Perimeter} = ' + texta,
+          textq: '\\text{Perimeter} = ' + textq,
+          text: '\\text{Perimeter} = ' + textq,
           styleq: styleq,
           stylea: stylea,
           style: styleq
