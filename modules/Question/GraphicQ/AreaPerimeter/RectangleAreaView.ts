@@ -1,7 +1,9 @@
 import { drawRightAngle } from 'drawing'
 import Point from 'Point'
+import { randElem } from 'utilities'
 import { GraphicQData, GraphicQView, Label } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
+import { colors } from './types'
 import RectangleAreaData, { Value } from './RectangleAreaData'
 
 export default class RectangleAreaView extends GraphicQView {
@@ -69,7 +71,7 @@ export default class RectangleAreaView extends GraphicQView {
 
       pos.translate(-unitvec.y * offset, unitvec.x * offset)
 
-      const texta = sides[i][2].val.toString() + '\\mathrm{cm}'
+      const texta = sides[i][2].label ?? sides[i][2].val.toString()
       const textq = sides[i][2].missing ? '?' : texta
       const styleq = 'normal'
       const stylea = sides[i][2].missing ? 'answer' : 'normal'
@@ -87,15 +89,15 @@ export default class RectangleAreaView extends GraphicQView {
 
     let nInfo = 0
     if (data.area.show) {
-      const texta = data.area.val.toString() + '\\mathrm{cm}^2'
+      const texta = data.area.label ?? data.area.val.toString()
       const textq = data.area.missing ? '?' : texta
       const styleq = 'extra-info'
       const stylea = data.area.missing ? 'extra-answer' : 'extra-info'
       labels.push(
         {
-          texta: 'Area = ' + texta,
-          textq: 'Area = ' + textq,
-          text: 'Area = ' + textq,
+          texta: '\\text{Area} = ' + texta,
+          textq: '\\text{Area} = ' + textq,
+          text: '\\text{Area} = ' + textq,
           styleq: styleq,
           stylea: stylea,
           style: styleq,
@@ -106,16 +108,16 @@ export default class RectangleAreaView extends GraphicQView {
     }
 
     if (data.perimeter.show) {
-      const texta = data.perimeter.val.toString() + '\\mathrm{cm}'
+      const texta = data.perimeter.label ?? data.perimeter.val.toString()
       const textq = data.perimeter.missing ? '?' : texta
       const styleq = 'extra-info'
       const stylea = data.perimeter.missing ? 'extra-answer' : 'extra-info'
       labels.push(
         {
           pos: new Point(10, viewOptions.height - 10 - 20 * nInfo),
-          texta: 'Perimeter = ' + texta,
-          textq: 'Perimeter = ' + textq,
-          text: 'Perimeter = ' + textq,
+          texta: '\\text{Perimeter} = ' + texta,
+          textq: '\\text{Perimeter} = ' + textq,
+          text: '\\text{Perimeter} = ' + textq,
           styleq: styleq,
           stylea: stylea,
           style: styleq
@@ -140,7 +142,7 @@ export default class RectangleAreaView extends GraphicQView {
     ctx.lineTo(this.D.x, this.D.y)
     ctx.lineTo(this.A.x, this.A.y)
     ctx.stroke()
-    ctx.fillStyle = 'LightGrey'
+    ctx.fillStyle = randElem(colors)
     ctx.fill()
     ctx.closePath()
 

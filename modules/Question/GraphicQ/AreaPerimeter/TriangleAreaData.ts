@@ -1,7 +1,8 @@
-import { randElem, scaledStr } from 'utilities.js' // change relative path after testing
+import { randBetween, randElem, scaledStr } from 'utilities.js' // change relative path after testing
 import { Value } from './RectangleAreaData'
 import { QuestionOptions } from './types'
 import * as TD from 'triangleData'
+import fraction from 'fraction.js'
 
 export default class TriangleAreaData {
   readonly base: Value
@@ -9,6 +10,7 @@ export default class TriangleAreaData {
   readonly side2: Value
   readonly height: Value
   private readonly dp: number
+  private readonly denominator: number = 1
   private _area?: Partial<Value>
   private _perimeter?: Partial<Value>
 
@@ -18,6 +20,7 @@ export default class TriangleAreaData {
     side2: Value,
     height: Value,
     dp: number,
+    denominator: number,
     areaProperties?: Omit<Value, 'val'>,
     perimeterProperties?: Omit<Value, 'val'>) {
     this.base = base
@@ -25,6 +28,7 @@ export default class TriangleAreaData {
     this.side2 = side2
     this.height = height
     this.dp = dp
+    this.denominator = denominator
     this._area = areaProperties
     this._perimeter = perimeterProperties
   }
@@ -39,6 +43,11 @@ export default class TriangleAreaData {
     if (!this._perimeter.val) {
       this._perimeter.val = this.base.val + this.side1.val + this.side2.val
       this._perimeter.label = scaledStr(this._perimeter.val, this.dp) + '\\mathrm{cm}'
+      if (this.denominator > 1) {
+        this._perimeter.label = new fraction(this._perimeter.val, this.denominator).toLatex(true) + '\\mathrm{cm}'
+      } else {
+        this._perimeter.label = scaledStr(this._perimeter.val, this.dp) + '\\mathrm{cm}'
+      }
     }
 
     return this._perimeter as Value
@@ -53,7 +62,11 @@ export default class TriangleAreaData {
     }
     if (!this._area.val) {
       this._area.val = this.base.val * this.height.val / 2
-      this._area.label = scaledStr(this._area.val, 2 * this.dp) + '\\mathrm{cm}^2'
+      if (this.denominator > 1) {
+        this._area.label = new fraction(this._area.val, this.denominator**2).toLatex(true) + '\\mathrm{cm}^2'
+      } else {
+        this._area.label = scaledStr(this._area.val, 2 * this.dp) + '\\mathrm{cm}^2'
+      }
     }
     return this._area as Value
   }
@@ -71,6 +84,7 @@ export default class TriangleAreaData {
   static async random (options: QuestionOptions): Promise<TriangleAreaData> {
     options.maxLength = options.maxLength || 20
     const dp = options.dp || 0
+    const denominator = options.fraction? randBetween(2,6) : 1
     const requireIsosceles = (options.questionType === 'pythagorasIsoscelesArea')
     const requireRightAngle = (options.questionType === 'pythagorasArea' || options.questionType === 'pythagorasPerimeter')
 
@@ -90,7 +104,11 @@ export default class TriangleAreaData {
     const side1 : Value = { val: triangle.s1, show: true, missing: false }
     const side2 : Value = { val: triangle.s2, show: true, missing: false };
     [base, height, side1, side2].forEach(v => {
-      v.label = scaledStr(v.val, dp) + '\\mathrm{cm}'
+      if (denominator === 1) {
+        v.label = scaledStr(v.val, dp) + '\\mathrm{cm}'
+      } else {
+        v.label = new fraction(v.val,denominator).toLatex(true) + "\\mathrm{cm}"
+      }
     })
 
     // Some aliases useful when reasoning about RA triangles
@@ -152,7 +170,7 @@ export default class TriangleAreaData {
         height.show = false
         break
     }
-    return new TriangleAreaData(base, side1, side2, height, dp, areaProperties, perimeterProperties)
+    return new TriangleAreaData(base, side1, side2, height, dp, denominator, areaProperties, perimeterProperties)
   }
 }
 

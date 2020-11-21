@@ -1,4 +1,4 @@
-import { randBetween, randElem } from 'utilities'
+import { randBetween, randElem, scaledStr } from 'utilities'
 import { QuestionOptions } from './types'
 
 /**
@@ -15,28 +15,32 @@ export default class RectangleAreaData {
   readonly base : Value
   readonly height: Value
   readonly showOpposites: boolean
+  private readonly dp: number
   private _area?: Partial<Value> // lazily calculated
   private _perimeter?: Partial<Value>
 
-  constructor (base: Value, height: Value, showOpposites: boolean, areaProperties?: Omit<Value, 'val'>, perimeterProperties?: Omit<Value, 'val'>) {
+  constructor (base: Value, height: Value, showOpposites: boolean, dp: number, areaProperties?: Omit<Value, 'val'>, perimeterProperties?: Omit<Value, 'val'>) {
     this.base = base
     this.height = height
     this.showOpposites = showOpposites
+    this.dp = dp
     this._area = areaProperties
     this._perimeter = perimeterProperties
   }
 
   static random (options: QuestionOptions) : RectangleAreaData {
     options.maxLength = options.maxLength || 20 // default values
-    options.dp = options.dp || 0
+    const dp = options.dp || 0
 
     const sides = {
       base: randBetween(1, options.maxLength),
       height: randBetween(1, options.maxLength)
     }
 
-    const base : Value = { val: sides.base, show: true, missing: false }
-    const height : Value = { val: sides.height, show: true, missing: false }
+    const base : Value =
+      { val: sides.base, show: true, missing: false, label: scaledStr(sides.base,dp) + "\\mathrm{cm}" }
+    const height : Value =
+      { val: sides.height, show: true, missing: false ,label: scaledStr(sides.base,dp) + "\\mathrm{cm}"}
     let showOpposites : boolean
     const areaProperties : Partial<Omit<Value, 'val'>> = {}
     const perimeterProperties : Partial<Omit<Value, 'val'>> = {}
@@ -68,7 +72,7 @@ export default class RectangleAreaData {
         break
     }
 
-    return new this(base, height, showOpposites, areaProperties as Omit<Value, 'val'>, perimeterProperties as Omit<Value, 'val'>)
+    return new this(base, height, showOpposites, dp, areaProperties as Omit<Value, 'val'>, perimeterProperties as Omit<Value, 'val'>)
   }
 
   get perimeter () : Value {
@@ -80,6 +84,7 @@ export default class RectangleAreaData {
     }
     if (!this._perimeter.val) {
       this._perimeter.val = 2 * (this.base.val + this.height.val)
+      this._perimeter.label = scaledStr(this._perimeter.val,this.dp) + "\\mathrm{cm}"
     }
     return this._perimeter as Value
   }
@@ -93,6 +98,7 @@ export default class RectangleAreaData {
     }
     if (!this._area.val) {
       this._area.val = this.base.val * this.height.val
+      this._area.label = scaledStr(this._area.val,2*this.dp) + "\\mathrm{cm}^2"
     }
     return this._area as Value
   }
