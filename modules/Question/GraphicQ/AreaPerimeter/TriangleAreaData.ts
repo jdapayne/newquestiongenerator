@@ -1,7 +1,7 @@
 import { randBetween, randElem, scaledStr } from 'utilities.js' // change relative path after testing
 import { Value } from './RectangleAreaData'
 import { QuestionOptions } from './types'
-import * as TD from 'triangleData'
+import * as TD from 'triangleData-queue'
 import fraction from 'fraction.js'
 
 export default class TriangleAreaData {
@@ -42,7 +42,6 @@ export default class TriangleAreaData {
     }
     if (!this._perimeter.val) {
       this._perimeter.val = this.base.val + this.side1.val + this.side2.val
-      this._perimeter.label = scaledStr(this._perimeter.val, this.dp) + '\\mathrm{cm}'
       if (this.denominator > 1) {
         this._perimeter.label = new fraction(this._perimeter.val, this.denominator).toLatex(true) + '\\mathrm{cm}'
       } else {

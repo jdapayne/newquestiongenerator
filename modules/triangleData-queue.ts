@@ -14,40 +14,51 @@ export interface Triangle{
 interface dataSource {
   readonly length: number,
   readonly path: string,
-  loaded: boolean,
-  data: Triangle[]
+  status: 'uncached' | 'cached' | 'pending',
+  data: Triangle[],
+  queue: {
+    callback: (t: Triangle) => void,
+    maxLength: number,
+    filter?: (t: Triangle) => boolean
+  }[]
 }
+
 
 const dataSources : Record<indexVals, dataSource> = {
   100: {
     length: 361,
     path: '/data/triangles0-100.json',
-    loaded: false,
-    data: []
+    status: 'uncached',
+    data: [],
+    queue: []
   },
   200: {
     length: 715,
     path: '/data/triangles100-200.json',
-    loaded: false,
-    data: []
+    status: 'uncached',
+    data: [],
+    queue: []
   },
   300: {
     length: 927,
     path: '/data/triangles200-300.json',
-    loaded: false,
-    data: []
+    status: 'uncached',
+    data: [],
+    queue: []
   },
   400: {
     length: 1043,
     path: '/data/triangles300-400.json',
-    loaded: false,
-    data: []
+    status: 'uncached',
+    data: [],
+    queue: []
   },
   500: {
     length: 1151,
     path: '/data/triangles400-500.json',
-    loaded: false,
-    data: []
+    status: 'uncached',
+    data: [],
+    queue: []
   }
 }
 
@@ -67,12 +78,22 @@ function getTriangle (maxLength: number, filterPredicate?: (t: Triangle) => bool
   const bin100 = (Math.ceil(bin50 / 100) * 100).toString() as indexVals // e.g. if bin50 = 150, bin100 = Math.ceil(1.5)*100 = 200
   const dataSource = dataSources[bin100]
 
-  if (dataSource.loaded) { // Cached
+  if (dataSource.status === 'cached') { // Cached - just load data
     console.log('Using cached data')
     triangle = randElem(dataSource.data.filter(t => maxSide(t) < maxLength && filterPredicate!(t)))
     return Promise.resolve(triangle)
-  } else { // nobody has loaded yet
+  }
+
+  else if (dataSource.status === 'pending') { // pending - put callback into queue
+    console.log('Pending: adding request to queue')
+    return new Promise((resolve,reject) => {
+      dataSource.queue.push({callback: resolve, maxLength: maxLength, filter: filterPredicate})
+    })
+  }
+  
+  else { // nobody has loaded yet
     console.log('Loading data with XHR')
+    dataSource.status = 'pending'
     return fetch(`${pathRoot}${dataSource.path}`).then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText)
@@ -80,10 +101,14 @@ function getTriangle (maxLength: number, filterPredicate?: (t: Triangle) => bool
         return response.json() as Promise<Triangle[]>
       }
     }).then(data => {
-      if (!dataSource.loaded) { // cache if something hasn't beaten us to it
-        dataSource.loaded = true
-        dataSource.data = data
-      }
+      dataSource.data = data
+      dataSource.status = 'cached'
+      dataSource.queue.forEach( ({callback,maxLength, filter}) => {
+        filter = filter ?? (t=>true)
+        const triangle = randElem(data.filter((t: Triangle) => maxSide(t) < maxLength && filter!(t)))
+        console.log('loading from queue')
+        callback(triangle)
+      })
       triangle = randElem(data.filter((t: Triangle) => maxSide(t) < maxLength && filterPredicate!(t)))
       return triangle
     })

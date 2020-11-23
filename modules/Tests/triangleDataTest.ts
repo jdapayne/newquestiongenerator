@@ -1,3 +1,4 @@
+import * as TriangleDataQ from '../triangleData-queue.js'
 import * as TriangleData from '../triangleData.js'
 
 /*
@@ -8,15 +9,34 @@ for (let i=0; i<300; i++) {
 }
 */
 const button = document.getElementById('button')
-button?.addEventListener('click', printNewTriangle)
+button?.addEventListener('click', () => {
+  for (let i = 0; i < 10; i++) {
+    printNewTriangleQ()
+  }
+})
+
 
 async function printNewTriangle () {
   const elem = document.createElement('div')
   document.body.append(elem)
+  elem.style.background = "lightblue"
   const loader = document.createElement('div')
   loader.classList.add('loader')
   elem.append(loader)
-  const triangle = await TriangleData.getTriangle(500)
+  const triangle = await TriangleData.getTriangle(100)
+  const area = triangle.b * triangle.h / 2
+  const perimeter = triangle.s1 + triangle.s2 + triangle.b
+  elem.innerHTML = `Sides: ${triangle?.s1}, ${triangle?.s2}, ${triangle?.b}, height: ${triangle?.h}. Area = ${area}. Perimeter = ${perimeter}`
+}
+
+async function printNewTriangleQ () {
+  const elem = document.createElement('div')
+  document.body.append(elem)
+  elem.style.background = "lightgreen"
+  const loader = document.createElement('div')
+  loader.classList.add('loader')
+  elem.append(loader)
+  const triangle = await TriangleDataQ.getTriangle(100)
   const area = triangle.b * triangle.h / 2
   const perimeter = triangle.s1 + triangle.s2 + triangle.b
   elem.innerHTML = `Sides: ${triangle?.s1}, ${triangle?.s2}, ${triangle?.b}, height: ${triangle?.h}. Area = ${area}. Perimeter = ${perimeter}`
