@@ -183,10 +183,11 @@ RS.prototype.drag = function (e) {
 
 RS.prototype.move = function (e) {
   if (this.activePointer && !this.conf.disabled) {
+    this.onResize() // needed in case any elements have moved the slider in the meantime
     var coordX = e.type === 'touchmove' ? e.touches[0].clientX : e.pageX
-    var index = coordX - this.sliderLeft - (this.pointerWidth / 2)
+    var index = coordX - this.sliderLeft - (this.pointerWidth / 2) // pixel position from left of slider (shifted left by half width)
 
-    index = Math.round(index / this.step)
+    index = Math.ceil(index / this.step)
 
     if (index <= 0) index = 0
     if (index > this.conf.values.length - 1) index = this.conf.values.length - 1
