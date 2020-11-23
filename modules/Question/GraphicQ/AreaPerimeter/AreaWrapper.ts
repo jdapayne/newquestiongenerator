@@ -56,22 +56,22 @@ export default class AreaPerimeterQ extends Question {
         questionOptions.maxLength = 100
         break
       case 4: // TODO: fraction
-        if (Math.random()<0.5 || shape==='rectangle') {  // decimal
+        if (Math.random()<0.5) {  // decimal
           questionOptions.dp = 1
           questionOptions.maxLength = 99
-        } else {
+        } else { // fraction
           questionOptions.fraction = true
-          questionOptions.maxLength = 40
+          questionOptions.maxLength = 15
         }
         questionOptions.noDistractors = false
         break
       case 5:
-        if (Math.random()<0.5 || shape==='rectangle') {  // decimal
+        if (Math.random()<0.5) {  // decimal
           questionOptions.dp = 1
           questionOptions.maxLength = 500
         } else {
           questionOptions.fraction = true
-          questionOptions.maxLength = 400
+          questionOptions.maxLength = 100
         }
         questionOptions.noDistractors = false
         break
