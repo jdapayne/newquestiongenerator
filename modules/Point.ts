@@ -57,6 +57,30 @@ export default class Point {
   }
 
   /**
+   * Returns a point representing the position of an element, either relative to parent or viewport
+   * @param elem An HTML element
+   * @param anchor Which cornder of the bounding box of elem to return, or the center
+   */
+  static fromElement(elem: HTMLElement, anchor: 'topleft'|'bottomleft'|'topright'|'bottomright'|'center' = 'topleft', relativeToParent: boolean = true) {
+    const rect = elem.getBoundingClientRect()
+    let y = anchor.startsWith('top') ? rect.top :
+              anchor.startsWith('bottom') ? rect.bottom :
+              (rect.bottom + rect.top)/2
+
+    let x = anchor.endsWith('left') ? rect.left :
+              anchor.endsWith('right') ? rect.right :
+              (rect.right + rect.left)/2
+
+    if (relativeToParent && elem.parentElement) {
+      const parentPt = Point.fromElement(elem.parentElement, 'topleft', false)
+      x -= parentPt.x
+      y -= parentPt.y
+    }
+
+    return new Point(x,y)
+  }
+
+  /**
    * Find the mean of
    * @param  {...Point} points The points to find the mean of
    */
@@ -101,9 +125,12 @@ export default class Point {
     return new Point((maxx + minx) / 2, (maxy + miny) / 2)
   }
 
+  /**
+   * returns a unit vector in the direction of p1 to p2 in the form {x:..., y:...}
+   * @param p1 A point
+   * @param p2 A point
+   */
   static unitVector (p1 : Point, p2 : Point) {
-    // returns a unit vector in the direction of p1 to p2
-    // in the form {x:..., y:...}
     const vecx = p2.x - p1.x
     const vecy = p2.y - p1.y
     const length = Math.hypot(vecx, vecy)

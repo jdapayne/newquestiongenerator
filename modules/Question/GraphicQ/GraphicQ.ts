@@ -1,5 +1,5 @@
 import Question from 'Question/Question'
-import { createElem } from 'utilities'
+import { createElem, repelElements } from 'utilities'
 import Point from 'Point'
 import ViewOptions from './ViewOptions'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
@@ -63,7 +63,7 @@ export abstract class GraphicQView {
 
   abstract render () : void
 
-  renderLabels (nudge? : boolean) : void {
+  renderLabels (nudge? : boolean, repel: boolean = true) : void {
     const container = this.DOM
 
     // remove any existing labels
@@ -86,7 +86,7 @@ export abstract class GraphicQView {
 
       // remove space if the inner label is too big
       if (innerlabel.offsetWidth / innerlabel.offsetHeight > 2) {
-        console.log(`removed space in ${l.text}`)
+        //console.log(`removed space in ${l.text}`)
         const newlabeltext = l.text.replace(/\+/, '\\!+\\!').replace(/-/, '\\!-\\!')
         katex.render(newlabeltext, innerlabel)
       }
@@ -106,6 +106,16 @@ export abstract class GraphicQView {
         }
       }
     })
+
+    //repel if given
+    if (repel) {
+    const labelElements = [...this.DOM.getElementsByClassName('label')] as HTMLElement[]
+    for (let i = 0; i < labelElements.length; i++) {
+      for (let j = i+1; j < labelElements.length; j++) {
+        repelElements(labelElements[i],labelElements[j])
+      }
+    }
+    }
   }
 
   showAnswer () : void {

@@ -1,3 +1,5 @@
+import Point from './Point.js'
+
 /* RNGs / selectors */
 export function gaussian (n) {
   let rnum = 0
@@ -287,6 +289,57 @@ export function hasAncestorClass (elem, className) {
     }
   }
   return result
+}
+
+/**
+ * Determines if two elements overlap
+ * @param {HTMLElement} elem1 An HTML element
+ * @param {HTMLElement} elem2 An HTML element
+ */
+function overlap( elem1, elem2) {
+  const rect1 = elem1.getBoundingClientRect()
+  const rect2 = elem2.getBoundingClientRect()
+  return !(rect1.right < rect2.left || 
+           rect1.left > rect2.right || 
+           rect1.bottom < rect2.top || 
+           rect1.top > rect2.bottom)
+}
+
+/**
+ * If elem1 and elem2 overlap, move them apart until they don't.
+ * Only works for those with position:absolute
+ * This strips transformations, which may be a problem
+ * Elements with class 'repel-locked' will not be moved
+ * @param {HTMLElement} elem1 An HTML element
+ * @param {HTMLElement} elem2 An HTML element
+ */
+export function repelElements(elem1, elem2)  {
+  if (!overlap(elem1,elem2)) return
+  if (getComputedStyle(elem1).position !== "absolute" || getComputedStyle(elem2).position !== 'absolute') throw new Error ('Only call on position:absolute')
+  let tl1 = Point.fromElement(elem1)
+  let tl2 = Point.fromElement(elem2)
+  
+  const c1 = Point.fromElement(elem1, "center")
+  const c2 = Point.fromElement(elem2, "center")
+  const vec = Point.unitVector(c1,c2)
+
+  const locked1 = elem1.classList.contains('repel-locked')
+  const locked2 = elem2.classList.contains('repel-locked')
+
+  let i = 0
+  while(overlap(elem1,elem2) && i<500) {
+    if (!locked1) tl1.translate(-vec.x,-vec.y)
+    if (!locked2) tl2.translate(vec.x,vec.y)
+    elem1.style.left = tl1.x + "px"
+    elem1.style.top = tl1.y + "px"
+    elem1.style.transform = "none"
+    elem2.style.left = tl2.x + "px"
+    elem2.style.top = tl2.y + "px"
+    elem2.style.transform = "none"
+    i++
+  }
+  if (i===500) throw new Error('Too much moving')
+  console.log(`Repelled with ${i} iterations`)
 }
 
 /* Canvas drawing */

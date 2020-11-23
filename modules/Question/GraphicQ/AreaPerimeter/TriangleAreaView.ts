@@ -1,7 +1,7 @@
 import { arrowLine, drawRightAngle } from 'drawing'
 import Point from 'Point'
-import { couldStartTrivia } from 'typescript'
-import { createElem, randElem } from 'utilities'
+import { couldStartTrivia, resolveTripleslashReference } from 'typescript'
+import { createElem, randElem, repelElements } from 'utilities'
 import { GraphicQView, Label } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
 import { colors } from './types'
@@ -101,7 +101,7 @@ export default class TriangleAreaView extends GraphicQView {
       ctx.closePath()
     }
 
-    this.renderLabels()
+    this.renderLabels(false,true)
     loader.remove()
   }
 
@@ -154,12 +154,14 @@ export default class TriangleAreaView extends GraphicQView {
       const pos = Point.mean(sides[i][0], sides[i][1]) // start at midpoint
       const unitvec = Point.unitVector(sides[i][0], sides[i][1])
 
-      if (i < 3 || this.data.isRightAngled()) { pos.translate(-unitvec.y * offset, unitvec.x * offset) }
+      if (i < 3 ) { pos.translate(-unitvec.y * offset, unitvec.x * offset) }
 
       const texta : string = sides[i][2].label ?? sides[i][2].val.toString()
       const textq = sides[i][2].missing ? '?' : texta
-      const styleq = 'normal'
-      const stylea = sides[i][2].missing ? 'answer' : 'normal'
+      const styleq = i===3 ? 'normal repel-locked' : 'normal'
+      const stylea = sides[i][2].missing ?
+                      (i===3 ? 'answer repel-locked' : 'answer') :
+                      (i===3 ? 'normal repel-locked' : 'normal')
 
       this.labels.push({
         pos: pos,

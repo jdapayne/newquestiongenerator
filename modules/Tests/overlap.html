@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container {
+      width:500px;
+      height: 500px;
+      border: thin solid black;
+      position: absolute
+    }
+    .inner {
+      position:absolute;
+      border: thin solid green;
+    }
+  </style>
+</head>
+<body>
+  <button id="button">Repel</button>
+  <div id="container">
+    <div class="inner" style="left:15px;top:60px">Foo bar</div>
+    <div class="inner" style="left:50px;top:70px">Hello world<br>Something</div>
+  </div>
+  <script type="module" src="overlap.js"></script>
+</body>
+</html>
