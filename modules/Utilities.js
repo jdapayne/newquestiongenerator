@@ -1,12 +1,26 @@
 import Point from './Point.js'
 
-/* RNGs / selectors */
+/**
+ * Approximates a guassian distribution by finding the mean of n uniform distributions
+ * @param {number} n Number of times to roll the 'dice' - higher is closer to gaussian
+ * @returns {number} A number between 0 and 1
+ */
 export function gaussian (n) {
   let rnum = 0
   for (let i = 0; i < n; i++) {
     rnum += Math.random()
   }
   return rnum / n
+}
+
+/**
+ * Approximates a gaussian distribution by finding the mean of n uniform distributions
+ * Returns a functio 
+ * @param {number} n Number of uniform distributions to average
+ * @returns {()=>number} A function which returns a random number
+ */
+export function gaussianCurry (n) {
+  return () => gaussian(n)
 }
 
 /**
@@ -17,9 +31,6 @@ export function gaussian (n) {
  * @param {()=>number} [dist] A distribution returning a number from 0 to 1
  */
 export function randBetween (n, m, dist) {
-  // return a random integer between n and m inclusive
-  // dist (optional) is a function returning a value in [0,1)
-  // default is slightly biased towards middle
   if (!dist) dist = Math.random
   return n + Math.floor(dist() * (m - n + 1))
 }

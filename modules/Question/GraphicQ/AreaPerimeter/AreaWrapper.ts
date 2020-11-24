@@ -3,6 +3,7 @@ import Question from 'Question/Question'
 import { randElem } from 'utilities'
 import { GraphicQ, GraphicQView } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
+import ParallelogramAreaQ from './ParallelogramAreaQ'
 import RectangleAreaQ from './RectangleAreaQ'
 import TrapeziumAreaQ from './TrapeziumAreaQ'
 import TriangleAreaQ from './TriangleAreaQ'
@@ -124,6 +125,9 @@ export default class AreaPerimeterQ extends Question {
         question = TrapeziumAreaQ.random(options,viewOptions)
         break
       case 'parallelogram':
+        question = ParallelogramAreaQ.random(options,viewOptions)
+        break
+      default:
         throw new Error('Not yet implemented')
     }
     return new this(question)
@@ -143,9 +147,10 @@ export default class AreaPerimeterQ extends Question {
         selectOptions: [
           { id: 'rectangle', title: 'Rectangles' },
           { id: 'triangle', title: 'Triangles' },
+          { id: 'parallelogram', title: 'Parallelograms' },
           { id: 'trapezium', title: 'Trapezia' }
         ],
-        default: ['rectangle', 'triangle', 'trapezium'],
+        default: ['rectangle', 'triangle', 'parallelogram', 'trapezium'],
         title: 'Shapes'
       },
       {
