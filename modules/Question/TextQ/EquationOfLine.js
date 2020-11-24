@@ -1,6 +1,6 @@
 import { randBetween } from 'utilities'
 import TextQ from 'Question/TextQ/TextQ'
-import Fraction from 'vendor/fraction'
+import Fraction from 'fraction.js'
 
 /* Main question class. This will be spun off into different file and generalised */
 export default class EquationOfLine extends TextQ {

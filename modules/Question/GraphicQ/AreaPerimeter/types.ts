@@ -6,9 +6,9 @@ export type QuestionType = QuestionTypeSimple | QuestionTypeCustom;
 
 export interface QuestionOptions {
   noDistractors: boolean, // adds layer of difficulty when true by including/excluding sides (depending on shape type)
-  dp?: number, // number of decimal places of lengths
-  fraction?: boolean,
-  maxLength?: number, // the maximum length of a side
+  dp: number, // number of decimal places of lengths
+  fraction: boolean,
+  maxLength: number, // the maximum length of a side
   questionType: QuestionType
 }
 

@@ -91,6 +91,82 @@ export function randElemWithProbabilities (array, probabilities) {
   return (array[array.length - 1])
 }
 
+/**
+ * Finds a random pythaogrean triple with maximum hypotenuse lengt 
+ * @param {number} max The maximum length of the hypotenuse
+ * @returns {{a: number, b: number, c: number}} Three values such that a^2+b^2=c^2
+ */
+export function randPythagTriple(max) {
+  const n = randBetween(2, Math.ceil(Math.sqrt(max))-1);
+  const m = randBetween(1, Math.min(n-1,Math.floor(Math.sqrt(max-n*n))));
+  return {a: n*n-m*m, b: 2*n*m, c:n*n+m*m};
+}
+
+/**
+ * Random pythagorean triple with a given leg
+ * @param {number} a The length of the first leg
+ * @param {number} max The maximum length of the hypotenuse
+ * @returns {{a: number, b: number, c:number}} Three values such that a^2+b^2 = c^2 and a is the first input parameter
+ */
+export function randPythagTripleWithLeg(a,max) {
+  /* Random pythagorean triple with a given leg
+   * That leg is the first one */
+
+  if (max===undefined) max = 500;
+
+  if (a%2===1) { //odd: a = n^2-m^2
+    return randPythagnn_mm(a,max);
+  } else { //even: try a = 2mn, but if that fails, try a=n^2-m^2
+    let triple;
+    let f1, f2;
+    if (Math.random()<0.5) {
+      f1 = randPythag2mn, f2=randPythagnn_mm;
+    } else {
+      f2 = randPythag2mn, f1=randPythagnn_mm;
+    }
+    try {
+      triple = f1(a,max);
+    } catch(err) {
+      triple = f2(a,max);
+    } 
+    return triple;
+  }
+}
+
+function randPythag2mn(a,max) {
+  // assumes a is 2mn, finds appropriate parameters
+  // let m,n be a factor pair of a/2
+  let factors = []; //factors of n
+  const maxm = Math.sqrt(a/2);                              
+  for (let m=1; m<maxm; m++) {
+    if ( (a/2)%m===0 && m*m+(a*a)/(4*m*m)<=max ) {
+      factors.push(m);
+    }
+  }
+  if (factors.length===0) throw "2mn no options";
+
+  let m = randElem(factors);
+  let n = a/(2*m);
+  return {a: 2*n*m, b: Math.abs(n*n-m*m), c:n*n+m*m};
+}
+
+function randPythagnn_mm(a,max) {
+  // assumes a = n^2-m^2
+  // m=sqrt(a+n^2)
+  // cycle through 1≤m≤sqrt((max-a)/2)
+  let possibles = [];
+  const maxm = Math.sqrt((max-a)/2);
+  for (let m=1; m<=maxm; m++) {
+    let n = Math.sqrt(a+m*m);
+    if (n===Math.floor(n)) possibles.push([n,m]);
+  }
+  if (possibles.length===0) throw "n^2-m^2 no options";
+
+  let [n,m] = randElem(possibles);
+
+  return {a: n*n-m*m, b: 2*n*m, c: n*n+m*m};
+}
+
 /* Maths */
 export function roundToTen (n) {
   return Math.round(n / 10) * 10

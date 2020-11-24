@@ -1,6 +1,5 @@
 import { arrowLine, drawRightAngle } from 'drawing'
 import Point from 'Point'
-import { couldStartTrivia, resolveTripleslashReference } from 'typescript'
 import { createElem, randElem, repelElements } from 'utilities'
 import { GraphicQView, Label } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
@@ -130,7 +129,7 @@ export default class TriangleAreaView extends GraphicQView {
     // rotate, scale and center
     this.rotation = this.rotation ?? 2 * Math.PI * Math.random()
     ;[this.A, this.B, this.C, this.ht].forEach(pt => pt.rotate(this.rotation!))
-    Point.scaleToFit([this.A, this.B, this.C, this.ht], this.width, this.height, 80)
+    Point.scaleToFit([this.A, this.B, this.C, this.ht], this.width, this.height, 100, [0,20])
 
     // Making labels - more involved than I remembered!
     // First the labels for the sides

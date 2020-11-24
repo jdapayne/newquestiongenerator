@@ -28,9 +28,15 @@ export function dashedLine (ctx, x1, y1, x2, y2) {
 
   ctx.moveTo(x2, y2)
 }
-
-export function arrowLine (ctx, pt1, pt2, size, m) {
-  if (!m) m = 0.5
+/**
+ * 
+ * @param {CanvasRenderingContext2D} ctx The context
+ * @param {Point} pt1 A point
+ * @param {Point} pt2 A point
+ * @param {number} size The size of the array to draw
+ * @param {number} [m=0.5] The 'sharpness' of the point. Smaller is pointier
+ */
+export function arrowLine (ctx, pt1, pt2, size, m=0.5) {
 
   const unit = Point.unitVector(pt1, pt2)
   unit.x *= size
@@ -73,17 +79,22 @@ export function drawRightAngle (ctx, A, O, C, size) {
   ctx.lineTo(ctl3.x, ctl3.y)
 }
 
-export function parallelSign (ctx, A, B, size, number, gap) {
-  if (!size) size = 10
-  if (!number) number = 1
-  if (!gap) gap = size
-
+/**
+ * Draws a dash, or multiple dashes, at the midpoint of A and B
+ * @param {CanvasRenderingContext2D} ctx The canvas rendering context
+ * @param {Point} A A point
+ * @param {Point} B A point
+ * @param {number} [size=10]  The length of the dashes, in pixels
+ * @param {number} [number=1] How many dashes to drw
+ * @param {number} [gap=size] The gap between dashes
+ */
+export function parallelSign (ctx, A, B, size=10, number=1, gap=size) {
   const unit = Point.unitVector(A, B)
   unit.x *= size
   unit.y *= size
   const normal = { x: -unit.y, y: unit.x }
 
-  const M = Point.mean([A, B])
+  const M = Point.mean(A, B)
 
   for (let i = 0; i < number; i++) {
     const ctl2 = M.clone().moveToward(B, i * gap)

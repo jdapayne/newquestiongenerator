@@ -48,7 +48,7 @@ export default class RectangleAreaView extends GraphicQView {
     // rotate, scale and center
     const rotation = viewOptions.rotation ?? 2 * Math.PI * Math.random()
     ;[A, B, C, D].forEach(pt => pt.rotate(rotation))
-    Point.scaleToFit([A, B, C, D], viewOptions.width, viewOptions.height, 80)
+    Point.scaleToFit([A, B, C, D], viewOptions.width, viewOptions.height, 100, [0,20])
 
     // Set up labels
     const labels : Label[] = []

@@ -4,7 +4,9 @@ import * as AreaTypes from 'Question/GraphicQ/AreaPerimeter/types'
 const options: AreaTypes.QuestionOptions = {
   questionType: 'area',
   maxLength: 100,
-  noDistractors: false
+  noDistractors: false,
+  dp: 0,
+  fraction: false
 }
 
 const types : AreaTypes.QuestionType[] = [

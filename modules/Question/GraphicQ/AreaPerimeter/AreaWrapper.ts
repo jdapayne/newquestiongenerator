@@ -4,6 +4,7 @@ import { randElem } from 'utilities'
 import { GraphicQ, GraphicQView } from '../GraphicQ'
 import ViewOptions from '../ViewOptions'
 import RectangleAreaQ from './RectangleAreaQ'
+import TrapeziumAreaQ from './TrapeziumAreaQ'
 import TriangleAreaQ from './TriangleAreaQ'
 import { WrapperOptions, Shape, QuestionTypeSimple, QuestionOptions, QuestionType } from './types'
 
@@ -40,6 +41,7 @@ export default class AreaPerimeterQ extends Question {
     const questionOptions: QuestionOptions = {
       questionType: randElem(questionTypes),
       dp: 0,
+      fraction: false,
       noDistractors: true,
       maxLength: 20
     }
@@ -102,7 +104,7 @@ export default class AreaPerimeterQ extends Question {
       case 10:
       default: // TODO fix this
         shape = 'triangle'
-        questionOptions.questionType = 'pythagorasArea'
+        questionOptions.questionType = randElem(['pythagorasArea','pythagorasIsoscelesArea','pythagorasPerimeter'])
         break
     }
 
@@ -118,8 +120,10 @@ export default class AreaPerimeterQ extends Question {
       case 'triangle':
         question = TriangleAreaQ.random(options,viewOptions)
         break
-      case 'parallelogram':
       case 'trapezium':
+        question = TrapeziumAreaQ.random(options,viewOptions)
+        break
+      case 'parallelogram':
         throw new Error('Not yet implemented')
     }
     return new this(question)
@@ -137,10 +141,11 @@ export default class AreaPerimeterQ extends Question {
         id: 'shapes',
         type: 'select-inclusive',
         selectOptions: [
-          { id: 'rectangle', title: 'Rectangle' },
-          { id: 'triangle', title: 'Triangle' }
+          { id: 'rectangle', title: 'Rectangles' },
+          { id: 'triangle', title: 'Triangles' },
+          { id: 'trapezium', title: 'Trapezia' }
         ],
-        default: ['rectangle'],
+        default: ['rectangle', 'triangle', 'trapezium'],
         title: 'Shapes'
       },
       {
