@@ -279,7 +279,6 @@ export default class QuestionSet {
   }
 
   generate (i: number, difficulty: number, topicId?: string) {
-    // TODO get options properly
     topicId = topicId || randElem(this.topics)
 
     const options = {

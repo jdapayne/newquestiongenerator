@@ -28,7 +28,7 @@ export default class MissingAnglesAroundAlgebraQ extends GraphicQ {
     const settings: AlgebraOptions = Object.assign({}, defaults, options)
 
     const data = MissingAnglesAlgebraData.random(settings)
-    const view = new MissingAnglesAroundAlgebraView(data, viewOptions) // TODO eliminate public constructors
+    const view = new MissingAnglesAroundAlgebraView(data, viewOptions) 
 
     return new MissingAnglesAroundAlgebraQ(data, view)
   }

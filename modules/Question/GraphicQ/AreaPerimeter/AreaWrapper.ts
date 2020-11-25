@@ -58,7 +58,7 @@ export default class AreaPerimeterQ extends Question {
         questionOptions.noDistractors = false
         questionOptions.maxLength = 100
         break
-      case 4: // TODO: fraction
+      case 4:
         if (Math.random()<0.5) {  // decimal
           questionOptions.dp = 1
           questionOptions.maxLength = 99
@@ -103,7 +103,7 @@ export default class AreaPerimeterQ extends Question {
         questionOptions.maxLength = 500
         break
       case 10:
-      default: // TODO fix this
+      default:
         shape = 'triangle'
         questionOptions.questionType = randElem(['pythagorasArea','pythagorasIsoscelesArea','pythagorasPerimeter'])
         break
