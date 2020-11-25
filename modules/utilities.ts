@@ -5,7 +5,7 @@ import Point from './Point.js'
  * @param {number} n Number of times to roll the 'dice' - higher is closer to gaussian
  * @returns {number} A number between 0 and 1
  */
-export function gaussian (n) {
+export function gaussian (n: number): number {
   let rnum = 0
   for (let i = 0; i < n; i++) {
     rnum += Math.random()
@@ -19,7 +19,7 @@ export function gaussian (n) {
  * @param {number} n Number of uniform distributions to average
  * @returns {()=>number} A function which returns a random number
  */
-export function gaussianCurry (n) {
+export function gaussianCurry (n: number): () => number {
   return () => gaussian(n)
 }
 
@@ -30,12 +30,12 @@ export function gaussianCurry (n) {
  * @param {number} m The maximum value
  * @param {()=>number} [dist] A distribution returning a number from 0 to 1
  */
-export function randBetween (n, m, dist) {
+export function randBetween (n: number, m: number, dist?: ()=>number) {
   if (!dist) dist = Math.random
   return n + Math.floor(dist() * (m - n + 1))
 }
 
-export function randBetweenFilter (n, m, filter) {
+export function randBetweenFilter (n: number, m: number, filter: (n:number)=>boolean) {
   /* returns a random integer between n and m inclusive which satisfies the filter
   /  n, m: integer
   /  filter: Int-> Bool
@@ -56,7 +56,7 @@ export function randBetweenFilter (n, m, filter) {
  * @param {number} n Choose a multiple of this value
  * @returns {number} A multipleof n between min and max
  */
-export function randMultBetween (min, max, n) {
+export function randMultBetween (min: number, max: number, n: number): number {
   // return a random multiple of n between n and m (inclusive if possible)
   min = Math.ceil(min / n) * n
   max = Math.floor(max / n) * n // could check divisibility first to maximise performace, but I'm sure the hit isn't bad
@@ -71,10 +71,10 @@ export function randMultBetween (min, max, n) {
  * @param {()=>number} [dist] A distribution function for weighting, returning a number between 0 and 1. Default is Math.random
  * @returns {T}
  */
-export function randElem (array, dist) {
+export function randElem<T> (array: Array<T>, dist?: ()=> number) : T {
   if ([...array].length === 0) throw new Error('empty array')
   if (!dist) dist = Math.random
-  const n = array.length || array.size
+  const n = array.length
   const i = randBetween(0, n - 1, dist)
   return [...array][i]
 }
@@ -86,7 +86,7 @@ export function randElem (array, dist) {
  * @param {number[]} probabilities An array of probbilities
  * @returns {T}
  */
-export function randElemWithProbabilities (array, probabilities) {
+export function randElemWithProbabilities<T> (array: Array<T>, probabilities: Array<number>): T {
   // validate
   if (array.length !== probabilities.length) throw new Error('Array lengths do not match')
 
@@ -107,7 +107,7 @@ export function randElemWithProbabilities (array, probabilities) {
  * @param {number} max The maximum length of the hypotenuse
  * @returns {{a: number, b: number, c: number}} Three values such that a^2+b^2=c^2
  */
-export function randPythagTriple(max) {
+export function randPythagTriple(max: number): { a: number; b: number; c: number } {
   const n = randBetween(2, Math.ceil(Math.sqrt(max))-1);
   const m = randBetween(1, Math.min(n-1,Math.floor(Math.sqrt(max-n*n))));
   return {a: n*n-m*m, b: 2*n*m, c:n*n+m*m};
@@ -119,7 +119,7 @@ export function randPythagTriple(max) {
  * @param {number} max The maximum length of the hypotenuse
  * @returns {{a: number, b: number, c:number}} Three values such that a^2+b^2 = c^2 and a is the first input parameter
  */
-export function randPythagTripleWithLeg(a,max) {
+export function randPythagTripleWithLeg(a: number,max?: number): { a: number; b: number; c: number } {
   /* Random pythagorean triple with a given leg
    * That leg is the first one */
 
@@ -144,7 +144,7 @@ export function randPythagTripleWithLeg(a,max) {
   }
 }
 
-function randPythag2mn(a,max) {
+function randPythag2mn(a: number,max: number) {
   // assumes a is 2mn, finds appropriate parameters
   // let m,n be a factor pair of a/2
   let factors = []; //factors of n
@@ -161,7 +161,7 @@ function randPythag2mn(a,max) {
   return {a: 2*n*m, b: Math.abs(n*n-m*m), c:n*n+m*m};
 }
 
-function randPythagnn_mm(a,max) {
+function randPythagnn_mm(a: number,max: number) {
   // assumes a = n^2-m^2
   // m=sqrt(a+n^2)
   // cycle through 1≤m≤sqrt((max-a)/2)
@@ -179,7 +179,7 @@ function randPythagnn_mm(a,max) {
 }
 
 /* Maths */
-export function roundToTen (n) {
+export function roundToTen (n: number) {
   return Math.round(n / 10) * 10
 }
 
@@ -189,19 +189,19 @@ export function roundToTen (n) {
  * @param {number} n The number of decimal places
  * @returns {number}
  */
-export function roundDP (x, n) {
+export function roundDP (x: number, n: number): number {
   return Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
 }
 
-export function degToRad (x) {
+export function degToRad (x: number) {
   return x * Math.PI / 180
 }
 
-export function sinDeg (x) {
+export function sinDeg (x: number) {
   return Math.sin(x * Math.PI / 180)
 }
 
-export function cosDeg (x) {
+export function cosDeg (x: number) {
   return Math.cos(x * Math.PI / 180)
 }
 
@@ -212,19 +212,19 @@ export function cosDeg (x) {
  * @param {number} dp An integer for number of decimal places
  * @returns {string}
  */
-export function scaledStr (n, dp) {
-  if (dp === 0) return n
+export function scaledStr (n: number, dp: number): string {
+  if (dp === 0) return n.toString()
   const factor = Math.pow(10, dp)
   const intpart = Math.floor(n / factor)
   const decpart = n % factor
   if (decpart === 0) {
-    return intpart
+    return intpart.toString()
   } else {
     return intpart + '.' + decpart
   }
 }
 
-export function gcd (a, b) {
+export function gcd (a: number, b: number) : number {
   // taken from fraction.js
   if (!a) { return b }
   if (!b) { return a }
@@ -235,13 +235,18 @@ export function gcd (a, b) {
     b %= a
     if (!b) { return a }
   }
+  return 0 // unreachable, and mathematically guaranteed not to happen, but makes typescript queit
 }
 
-export function lcm (a, b) {
+export function lcm (a: number, b: number) {
   return a * b / gcd(a, b)
 }
 
 /* Arrays and similar */
+
+function isArrayOfNumbers(arr: unknown[]) : arr is number[] {
+  return (typeof arr[0] === 'number')
+}
 
 /**
  * Sorts two arrays together based on sorting arr0
@@ -249,12 +254,14 @@ export function lcm (a, b) {
  * @param {*[]} arr1
  * @param {*} f
  */
-export function sortTogether (arr0, arr1, f) {
+export function sortTogether (arr0 : unknown[], arr1: unknown[], f: (x: unknown, y:unknown)=>number) : [unknown[],unknown[]] {
   if (arr0.length !== arr1.length) {
     throw new TypeError('Both arguments must be arrays of the same length')
   }
 
-  f = f || ((x, y) => x - y)
+  if (!f) {
+    f = f || ((x, y) => (x as number) - (y as number))
+  }
 
   const n = arr0.length
   const combined = []
@@ -272,7 +279,7 @@ export function sortTogether (arr0, arr1, f) {
   return [arr0, arr1]
 }
 
-export function shuffle (array) {
+export function shuffle<T> (array: T[]) {
   // Knuth-Fisher-Yates
   // from https://stackoverflow.com/a/2450976/3737295
   // nb. shuffles in place
@@ -299,11 +306,11 @@ export function shuffle (array) {
  * @param {*} e An element to check if is in the array
  * @returns {boolean}
  */
-export function weakIncludes (a, e) {
+export function weakIncludes (a: unknown, e:unknown) : boolean {
   return (Array.isArray(a) && a.includes(e))
 }
 
-export function firstUniqueIndex (array) {
+export function firstUniqueIndex<T> (array:T[]): number {
   // returns index of first unique element
   // if none, returns length of array
   let i = 0
@@ -316,7 +323,7 @@ export function firstUniqueIndex (array) {
   return i
 }
 
-export function boolObjectToArray (obj) {
+export function boolObjectToArray (obj: Record<string,boolean>) {
   // Given an object where all values are boolean, return keys where the value is true
   const result = []
   for (const key in obj) {
@@ -326,7 +333,7 @@ export function boolObjectToArray (obj) {
 }
 
 /* Object property access by string */
-export function propByString (o, s, x) {
+export function propByString (o: Record<string,unknown>, s: string, x: unknown) {
   /* E.g. byString(myObj,"foo.bar") -> myObj.foo.bar
      * byString(myObj,"foo.bar","baz") -> myObj.foo.bar = "baz"
      */
@@ -336,7 +343,7 @@ export function propByString (o, s, x) {
   for (var i = 0, n = a.length - 1; i < n; ++i) {
     var k = a[i]
     if (k in o) {
-      o = o[k]
+      o = o[k] as Record<string,unknown>
     } else {
       return
     }
@@ -346,7 +353,7 @@ export function propByString (o, s, x) {
 }
 
 /* Logic */
-export function mIf (p, q) { // material conditional
+export function mIf (p: boolean, q: boolean) { // material conditional
   return (!p || q)
 }
 
@@ -359,7 +366,7 @@ export function mIf (p, q) { // material conditional
  * @param {HTMLElement} [parent] A parent element to append the element to
  * @returns {HTMLElement}
  */
-export function createElem (tagName, className, parent) {
+export function createElem (tagName: string, className: string | undefined, parent?: HTMLElement): HTMLElement {
   // create, set class and append in one
   const elem = document.createElement(tagName)
   if (className) elem.className = className
@@ -367,10 +374,10 @@ export function createElem (tagName, className, parent) {
   return elem
 }
 
-export function hasAncestorClass (elem, className) {
+export function hasAncestorClass (elem: HTMLElement|null, className: string) {
   // check if an element elem or any of its ancestors has clss
   let result = false
-  for (;elem && elem !== document; elem = elem.parentNode) { // traverse DOM upwards
+  for (;elem && elem.parentNode; elem = elem.parentElement) { // traverse DOM upwards
     if (elem.classList.contains(className)) {
       result = true
     }
@@ -383,7 +390,7 @@ export function hasAncestorClass (elem, className) {
  * @param {HTMLElement} elem1 An HTML element
  * @param {HTMLElement} elem2 An HTML element
  */
-function overlap( elem1, elem2) {
+function overlap( elem1: HTMLElement, elem2: HTMLElement) {
   const rect1 = elem1.getBoundingClientRect()
   const rect2 = elem2.getBoundingClientRect()
   return !(rect1.right < rect2.left || 
@@ -400,7 +407,7 @@ function overlap( elem1, elem2) {
  * @param {HTMLElement} elem1 An HTML element
  * @param {HTMLElement} elem2 An HTML element
  */
-export function repelElements(elem1, elem2)  {
+export function repelElements(elem1: HTMLElement, elem2: HTMLElement)  {
   if (!overlap(elem1,elem2)) return
   if (getComputedStyle(elem1).position !== "absolute" || getComputedStyle(elem2).position !== 'absolute') throw new Error ('Only call on position:absolute')
   let tl1 = Point.fromElement(elem1)
@@ -430,7 +437,7 @@ export function repelElements(elem1, elem2)  {
 }
 
 /* Canvas drawing */
-export function dashedLine (ctx, x1, y1, x2, y2) {
+export function dashedLine (ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
   const length = Math.hypot(x2 - x1, y2 - y1)
   const dashx = (y1 - y2) / length // unit vector perpendicular to line
   const dashy = (x2 - x1) / length
