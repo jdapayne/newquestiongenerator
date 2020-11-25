@@ -80,6 +80,30 @@ export function randElem<T> (array: Array<T>, dist?: ()=> number) : T {
 }
 
 /**
+ * Randomly partitions a total into n amounts
+ * @param total The total amount to partition
+ * @param n How many parts to partition into
+ * @param minProportion The smallest proportion of a whole for a partion
+ * @param minValue The smallest value for a partition. Overrides minProportion
+ * @returns An array of n numbers which sum to total
+ */
+export function randPartition({ total, n, minProportion, minValue, integer = true }: { total: number; n: number; minProportion?: number; minValue?: number; integer?: boolean }): number[] {
+  minValue = minValue ?? (minProportion !== undefined? total*minProportion : 0)  // why does typescript require ! here? 
+  
+  const partitions: number[] = []
+  let left = total
+  for (let i = 0; i < n - 1; i++) {
+    const maxValue = left - minValue * (n - i - 1)
+    const nextValue = integer? randBetween(minValue, maxValue) : minValue + Math.random()*(maxValue-minValue)
+    left -= nextValue
+    partitions.push(nextValue)
+  }
+  partitions[n - 1] = left
+
+  return partitions
+}
+
+/**
  * Selects an element
  * @template T
  * @param {T[]} array An array of elements
@@ -323,7 +347,7 @@ export function firstUniqueIndex<T> (array:T[]): number {
   return i
 }
 
-export function boolObjectToArray (obj: Record<string,boolean>) {
+export function boolObjectToArray<T extends string> (obj: Record<T,unknown>) : T[] {
   // Given an object where all values are boolean, return keys where the value is true
   const result = []
   for (const key in obj) {

@@ -9,7 +9,7 @@
  *
  */
 
-import { randBetween } from 'utilities'
+import { randBetween, randPartition } from 'utilities'
 import { GraphicQData } from '../GraphicQ'
 import { MissingAnglesData } from './MissingAnglesData'
 import { MissingAngleOptions as Options } from './NumberOptions'
@@ -52,7 +52,8 @@ export class MissingAnglesNumberData implements MissingAnglesData {
     if (n < 2) throw new Error('Can\'t have missing fewer than 2 angles')
 
     // Build up angles
-    const angles = []
+    /*
+    const angles: number[] = []
     let left = angleSum
     for (let i = 0; i < n - 1; i++) {
       const maxAngle = left - minAngle * (n - i - 1)
@@ -61,6 +62,9 @@ export class MissingAnglesNumberData implements MissingAnglesData {
       angles.push(nextAngle)
     }
     angles[n - 1] = left
+    */
+
+    const angles = randPartition({total: angleSum, n: n, minValue: minAngle})
 
     // pick one to be missing
     const missing: boolean[] = []
