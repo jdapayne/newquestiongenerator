@@ -337,7 +337,7 @@ export default class QuestionSet {
 
     // Q: is this best way - or an event listener on the whole displayBox?
     container.addEventListener('click', e => {
-      if (!hasAncestorClass(e.target, 'question-actions')) {
+      if (!hasAncestorClass(e.target as HTMLElement, 'question-actions')) {
         // only do this if it didn't originate in action button
         this.showQuestionActions(i)
       }
