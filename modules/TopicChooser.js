@@ -8,6 +8,7 @@ import MissingAnglesQ from 'Question/GraphicQ/MissingAngles/MissingAnglesWrapper
 import AreaPerimeterQ from 'Question/GraphicQ/AreaPerimeter/AreaWrapper'
 
 import OptionsSet from 'OptionsSet'
+import PartitionQ from 'Question/GraphicQ/BarModels'
 
 const topicList = [
   {
@@ -49,6 +50,11 @@ const topicList = [
     id: 'test',
     title: 'Test questions',
     class: TestQ
+  },
+  {
+    id: 'barmodel',
+    title: 'Partitions with bar models',
+    class: PartitionQ
   }
 ]
 

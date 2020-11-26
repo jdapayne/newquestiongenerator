@@ -32,6 +32,8 @@ export function gaussianCurry (n: number): () => number {
  */
 export function randBetween (n: number, m: number, dist?: ()=>number) {
   if (!dist) dist = Math.random
+  n = Math.ceil(n)
+  m = Math.floor(m)
   return n + Math.floor(dist() * (m - n + 1))
 }
 

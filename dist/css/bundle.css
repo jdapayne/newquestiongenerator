@@ -1,0 +1,45 @@
+.barModel-outer {
+  width: 270px;
+  text-align: center;
+  margin: 1em
+}
+
+.barModel-bracket {
+  height: 10px;
+  border: thin solid black;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 5px;
+}
+
+.barModel-bar {
+  display: flex;
+}
+
+.barModel-part {
+  border: thin solid black;
+  border-left: none;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.barModel-part:first-child {
+  border-left: thin solid black;
+  background: lightblue;
+}
+
+.barModel-part:nth-child(2) {
+  background: lightsalmon;
+}
+
+.barModel-part:nth-child(3) {
+  background: lightyellow;
+}
+
+.barModel-part:nth-child(4) {
+  background: plum;
+}
+
+.barModel-part:nth-child(5) {
+  background: orange;
+}

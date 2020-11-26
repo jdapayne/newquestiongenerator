@@ -5,8 +5,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
   <title>Question generator</title>
-  <link rel="stylesheet" href="css/style.css" title="main" type="text/css" media="screen">
-  <link rel="stylesheet" href="css/print.css" type="text/css" me media="print">
+  <link rel="stylesheet" href="css/style.css" title="main" type="text/css" media="all">
+  <link rel="stylesheet" href="css/print.css" type="text/css" media="print">
+  <link rel="stylesheet" href="css/bundle.css" type="text/css" media="all">
   <link rel="stylesheet" href="css/tingle.css" type="text/css" media="all">
   <link rel="stylesheet" href="css/rSlider.css" type="text/css" media="all">
 </head>
@@ -15,8 +16,16 @@
 <!--<script type="module" src="main.js"></script>-->
 <script src="main.js"></script>
 
-<a href="javascript:window.print()" id="print-button"><img src="img/print.png"></a>
-<a href="/" id="home-button"><img src="img/home.png"></a>
+<footer>
+<div><a href="/" id="home-button"><img src="img/home.png"></a></div>
+<div>
+  <a href="javascript:window.print()" id="print-button">Print</a> | <a id="hide-controls" href="#0">Hide controls</a> | <a id="fullscreen" href="#0">Full screen</a>
+</div>
+<div>
+  <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <a href="https://twitter.com/DrPMaths?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @DrPMaths</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</footer>
 
 </body>
 </html>

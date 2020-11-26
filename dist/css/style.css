@@ -2,21 +2,48 @@ body {
     font-family: Arial
 }
 
+/*
 #print-button {
   position:absolute;
   top:10px;
   right:10px;
+}
+*/
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: black solid 2px;
+  background: #eee;
+  padding: 0.5em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  z-index: 999;
+  text-align: center;
+}
+
+footer>:first-child {
+  text-align: left;
+}
+
+footer>:last-child {
+  text-align: right;
+  padding-right: 1em
 }
 
 #print-button img {
   width:25px
 }
 
+/*
 #home-button {
   position:absolute;
   top:10px;
   left:10px;
 }
+*/
 
 #home-button img {
   width:25px
@@ -25,7 +52,7 @@ body {
 /* {{{ Questions styling */
 
 .question-displaybox {
-  --column-width: 300px; /* will be updated by js */
+  --column-width: 300px; /* TODO will be updated by js */
   display:grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
@@ -35,17 +62,6 @@ body {
   margin-right: auto;
   margin-top: 30px;
 }
-
-/*flex version*/
-/*.question-displaybox {*/
-    /*display:flex;*/
-    /*flex-wrap: wrap;*/
-    /*justify-content: center;*/
-    /*width: 80%;*/
-    /*margin-left :auto;*/
-    /*margin-right: auto;*/
-    /*margin-top: 30px;*/
-/*}*/
 
 .mainq {
     grid-column: 1 / -2;
@@ -58,7 +74,6 @@ body {
     position: relative;
     flex: 1 1;
     z-index:2;
-    /*flex-basis: 20%;*/
     display: flex;
     flex-flow: row;
 }
@@ -67,9 +82,7 @@ body {
   flex-direction: column;
 }
 
-.question-number {
-  padding: 0.3em 0.9em 0.3em 0.3em
-}
+.question-number { padding: 0.3em 0.9em 0.3em 0.3em }
 
 .katex-display {
   margin: 0.5em 0

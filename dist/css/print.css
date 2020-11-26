@@ -1,15 +1,14 @@
-body { font-family: Arial }
-#print-button { display: none }
-#home-button { display: none }
+/* Hide a bunch of stuff */
+.question-actions { display: none; }
+.show-answers { display: none }
+.question-headerbox { display: none }
+footer {display: none}
+.topic-chooser { display: none }
+.hidden { display: none !important }
 
-/* {{{ Questions styling */
 
 .question-displaybox {
   --column-width: 300px; /* will be updated by js */
-  display:grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
-  grid-gap: 25px;
   width: calc(100%-20mm);
   margin-left :10mm;
   margin-right: 10mm;
@@ -18,79 +17,4 @@ body { font-family: Arial }
 
 .mainq {
     grid-column: 1 / -1;
-    align-self: end;
-    margin: 0;
 }
-
-.question-container {
-    position: relative;
-    flex: 1 1;
-    z-index:2;
-    display: flex;
-    flex-flow: row;
-}
-
-.question-container.individual-command-word {
-  flex-direction: column;
-}
-
-.question-number { padding: 0.3em 0.9em 0.3em 0.3em }
-
-.katex-display { margin: 0.5em 0 }
-
-.question-actions { display: none; }
-
-p.question { margin: 0 }
-
-.show-answers { display: none }
-
-.question-headerbox { display: none }
-
-.question-div { position: relative; }
-
-.answer {
-  color: red;
-}
-
-.topic-chooser { display: none }
-
-.label {
-  position: absolute;
-  display: flex;
-  justify-content:center;
-  flex-direction:column;
-  text-align: center;
-  white-space: nowrap;
-  transform: translate(-50%,-50%);
-}
-.label.answer {
-  color: red;
-}
-.label.extra-answer {
-  color: red;
-  transform: translateY(-50%);
-}
-.label.extra-info {
-  transform: translateY(-100%);
-  font-size: small;
-  display: block;
-  text-align: left;
-}
-.label.side {
-  min-width: 35px;
-  min-height: 35px;
-  border: thin solid black;
-  background: white;
-}
-.label.vertex {
-  border-radius: 50%;
-  min-width: 50px;
-  min-height: 50px;
-  border: thin solid black;
-  background: white;
-}
-.label>div {
-    margin: 5px;
-}
-
-.hidden { display: none !important }

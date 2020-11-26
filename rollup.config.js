@@ -4,6 +4,7 @@ import {nodeResolve} from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 // import {eslint} from 'rollup-plugin-eslint'
 import typescript from '@rollup/plugin-typescript'
+import css from 'rollup-plugin-css-only'
 
 const includePathOptions = {
   include: {},
@@ -37,5 +38,11 @@ export default {
       plugins: [terser()]
     }*/
   ],
-  plugins: [ includePaths(includePathOptions), nodeResolve(), commonjs(), typescript(typescriptOptions)]
+  plugins: [
+    includePaths(includePathOptions),
+    nodeResolve(),
+    commonjs(),
+    css({output: 'style/bundle.css'}),
+    typescript(typescriptOptions),
+  ]
 };
