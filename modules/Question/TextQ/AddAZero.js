@@ -3,7 +3,7 @@ import { randBetween } from 'utilities'
 
 export default class AddAZero extends TextQ {
   constructor (options) {
-    super(options)
+    super()
 
     const defaults = {
       difficulty: 5,

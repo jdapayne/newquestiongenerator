@@ -7,7 +7,7 @@ export default class EquationOfLine extends TextQ {
   // 'extends' Question, but nothing to actually extend
   constructor (options) {
     // boilerplate
-    super(options)
+    super()
 
     const defaults = {
       difficulty: 2

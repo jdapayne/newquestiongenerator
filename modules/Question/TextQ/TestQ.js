@@ -3,7 +3,7 @@ import { randElem } from 'utilities'
 
 export default class TestQ extends TextQ {
   constructor (options) {
-    super(options)
+    super()
 
     const defaults = {
       difficulty: 5,

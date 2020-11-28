@@ -5,7 +5,7 @@ import TextQ from 'Question/TextQ/TextQ'
 export default class AlgebraicFractionQ extends TextQ {
   // 'extends' Question, but nothing to actually extend
   constructor (options) {
-    super(options)
+    super()
 
     const defaults = {
       difficulty: 2
