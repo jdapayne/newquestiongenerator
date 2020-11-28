@@ -46,7 +46,7 @@ export function randBetweenFilter (n: number, m: number, filter: (n:number)=>boo
   for (let i = n; i < m + 1; i++) {
     if (filter(i)) arr.push(i)
   }
-  if (arr === []) throw new Error('overfiltered')
+  if (arr.length===0) throw new Error('overfiltered')
   const i = randBetween(0, arr.length - 1)
   return arr[i]
 }
