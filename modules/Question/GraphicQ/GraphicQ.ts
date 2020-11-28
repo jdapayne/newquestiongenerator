@@ -2,6 +2,8 @@ import Question from 'Question/Question'
 import { createElem, repelElements } from 'utilities'
 import Point from 'Point'
 import ViewOptions from './ViewOptions'
+import Options from 'Options'
+import { OptionsSpec } from 'OptionsSpec'
 declare const katex : {render : (string: string, element: HTMLElement) => void}
 
 /* GraphicQData can all be very different, so interface is empty

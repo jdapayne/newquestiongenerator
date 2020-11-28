@@ -19,11 +19,10 @@ export default class AreaPerimeterQ extends Question {
     this.DOM = question.DOM
   }
 
-  static random (options: WrapperOptions) {
-    if (!options.custom) {
-      const shape = randElem(options.shapes)
-      return this.randomFromDifficulty(options.difficulty, shape, options.questionTypesSimple)
-    }
+  static random (options: WrapperOptions) : AreaPerimeterQ {
+    // TODO Add custom options
+    const shape = randElem(options.shapes)
+    return this.randomFromDifficulty(options.difficulty, shape, options.questionTypesSimple)
   }
 
   private static randomFromDifficulty (difficulty: number, shape: Shape, questionTypes: QuestionTypeSimple[]): AreaPerimeterQ {
