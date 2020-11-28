@@ -69,7 +69,6 @@ export default class QuestionSet {
     this.displayBox = createElem('div', 'question-displaybox', this.outerBox)
 
     this._buildOptionsBox()
-
     this._buildTopicChooser()
   }
 
@@ -118,13 +117,20 @@ export default class QuestionSet {
     const topics = TopicChooser.getTopics()
     const optionsSpec: OptionsSpec = []
     topics.forEach(topic => {
-      optionsSpec.push({
-        title: topic.title,
-        id: topic.id,
-        type: 'bool',
-        default: false,
-        swapLabel: true
-      })
+      if ('section' in topic) {
+        optionsSpec.push({
+          type: 'heading',
+          title: topic.section
+        })
+      } else {
+        optionsSpec.push({
+          title: topic.title,
+          id: topic.id,
+          type: 'bool',
+          default: false,
+          swapLabel: true
+        })
+      }
     })
     this.topicsOptions = new OptionsSet(optionsSpec)
 
@@ -204,14 +210,14 @@ export default class QuestionSet {
     const topics = boolObjectToArray(this.topicsOptions.options)
     this.topics = topics
 
-    let text
+    let text: string
 
     if (topics.length === 0) {
       text = 'Choose topic' // nothing selected
       this.generateButton.disabled = true
     } else {
       const id = topics[0] // first item selected
-      text = TopicChooser.getTitle(id)
+      text = TopicChooser.getTitle(id) ?? ''
       this.generateButton.disabled = false
     }
 
@@ -293,6 +299,7 @@ export default class QuestionSet {
 
     // choose a question
     const question = TopicChooser.newQuestion(topicId, options)
+    if (!question) throw new Error(`Unable to make question with id ${topicId}`)
 
     // set some more data in the questions[] list
     if (!this.questions[i]) throw new Error('question not made')
