@@ -1,9 +1,9 @@
 import includePaths from 'rollup-plugin-includepaths'
-/*import {terser} from 'rollup-plugin-terser'*/
+import {terser} from 'rollup-plugin-terser'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-// import {eslint} from 'rollup-plugin-eslint'
 import typescript from '@rollup/plugin-typescript'
+import strip from '@rollup/plugin-strip'
 import css from 'rollup-plugin-css-only'
 
 const includePathOptions = {
@@ -12,13 +12,6 @@ const includePathOptions = {
   external: [],
   extensions: ['.js', '.mjs', '.ts']
 }
-
-/*
-const eslintOptions = {
-  fix: function() {return false},
-  exclude: ['node_modules/**', 'modules/vendor/*']
-}
-*/
 
 const typescriptOptions = {
   target: "ES6"
@@ -30,13 +23,8 @@ export default {
     {
       dir: 'dist',
       format: 'iife',
-      sourcemap: 'inline'
-    }/*,
-    {
-      dir: 'dist',
-      format: 'iife',
       plugins: [terser()]
-    }*/
+    }
   ],
   plugins: [
     includePaths(includePathOptions),
@@ -44,5 +32,6 @@ export default {
     commonjs(),
     css({output: 'css/bundle.css'}),
     typescript(typescriptOptions),
+    strip({include: '**/*.(js|ts)'})
   ]
 };

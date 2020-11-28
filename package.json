@@ -16,6 +16,7 @@
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-strip": "^2.0.0",
     "@types/mustache": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
@@ -39,10 +40,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup --config",
     "build-dev": "rollup --config -w",
+    "build-dist": "rollup --config rollup.dist.config.js",
     "lint": "eslint modules",
     "lint-quiet": "eslint --quiet modules",
     "lint-fix": "eslint --fix modules",
-    "lint-quiet-fix": "eslint --fix --quiet modules"
+    "lint-quiet-fix": "eslint --fix --quiet modules",
+    "deploy": "cp -R dist/ ../jdapayne.github.io/questiongenerator/ && cd ../jdapayne.github.io && git add questiongenerator && git commit -m 'update' && git push"
   },
   "author": "",
   "license": "ISC",
