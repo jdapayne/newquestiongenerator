@@ -1,6 +1,6 @@
 import { randElem, randMultBetween } from './utilities.js'
 
-const pathRoot = '/dist/'
+const pathRoot = '.'
 
 type indexVals = '100' | '200' | '300' | '400' | '500'
 
