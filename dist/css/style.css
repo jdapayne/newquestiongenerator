@@ -148,6 +148,11 @@ p.question {
   margin: 0
 }
 
+p.adjacent {
+  display: inline-block;
+  margin: 0 0.15em
+}
+
 .extra-options-button {
   display: inline-block;
   background-image: url('../img/settings-grey.png');
