@@ -55,6 +55,24 @@ export default class PartitionQ extends Question {
     this.questionSpec = questionSpec
     this.answerSpec = answerSpec
   }
+  
+  static fromString(string: expression) {
+  /* Constructs a bar model from a string like "72+6" or "72 - (6+5)". Uses regex so
+  is a bit inflexible, but should do the job */
+    
+    // First check for simple addition/subtraction
+    const simpleRegEx = /^ *(\d+) *([+-]) *(\d+) *$/
+    if (expression.test(simpleRegEx)) {
+      [,a,op,b] = expression.match(simpleRegEx)
+      if (op = "+") {
+        const spec : BarModelSpec = {
+          total: a + b,
+          parts: [a,b]
+      }
+      
+    }
+    
+  }
 
   static random(options: PartitionOptions) {
     let minTotal: number
